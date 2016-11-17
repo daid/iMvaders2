@@ -54,4 +54,6 @@
     sprite: weapon/bullet.png
     size: 0.5
     collision: 1.0, 0.3
+    speed: 25
+    distance: 25
 }

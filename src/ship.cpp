@@ -1,7 +1,6 @@
 #include "ship.h"
 #include "spacescene.h"
 #include "equipmentTemplate.h"
-#include "weapon/bullet.h"
 #include <sp2/graphics/spriteManager.h>
 #include <sp2/logging.h>
 

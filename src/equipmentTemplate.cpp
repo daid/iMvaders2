@@ -4,8 +4,10 @@
 #include "shipequipment/shield.h"
 #include "shipequipment/hull.h"
 #include "weapon/projectileWeapon.h"
+#include "weapon/projectile.h"
 
 #include <sp2/logging.h>
+#include <sp2/graphics/spritemanager.h>
 #include <sp2/io/keyValueTreeLoader.h>
 
 std::map<sp::string, EquipmentTemplate> EquipmentTemplate::templates;
@@ -20,6 +22,11 @@ void EquipmentTemplate::init()
 
         EquipmentTemplate et;
         et.data = data;
+        
+        if (data["type"] == "projectile")
+        {
+            sp::SpriteManager::create(data["sprite"], data["sprite"], data["size"].toFloat());
+        }
         
         templates[id] = et;
     }
@@ -53,4 +60,26 @@ sp::P<Equipment> EquipmentTemplate::create(sp::string id, sp::P<Ship> target_shi
             equipment->setParameter(i.first, i.second);
     }
     return equipment;
+}
+
+sp::P<Projectile> EquipmentTemplate::createProjectile(sp::string id)
+{
+    auto it = templates.find(id);
+    if (it == templates.end())
+    {
+        LOG(Error, "Tried to create non existing projectile:", id);
+        return nullptr;
+    }
+    
+    EquipmentTemplate& et = it->second;
+    sp::string type = et.data["type"];
+    sp::P<Projectile> projectile;
+    if (type == "projectile")
+        projectile = new Projectile();
+    for(auto i : et.data)
+    {
+        if (i.first != "type")
+            projectile->setParameter(i.first, i.second);
+    }
+    return projectile;
 }

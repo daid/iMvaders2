@@ -83,7 +83,10 @@ void SceneManager::activatePlayer(int index)
     
     data.state = PlayerData::State::Playing;
     
-    data.ship = ShipTemplate::create("UM-M");
+    if (index == 1)
+        data.ship = ShipTemplate::create("FLASH-CUBE");
+    else
+        data.ship = ShipTemplate::create("UM-M");
     data.ship->setRotation(45);
     data.ship->controller = new PlayerShipController(index);
     data.camera->setParent(data.ship);

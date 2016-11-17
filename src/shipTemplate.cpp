@@ -18,8 +18,12 @@ void ShipTemplate::init()
         ShipTemplate st;
         st.name = data["name"];
         st.sprite_name = "ship-" + id;
-        st.collision_size.x = data["collision"].toFloat();
-        st.collision_size.y = data["collision"].split(",")[1].toFloat();
+        std::vector<sp::string> collision = data["collision"].split(",");
+        st.collision_size.x = collision[0].toFloat();
+        if (collision.size() > 1)
+            st.collision_size.y = collision[1].toFloat();
+        else
+            st.collision_size.y = -1;
         
         sp::SpriteManager::create(st.sprite_name, data["sprite"], data["size"].toFloat());
         templates[id] = st;
@@ -38,7 +42,10 @@ sp::P<Ship> ShipTemplate::create(sp::string id)
     ShipTemplate& st = it->second;
     sp::P<Ship> ship = new Ship();
     ship->render_data = sp::SpriteManager::get(st.sprite_name);
-    ship->setCollisionShape(sp::collision::Box2D(st.collision_size.x, st.collision_size.y));
+    if (st.collision_size.y > 0)
+        ship->setCollisionShape(sp::collision::Box2D(st.collision_size.x, st.collision_size.y));
+    else
+        ship->setCollisionShape(sp::collision::Circle2D(st.collision_size.x));
     
     return ship;
 }

@@ -1,5 +1,5 @@
 #include "projectileWeapon.h"
-#include "bullet.h"
+#include "../equipmentTemplate.h"
 #include "../ship.h"
 #include <sp2/logging.h>
 #include <sp2/engine.h>
@@ -57,7 +57,7 @@ void ProjectileWeapon::onFixedUpdate()
             double f = 1.0;
             if (projectile_count > 1)
                 f = double(n) / double(projectile_count - 1);
-            (new Bullet())->launch(ship, spread_offset * -(f * 2.0 - 1.0), fire_angle + -spread_angle / 2.0 + spread_angle * f);
+            EquipmentTemplate::createProjectile(projectile_name)->launch(ship, spread_offset * -(f * 2.0 - 1.0), fire_angle + -spread_angle / 2.0 + spread_angle * f);
         }
     }
 }
