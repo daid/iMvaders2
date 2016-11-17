@@ -1,0 +1,57 @@
+[REACTOR-1] {
+    name: Refurbished Reactor
+    type: reactor
+    energy: 10.0
+    rate: 2.0
+}
+[ENGINE-1] {
+    name: Refurbished Engine
+    type: engine
+    //comment
+    forward: 30.0
+    reverse: 10.0
+    rotation: 10.0
+    strafe: 10.0
+    energy: 0.02
+}
+[SHIELD-1] {
+    name: Refurbished Shield
+    type: shield
+    
+    charge: 5.0
+    energy: 1.0
+    rate: 1.0
+}
+[HULL-1] {
+    name: Refurbished Hull
+    type: hull
+    
+    damage: 5.0
+}
+
+[BASIC-PULSE-LASER] {
+    name: Basic pulse laser
+    type: projectile_weapon
+    
+    rate: 10
+    projectile: PULSE
+    count: 1
+    energy: 0.2
+}
+[DOUBLE-PULSE-LASER] {
+    name: Double pulse laser
+    type: projectile_weapon
+    
+    rate: 7
+    projectile: PULSE
+    count: 2
+    offset: 0, 0.5
+    energy: 0.4
+}
+[PULSE] {
+    type: projectile
+
+    sprite: weapon/bullet.png
+    size: 0.5
+    collision: 1.0, 0.3
+}

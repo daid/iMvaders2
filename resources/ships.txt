@@ -1,0 +1,6 @@
+[UM-M] {
+    name: U-Force M-Fighter
+    sprite: ship/u.png
+    size: 1.0
+    collision: 1.3, 2
+}
