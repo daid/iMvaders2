@@ -11,7 +11,7 @@ public:
     ShipController();
     
     sp::Vector2d trust;
-    float rotate;
+    double rotate;
     bool primary_fire;
     bool secondary_fire;
     bool brake;

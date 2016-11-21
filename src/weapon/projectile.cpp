@@ -11,6 +11,7 @@ Projectile::Projectile()
 {
     travel_distance = 25.0;
     travel_speed = 25.0;
+    damage = 1.0;
     lifetime = travel_distance / travel_speed;
 }
 
@@ -35,7 +36,10 @@ void Projectile::onCollision(sp::CollisionInfo& info)
 {
     sp::P<Ship> ship = info.other;
     if (ship && ship != owner)
+    {
+        ship->takeDamage(damage);
         delete this;
+    }
 }
 
 void Projectile::setParameter(sp::string key, sp::string value)
@@ -62,6 +66,10 @@ void Projectile::setParameter(sp::string key, sp::string value)
     {
         lifetime = value.toFloat();
         travel_distance = 0.0;
+    }
+    else if (key == "damage")
+    {
+        damage = value.toFloat();
     }
     else if (key == "collision")
     {

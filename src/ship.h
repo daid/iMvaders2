@@ -18,10 +18,11 @@ public:
     sp::P<ShipController> controller;
 
     void takeDamage(double amount);
+    double getTotalMass();
 
     virtual void onFixedUpdate() override;
     
-    
+    double base_mass;
     sp::P<Reactor> reactor;
     sp::P<Engine> engine;
     sp::P<Shield> shield;

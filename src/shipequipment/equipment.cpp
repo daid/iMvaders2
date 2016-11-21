@@ -5,6 +5,7 @@
 Equipment::Equipment(sp::P<Ship> parent)
 : sp::SceneNode(parent)
 {
+    mass = 0.0;
 }
 
 void Equipment::setParameter(sp::string key, sp::string value)
@@ -13,6 +14,8 @@ void Equipment::setParameter(sp::string key, sp::string value)
         id = value;
     else if (key == "name")
         name = value;
+    else if (key == "mass")
+        mass = value.toFloat();
     else
         LOG(Warning, "Setting unknown equipment parameter", key, value);
 }

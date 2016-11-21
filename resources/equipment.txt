@@ -7,11 +7,9 @@
 [ENGINE-1] {
     name: Refurbished Engine
     type: engine
-    //comment
+
     forward: 30.0
-    reverse: 10.0
-    rotation: 10.0
-    strafe: 10.0
+    rotation: 4.0
     energy: 0.02
 }
 [SHIELD-1] {
@@ -56,4 +54,5 @@
     collision: 1.0, 0.3
     speed: 25
     distance: 25
+    damage: 1
 }

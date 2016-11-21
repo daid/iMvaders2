@@ -1,4 +1,5 @@
 #include "playershipcontroller.h"
+#include "ship.h"
 
 PlayerShipController::PlayerShipController(int index)
 {
@@ -8,14 +9,31 @@ PlayerShipController::PlayerShipController(int index)
 void PlayerShipController::update(Ship* ship)
 {
     trust.x = keys->up.getValue() - keys->down.getValue();
-    if (keys->strafe.get())
+    trust.y = keys->left.getValue() - keys->right.getValue();
+    if (keys->up.get())
     {
-        trust.y = keys->left.getValue() - keys->right.getValue();
-        rotate = 0.0;
-    }else{
-        trust.y = 0.0;
-        rotate = keys->left.getValue() - keys->right.getValue();
+        if (keys->left.get())
+            rotate = 45.0;
+        else if (keys->right.get())
+            rotate = 315.0;
+        else
+            rotate = 0.0;
     }
+    else if (keys->down.get())
+    {
+        if (keys->left.get())
+            rotate = 135.0;
+        else if (keys->right.get())
+            rotate = 225.0;
+        else
+            rotate = 180.0;
+    }
+    else if (keys->left.get())
+        rotate = 90.0;
+    else if (keys->right.get())
+        rotate = 270.0;
+    else
+        rotate = ship->getGlobalRotation2D();
     brake = keys->brake.get();
     
     primary_fire = keys->primary_fire.get();

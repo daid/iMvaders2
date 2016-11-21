@@ -16,7 +16,6 @@ public:
     sp::io::Keybinding start;
     sp::io::Keybinding primary_fire;
     sp::io::Keybinding secondary_fire;
-    sp::io::Keybinding strafe;
     sp::io::Keybinding brake;
 private:
     PlayerKeys(int index);

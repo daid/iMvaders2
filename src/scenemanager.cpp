@@ -4,6 +4,8 @@
 #include "keys.h"
 #include "playershipcontroller.h"
 
+#include <sp2/random.h>
+#include <sp2/graphics/meshdata.h>
 #include <sp2/graphics/gui/guiLoader.h>
 #include <sp2/graphics/gui/widget/progressbar.h>
 #include <sp2/scene/cameraNode.h>
@@ -38,6 +40,22 @@ SceneManager::SceneManager()
 
         player_data.push_back(pd);
     }
+
+    std::vector<sp::MeshData::Vertex> vertices;
+    vertices.emplace_back(sf::Vector3f(-1, -1, 1), sp::Vector2f(0, 1));
+    vertices.emplace_back(sf::Vector3f( 1, -1, 1), sp::Vector2f(1, 1));
+    vertices.emplace_back(sf::Vector3f(-1,  1, 1), sp::Vector2f(0, 0));
+    vertices.emplace_back(sf::Vector3f(-1,  1, 1), sp::Vector2f(0, 0));
+    vertices.emplace_back(sf::Vector3f( 1, -1, 1), sp::Vector2f(1, 1));
+    vertices.emplace_back(sf::Vector3f( 1,  1, 1), sp::Vector2f(1, 0));
+
+    sp::P<sp::SceneNode> background = new sp::SceneNode(space_scene->getRoot());
+    background->render_data.type = sp::RenderData::Type::Normal;
+    background->render_data.shader = sp::Shader::get("shader/star_background.shader");
+    background->render_data.mesh = std::make_shared<sp::MeshData>(vertices);
+    background->render_data.texture = "stars.png";
+    background->render_data.order = -1;
+    background->render_data.color = sf::Color::White;
 }
 
 void SceneManager::onUpdate(float delta)
@@ -71,6 +89,8 @@ void SceneManager::onUpdate(float delta)
                 bar->setValue(data.ship->hull->getHullLevel());
                 bar->setRange(0, data.ship->hull->getMaxHullLevel());
             }
+            
+            data.camera->setPosition(data.ship->getGlobalPosition2D() + data.ship->getLinearVelocity2D() * 0.1);
         }
     }
 }
@@ -84,12 +104,11 @@ void SceneManager::activatePlayer(int index)
     data.state = PlayerData::State::Playing;
     
     if (index == 1)
-        data.ship = ShipTemplate::create("FLASH-CUBE");
+        data.ship = ShipTemplate::create("MAKERBOT-M");
     else
         data.ship = ShipTemplate::create("UM-M");
-    data.ship->setRotation(45);
+    data.ship->setRotation(sp::random(0, 360));
     data.ship->controller = new PlayerShipController(index);
-    data.camera->setParent(data.ship);
 
     updateViews();
 }

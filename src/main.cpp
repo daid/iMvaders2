@@ -33,25 +33,12 @@ int main(int argc, char** argv)
     ShipTemplate::init();
     EquipmentTemplate::init();
     
-    space_scene = new sp::Scene();
-
     sp::SpriteManager::create("circle", "ship/circle.png", 0.5);
-    sp::SpriteManager::create("bullet", "weapon/bullet.png", 0.5);
     sp::SpriteManager::create("logo", "logo.png", sp::Vector2f(30.0, 15));
     sp::SpriteManager::create("logo2", "logo2.png", sp::Vector2f(30.0, 30.0 / 512 * 135));
     sp::SpriteManager::create("scrolltext", "scrolltext.png", sp::Vector2f(35.8, 154));
 
-    for(int x=-10; x<10; x++)
-    {
-        for(int y=-10; y<10; y++)
-        {
-            sp::P<sp::SceneNode> node = new sp::SceneNode(space_scene->getRoot());
-            node->setPosition(sp::Vector2d(x * 3, y * 3));
-            node->render_data = sp::SpriteManager::get("circle");
-        }
-    }
-    //space_scene->disable();
-    
+    space_scene = new sp::Scene();
     new SceneManager();
         
     engine->run();

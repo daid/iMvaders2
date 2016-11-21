@@ -13,6 +13,8 @@ Ship::Ship()
     hull = EquipmentTemplate::create("HULL-1", this);
     weapon[0] = EquipmentTemplate::create("BASIC-PULSE-LASER", this);
     weapon[1] = EquipmentTemplate::create("DOUBLE-PULSE-LASER", this);
+    
+    base_mass = 1.0;
 }
 
 Ship::~Ship()
@@ -27,9 +29,28 @@ Ship::~Ship()
     delete *weapon[1];
 }
 
+double Ship::getTotalMass()
+{
+    double mass = base_mass;
+    if (reactor)
+        mass += reactor->mass;
+    if (engine)
+        mass += engine->mass;
+    if (shield)
+        mass += shield->mass;
+    if (hull)
+        mass += hull->mass;
+    if (weapon[0])
+        mass += weapon[0]->mass;
+    if (weapon[1])
+        mass += weapon[1]->mass;
+    return mass;
+}
+
 void Ship::takeDamage(double amount)
 {
-    amount = shield->takeDamage(amount);
+    if (shield)
+        amount = shield->takeDamage(amount);
     if (hull->takeDamage(amount))
     {
         //We died...

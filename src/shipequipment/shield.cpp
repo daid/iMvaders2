@@ -24,6 +24,14 @@ void Shield::setParameter(sp::string key, sp::string value)
 
 double Shield::takeDamage(double amount)
 {
+    if (amount < charge_level)
+    {
+        charge_level -= amount;
+        amount = 0;
+    }else{
+        amount -= charge_level;
+        charge_level = 0;
+    }
     return amount;
 }
 

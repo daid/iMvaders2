@@ -19,6 +19,7 @@ private:
     double travel_distance;
     double travel_speed;
     double lifetime;
+    double damage;
 
     sp::P<Ship> owner;
 };
