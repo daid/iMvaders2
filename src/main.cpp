@@ -15,6 +15,7 @@
 #include "equipmenttemplate.h"
 #include "keys.h"
 #include "playershipcontroller.h"
+#include "aishipcontroller.h"
 
 int main(int argc, char** argv)
 {
@@ -40,7 +41,11 @@ int main(int argc, char** argv)
 
     space_scene = new sp::Scene();
     new SceneManager();
-        
+    
+    sp::P<Ship> ship = ShipTemplate::create("MAKERBOT-M");
+    ship->controller = new AIShipController();
+    ship->setPosition(sp::Vector2d(20, 0));
+    
     engine->run();
     
     return 0;

@@ -17,6 +17,7 @@ public:
     sp::io::Keybinding primary_fire;
     sp::io::Keybinding secondary_fire;
     sp::io::Keybinding brake;
+    sp::io::Keybinding hold_rotation;
 private:
     PlayerKeys(int index);
 };

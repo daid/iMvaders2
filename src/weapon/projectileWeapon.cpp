@@ -14,8 +14,11 @@ ProjectileWeapon::ProjectileWeapon(sp::P<Ship> parent)
     fire_angle = 0.0;
     spread_angle = 0.0;
     spread_offset = sp::Vector2d(0, 0);
+    burst_count = 0;
+    burst_time = 0.0;
     
     fire_delay = 0.0;
+    projectile_burst_count = 0.0;
 }
 
 void ProjectileWeapon::setParameter(sp::string key, sp::string value)
@@ -37,6 +40,11 @@ void ProjectileWeapon::setParameter(sp::string key, sp::string value)
         spread_offset.x = value.split(",")[0].toFloat();
         spread_offset.y = value.split(",")[1].toFloat();
     }
+    else if (key == "burst")
+    {
+        burst_count = value.split(",")[0].toInt();
+        burst_time = value.split(",")[1].toFloat();
+    }
     else
         Equipment::setParameter(key, value);
 }
@@ -52,12 +60,34 @@ void ProjectileWeapon::onFixedUpdate()
     {
         fire_delay += 1.0 / fire_rate;
         
-        for(int n=0; n<projectile_count; n++)
+        launchProjectiles();
+        if (burst_count > 0)
         {
-            double f = 1.0;
-            if (projectile_count > 1)
-                f = double(n) / double(projectile_count - 1);
-            EquipmentTemplate::createProjectile(projectile_name)->launch(ship, spread_offset * -(f * 2.0 - 1.0), fire_angle + -spread_angle / 2.0 + spread_angle * f);
+            projectile_burst_count = burst_count - 1;
+            projectile_burst_delay = burst_time / burst_count;
         }
+    }
+    if (projectile_burst_count > 0)
+    {
+        projectile_burst_delay -= sp::Engine::fixed_update_delta;
+        if (projectile_burst_delay <= 0.0)
+        {
+            projectile_burst_count -= 1;
+            projectile_burst_delay = burst_time / burst_count;
+            launchProjectiles();
+        }
+    }
+}
+
+void ProjectileWeapon::launchProjectiles()
+{
+    sp::P<Ship> ship = getParent();
+
+    for(int n=0; n<projectile_count; n++)
+    {
+        double f = 1.0;
+        if (projectile_count > 1)
+            f = double(n) / double(projectile_count - 1);
+        EquipmentTemplate::createProjectile(projectile_name)->launch(ship, spread_offset * -(f * 2.0 - 1.0), fire_angle + -spread_angle / 2.0 + spread_angle * f);
     }
 }

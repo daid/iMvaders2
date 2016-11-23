@@ -38,4 +38,7 @@ void PlayerShipController::update(Ship* ship)
     
     primary_fire = keys->primary_fire.get();
     secondary_fire = keys->secondary_fire.get();
+    
+    if (keys->hold_rotation.get())
+        rotate = ship->getGlobalRotation2D();
 }

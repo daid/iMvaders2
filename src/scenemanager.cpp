@@ -92,6 +92,25 @@ void SceneManager::onUpdate(float delta)
             
             data.camera->setPosition(data.ship->getGlobalPosition2D() + data.ship->getLinearVelocity2D() * 0.1);
         }
+        else
+        {
+            sp::P<sp::gui::Progressbar> bar;
+            bar = data.gui_layer->getRoot()->getWidgetWithID("ENERGY");
+            if (bar)
+            {
+                bar->setValue(0);
+            }
+            bar = data.gui_layer->getRoot()->getWidgetWithID("SHIELD");
+            if (bar)
+            {
+                bar->setValue(0);
+            }
+            bar = data.gui_layer->getRoot()->getWidgetWithID("HULL");
+            if (bar)
+            {
+                bar->setValue(0);
+            }
+        }
     }
 }
 

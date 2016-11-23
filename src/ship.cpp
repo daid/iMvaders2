@@ -3,6 +3,7 @@
 #include "equipmentTemplate.h"
 #include <sp2/graphics/spriteManager.h>
 #include <sp2/logging.h>
+#include <sp2/assert.h>
 
 Ship::Ship()
 : sp::SceneNode(space_scene->getRoot())
@@ -54,6 +55,7 @@ void Ship::takeDamage(double amount)
     if (hull->takeDamage(amount))
     {
         //We died...
+        delete this;
     }
 }
 
@@ -65,4 +67,62 @@ void Ship::onFixedUpdate()
         weapon[0]->fire = controller->primary_fire;
     if (weapon[1])
         weapon[1]->fire = controller->secondary_fire;
+}
+
+bool Ship::changeReactor(sp::string id)
+{
+    sp::P<Equipment> e = EquipmentTemplate::create(id, this);
+    if (!e)
+        return false;
+    delete *reactor;
+    reactor = e;
+    return true;
+}
+
+bool Ship::changeEngine(sp::string id)
+{
+    sp::P<Equipment> e = EquipmentTemplate::create(id, this);
+    if (!e)
+        return false;
+    delete *engine;
+    engine = e;
+    return true;
+}
+
+bool Ship::changeShield(sp::string id)
+{
+    sp::P<Equipment> e = EquipmentTemplate::create(id, this);
+    if (!e)
+        return false;
+    delete *shield;
+    shield = e;
+    return true;
+}
+
+bool Ship::changeHull(sp::string id)
+{
+    sp::P<Equipment> e = EquipmentTemplate::create(id, this);
+    if (!e)
+        return false;
+    delete *hull;
+    hull = e;
+    return true;
+}
+
+bool Ship::changeWeapon(int index, sp::string id)
+{
+    sp2assert(index >= 0 && index < 2, "Weapon index out of range.");
+    
+    if (id == "")
+    {
+        delete *weapon[index];
+        return true;
+    }else{
+        sp::P<Equipment> e = EquipmentTemplate::create(id, this);
+        if (!e)
+            return false;
+        delete *weapon[index];
+        weapon[index] = e;
+        return true;
+    }
 }

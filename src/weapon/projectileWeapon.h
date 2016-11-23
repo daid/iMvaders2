@@ -18,9 +18,15 @@ private:
     double energy_per_shot;
     double fire_angle;
     double spread_angle;
+    int burst_count;
+    double burst_time;
     sp::Vector2d spread_offset;
     
     int projectile_count;
+    int projectile_burst_count;
+    double projectile_burst_delay;
+
+    void launchProjectiles();
 };
 
 #endif//SHIELD_H

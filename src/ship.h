@@ -29,6 +29,12 @@ public:
     sp::P<Hull> hull;
     sp::P<Weapon> weapon[2];
     //special item
+    
+    bool changeReactor(sp::string id);
+    bool changeEngine(sp::string id);
+    bool changeShield(sp::string id);
+    bool changeHull(sp::string id);
+    bool changeWeapon(int index, sp::string id);
 };
 
 #endif//SHIP_H

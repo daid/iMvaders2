@@ -24,7 +24,14 @@ void ShipTemplate::init()
             st.collision_size.y = collision[1].toFloat();
         else
             st.collision_size.y = -1;
-        
+
+        st.reactor = data["reactor"];
+        st.engine = data["engine"];
+        st.shield = data["shield"];
+        st.hull = data["hull"];
+        st.weapon[0] = data["primary_weapon"];
+        st.weapon[1] = data["secondary_weapon"];
+
         sp::SpriteManager::create(st.sprite_name, data["sprite"], data["size"].toFloat());
         templates[id] = st;
     }
@@ -46,6 +53,13 @@ sp::P<Ship> ShipTemplate::create(sp::string id)
         ship->setCollisionShape(sp::collision::Box2D(st.collision_size.x, st.collision_size.y));
     else
         ship->setCollisionShape(sp::collision::Circle2D(st.collision_size.x));
+    
+    ship->changeReactor(st.reactor);
+    ship->changeEngine(st.engine);
+    ship->changeShield(st.shield);
+    ship->changeHull(st.hull);
+    ship->changeWeapon(0, st.weapon[0]);
+    ship->changeWeapon(1, st.weapon[1]);
     
     return ship;
 }

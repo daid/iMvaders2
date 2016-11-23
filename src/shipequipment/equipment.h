@@ -12,7 +12,7 @@ public:
     virtual void setParameter(sp::string key, sp::string value);
 
     double mass;
-private:
+
     sp::string id;
     sp::string name;
 };

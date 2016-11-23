@@ -9,7 +9,7 @@
     type: engine
 
     forward: 30.0
-    rotation: 4.0
+    rotation: 10.0
     energy: 0.02
 }
 [SHIELD-1] {
@@ -31,7 +31,7 @@
     name: Basic pulse laser
     type: projectile_weapon
     
-    rate: 10
+    rate: 7
     projectile: PULSE
     count: 1
     energy: 0.2
@@ -40,7 +40,7 @@
     name: Double pulse laser
     type: projectile_weapon
     
-    rate: 7
+    rate: 5
     projectile: PULSE
     count: 2
     offset: 0, 0.5
@@ -55,4 +55,20 @@
     speed: 25
     distance: 25
     damage: 1
+}
+
+
+[AI-ENGINE-1] {
+    type: engine
+
+    forward: 5.0
+    rotation: 4.0
+    energy: 0.02
+}
+[AI-PULSE-LASER] {
+    type: projectile_weapon
+    
+    rate: 2
+    projectile: PULSE
+    count: 1
 }
