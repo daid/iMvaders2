@@ -3,12 +3,13 @@
 
 #include "titleScene.h"
 #include "ship.h"
+#include <sp2/scene/cameraNode.h>
 #include <sp2/graphics/gui/graphicslayer.h>
 
-class SceneManager : public sp::Scene
+class SceneManager : public sp::SceneNode
 {
 public:
-    SceneManager();
+    SceneManager(sp::P<sp::Scene> scene);
 
     virtual void onUpdate(float delta) override;
 private:
@@ -30,8 +31,9 @@ private:
     };
     
     std::vector<PlayerData> player_data;
-
-    sp::P<TitleScene> title_scene;
+    sp::P<sp::SceneNode> background;
+    
+    sp::P<sp::Scene> title_scene;
     
     void activatePlayer(int index);
     void updateViews();

@@ -9,6 +9,8 @@ public:
     Weapon(sp::P<Ship> parent);
     
     bool fire;
+    
+    virtual bool hasHitPotential(sp::P<Ship> target) = 0;
 private:
 };
 

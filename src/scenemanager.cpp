@@ -13,9 +13,11 @@
 #include <sp2/graphics/scene/basicnoderenderpass.h>
 #include <sp2/graphics/scene/collisionrenderpass.h>
 
-SceneManager::SceneManager()
+SceneManager::SceneManager(sp::P<sp::Scene> scene)
+: sp::SceneNode(scene->getRoot())
 {
-    title_scene = new TitleScene();
+    title_scene = new sp::Scene("title");
+    new TitleController(title_scene);
     
     for(int n=0; n<max_players; n++)
     {
@@ -28,7 +30,7 @@ SceneManager::SceneManager()
         pd.hud = sp::gui::Loader::load("gui/hud.gui", "HUD", pd.gui_layer->getRoot());
 
         pd.camera = new sp::CameraNode(space_scene->getRoot());
-        pd.camera->setOrtographic(25.0);
+        pd.camera->setOrtographic(15.0);
         pd.camera->setRotation(-90);
         pd.camera->setPosition(sp::Vector2d(10, 0));
 
@@ -49,13 +51,16 @@ SceneManager::SceneManager()
     vertices.emplace_back(sf::Vector3f( 1, -1, 1), sp::Vector2f(1, 1));
     vertices.emplace_back(sf::Vector3f( 1,  1, 1), sp::Vector2f(1, 0));
 
-    sp::P<sp::SceneNode> background = new sp::SceneNode(space_scene->getRoot());
+    background = new sp::SceneNode(space_scene->getRoot());
     background->render_data.type = sp::RenderData::Type::Normal;
     background->render_data.shader = sp::Shader::get("shader/star_background.shader");
     background->render_data.mesh = std::make_shared<sp::MeshData>(vertices);
-    background->render_data.texture = "stars.png";
+    background->render_data.texture = "stars2.png";
     background->render_data.order = -1;
     background->render_data.color = sf::Color::White;
+
+    space_scene->disable();
+    title_scene->enable();
 }
 
 void SceneManager::onUpdate(float delta)
@@ -68,49 +73,48 @@ void SceneManager::onUpdate(float delta)
             activatePlayer(n);
         }
         
-        if (data.ship)
+        sp::P<sp::gui::Progressbar> bar;
+        bar = data.gui_layer->getRoot()->getWidgetWithID("ENERGY");
+        if (bar)
         {
-            sp::P<sp::gui::Progressbar> bar;
-            bar = data.gui_layer->getRoot()->getWidgetWithID("ENERGY");
-            if (bar)
+            if (data.ship && data.ship->reactor)
             {
                 bar->setValue(data.ship->reactor->getEnergyLevel());
                 bar->setRange(0, data.ship->reactor->getMaxEnergyLevel());
             }
-            bar = data.gui_layer->getRoot()->getWidgetWithID("SHIELD");
-            if (bar)
+            else
+            {
+                bar->setValue(0);
+            }
+        }
+        bar = data.gui_layer->getRoot()->getWidgetWithID("SHIELD");
+        if (bar)
+        {
+            if (data.ship && data.ship->shield)
             {
                 bar->setValue(data.ship->shield->getChargeLevel());
                 bar->setRange(0, data.ship->shield->getMaxChargeLevel());
             }
-            bar = data.gui_layer->getRoot()->getWidgetWithID("HULL");
-            if (bar)
+            else
+            {
+                bar->setValue(0);
+            }
+        }
+        bar = data.gui_layer->getRoot()->getWidgetWithID("HULL");
+        if (bar)
+        {
+            if (data.ship && data.ship->hull)
             {
                 bar->setValue(data.ship->hull->getHullLevel());
                 bar->setRange(0, data.ship->hull->getMaxHullLevel());
             }
-            
+            else
+            {
+                bar->setValue(0);
+            }
+        }
+        if (data.ship)
             data.camera->setPosition(data.ship->getGlobalPosition2D() + data.ship->getLinearVelocity2D() * 0.1);
-        }
-        else
-        {
-            sp::P<sp::gui::Progressbar> bar;
-            bar = data.gui_layer->getRoot()->getWidgetWithID("ENERGY");
-            if (bar)
-            {
-                bar->setValue(0);
-            }
-            bar = data.gui_layer->getRoot()->getWidgetWithID("SHIELD");
-            if (bar)
-            {
-                bar->setValue(0);
-            }
-            bar = data.gui_layer->getRoot()->getWidgetWithID("HULL");
-            if (bar)
-            {
-                bar->setValue(0);
-            }
-        }
     }
 }
 
@@ -122,10 +126,8 @@ void SceneManager::activatePlayer(int index)
     
     data.state = PlayerData::State::Playing;
     
-    if (index == 1)
-        data.ship = ShipTemplate::create("MAKERBOT-M");
-    else
-        data.ship = ShipTemplate::create("UM-M");
+    data.ship = ShipTemplate::create("UM-M");
+    data.ship->faction = new Faction();
     data.ship->setRotation(sp::random(0, 360));
     data.ship->controller = new PlayerShipController(index);
 
@@ -140,6 +142,7 @@ void SceneManager::updateViews()
         if (player_data[n].state != PlayerData::State::Inactive)
             player_count++;
     }
+
     if (player_count == 0)
     {
         space_scene->disable();

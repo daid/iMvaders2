@@ -1,29 +1,27 @@
 [VERTEX]
-layout (location = 0) in vec3 position;
-layout (location = 1) in vec3 normal;
-layout (location = 2) in vec2 uv;
+#version 400
 
 uniform mat4 projection_matrix;
 uniform mat4 camera_matrix;
 uniform mat4 object_matrix;
+uniform vec3 object_scale;
 
-varying highp vec2 v_uv;
+varying vec2 v_uv;
 
 void main()
 {
-    gl_Position = vec4(position, 1.0);
-    v_uv = (inverse(projection_matrix) * vec4(position, 1.0)).xy;
+    gl_Position = vec4(gl_Vertex.xyz, 1.0);
+    v_uv = (inverse(projection_matrix) * gl_Vertex).xy * 0.5;
 }
 
 [FRAGMENT]
+#version 110
 uniform sampler2D texture_map;
 uniform vec4 color;
 
-varying highp vec2 v_uv;
-
-out vec4 out_color;
+varying vec2 v_uv;
 
 void main()
 {
-    out_color = texture2D(texture_map, v_uv) * color;
+    gl_FragColor = texture2D(texture_map, v_uv) * color;
 }

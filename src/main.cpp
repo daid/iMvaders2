@@ -26,7 +26,7 @@ int main(int argc, char** argv)
     sp::gui::Theme::loadTheme("default", "gui/theme/basic.theme.txt");
     
     //Create a window to render on, and our engine.
-    new sp::Window();
+    new sp::Window(4.0/3.0);
     sp::P<sp::Engine> engine = new sp::Engine();
     
     //Initialize the player keys, needs to be done before keybindings are loaded.
@@ -34,18 +34,20 @@ int main(int argc, char** argv)
     ShipTemplate::init();
     EquipmentTemplate::init();
     
-    sp::SpriteManager::create("circle", "ship/circle.png", 0.5);
-    sp::SpriteManager::create("logo", "logo.png", sp::Vector2f(30.0, 15));
-    sp::SpriteManager::create("logo2", "logo2.png", sp::Vector2f(30.0, 30.0 / 512 * 135));
-    sp::SpriteManager::create("scrolltext", "scrolltext.png", sp::Vector2f(35.8, 154));
+    sp::SpriteManager::create("circle", "ship/circle.png", 1.0);
+    sp::SpriteManager::create("logo", "logo.png", sp::Vector2f(60.0, 30));
+    sp::SpriteManager::create("logo2", "logo2.png", sp::Vector2f(60.0, 60.0 / 512 * 135));
+    sp::SpriteManager::create("scrolltext", "scrolltext.png", sp::Vector2f(71.6, 308));
 
-    space_scene = new sp::Scene();
-    new SceneManager();
+    space_scene = new sp::Scene("space");
+    new SceneManager(new sp::Scene("main"));
     
-    sp::P<Ship> ship = ShipTemplate::create("MAKERBOT-M");
-    ship->controller = new AIShipController();
-    ship->setPosition(sp::Vector2d(20, 0));
-    
+    for(int n=0; n<20; n++)
+    {
+        sp::P<Ship> ship = ShipTemplate::create("MAKERBOT-M");
+        ship->controller = new AIShipController();
+        ship->setPosition(sp::Vector2d(20, n));
+    }
     engine->run();
     
     return 0;

@@ -18,6 +18,7 @@ Projectile::Projectile()
 void Projectile::launch(sp::P<Ship> owner, sp::Vector2d position_offset, double angle_offset)
 {
     this->owner = owner;
+    this->owner_faction = owner->faction;
     
     setRotation(owner->getGlobalRotation2D() + angle_offset);
     sp::Vector2d forward = getGlobalTransform().applyDirection(sp::Vector2d(1, 0));
@@ -35,7 +36,7 @@ void Projectile::onUpdate(float delta)
 void Projectile::onCollision(sp::CollisionInfo& info)
 {
     sp::P<Ship> ship = info.other;
-    if (ship && ship != owner)
+    if (ship && ship->faction != owner_faction)
     {
         ship->takeDamage(damage);
         delete this;

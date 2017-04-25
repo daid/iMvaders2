@@ -10,6 +10,8 @@ public:
     
     virtual void onFixedUpdate() override;
     virtual void setParameter(sp::string key, sp::string value) override;
+    
+    virtual bool hasHitPotential(sp::P<Ship> target);
 private:
     double fire_delay;
     

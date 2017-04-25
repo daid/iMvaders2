@@ -1,21 +1,21 @@
 {
     reactor: REACTOR-1
     engine: ENGINE-1
-    shield: SHIELD-1
     hull: HULL-1
 
     [UM-M] {
         name: U-Force M-Fighter
         sprite: ship/u.png
-        size: 1.0
+        size: 2.0
         collision: 1.3, 2
+        shield: SHIELD-1
         primary_weapon: BASIC-PULSE-LASER
         secondary_weapon: DOUBLE-PULSE-LASER
     }
     [MAKERBOT-M] {
         name: Makerbot M-Fighter
         sprite: ship/m.png
-        size: 1.0
+        size: 2.0
         collision: 1
         
         engine: AI-ENGINE-1
@@ -24,19 +24,19 @@
     [LULZ-FIG] {
         name: LulzFig
         sprite: ship/lulz.png
-        size: 1.0
+        size: 2.0
         collision: 1
     }
     [FORM-FLY] {
         name: FormFly
         sprite: ship/form.png
-        size: 1.0
+        size: 2.0
         collision: 1
     }
     [FLASH-CUBE] {
         name: FlashCube
         sprite: ship/flash.png
-        size: 1.0
+        size: 2.0
         collision: 1
     }
 }

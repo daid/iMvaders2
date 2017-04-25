@@ -1,15 +1,14 @@
 [VERTEX]
-layout (location = 0) in vec3 position;
-layout (location = 1) in vec3 normal;
-layout (location = 2) in vec2 uv;
+#version 400
 
 uniform mat4 projection_matrix;
 uniform mat4 camera_matrix;
 uniform mat4 object_matrix;
+uniform vec3 object_scale;
 
-varying highp vec2 v_uv1;
-varying highp vec2 v_uv2;
-varying highp vec2 v_uv3;
+varying vec2 v_uv1;
+varying vec2 v_uv2;
+varying vec2 v_uv3;
 
 mat4 rotationMatrix(vec3 axis, float angle)
 {
@@ -26,30 +25,27 @@ mat4 rotationMatrix(vec3 axis, float angle)
 
 void main()
 {
-    gl_Position = vec4(position, 1.0);
-    v_uv1 = (inverse(projection_matrix * camera_matrix) * vec4(position, 1.0)).xy / 100.0;
+    gl_Position = gl_Vertex;
+    v_uv1 = (inverse(projection_matrix * camera_matrix * object_matrix) * gl_Vertex).xy / 50.0;
     mat4 camera_matrix2 = camera_matrix;
     camera_matrix2[3][0] *= 0.5;
     camera_matrix2[3][1] *= 0.5;
-    camera_matrix2 *= rotationMatrix(vec3(0, 0, 1), 1);
-    v_uv2 = (inverse(projection_matrix * camera_matrix2) * vec4(position, 1.0)).xy / 100.0;
+    v_uv2 = (inverse(projection_matrix * camera_matrix2 * object_matrix * rotationMatrix(vec3(0, 0, 1), 1.0f)) * gl_Vertex).xy / 50.0;
     camera_matrix2[3][0] *= 0.5;
     camera_matrix2[3][1] *= 0.5;
-    camera_matrix2 *= rotationMatrix(vec3(0, 0, 1), 1);
-    v_uv3 = (inverse(projection_matrix * camera_matrix2) * vec4(position, 1.0)).xy / 100.0;
+    v_uv3 = (inverse(projection_matrix * camera_matrix2 * object_matrix * rotationMatrix(vec3(0, 0, 1), 2.0f)) * gl_Vertex).xy / 50.0;
 }
 
 [FRAGMENT]
+#version 110
 uniform sampler2D texture_map;
 uniform vec4 color;
 
-varying highp vec2 v_uv1;
-varying highp vec2 v_uv2;
-varying highp vec2 v_uv3;
-
-out vec4 out_color;
+varying vec2 v_uv1;
+varying vec2 v_uv2;
+varying vec2 v_uv3;
 
 void main()
 {
-    out_color = texture2D(texture_map, v_uv1) * color + texture2D(texture_map, v_uv2) * color * 0.5 + texture2D(texture_map, v_uv3) * color * 0.25;
+    gl_FragColor = texture2D(texture_map, v_uv1) * color + texture2D(texture_map, v_uv2) * color * 0.5 + texture2D(texture_map, v_uv3) * color * 0.25;
 }

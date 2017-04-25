@@ -91,3 +91,14 @@ void ProjectileWeapon::launchProjectiles()
         EquipmentTemplate::createProjectile(projectile_name)->launch(ship, spread_offset * -(f * 2.0 - 1.0), fire_angle + -spread_angle / 2.0 + spread_angle * f);
     }
 }
+
+bool ProjectileWeapon::hasHitPotential(sp::P<Ship> target)
+{
+    sp::P<Ship> ship = getParent();
+    
+    sp::Vector2d position_diff = target->getGlobalPosition2D() - ship->getGlobalPosition2D();
+    double target_rotation = sp::toRotationAngle(position_diff);
+    if (std::abs(sp::angleDifference(target_rotation, ship->getGlobalRotation2D())) < 15)
+        return true;
+    return false;
+}

@@ -20,11 +20,12 @@ void AIShipController::update(Ship* ship)
     
     if (!target)
     {
-        ship->getScene()->queryCollision2D(ship->getGlobalPosition2D(), 25, [this, ship](sp::P<sp::SceneNode> node)
+        ship->getScene()->queryCollision(ship->getGlobalPosition2D(), 25, [this, ship](sp::P<sp::SceneNode> node)
         {
-            if (node != ship && sp::P<Ship>(node))
+            sp::P<Ship> other = node;
+            if (other && other->faction != ship->faction)
             {
-                target = node;
+                target = other;
                 return false;
             }
             return true;
@@ -37,6 +38,9 @@ void AIShipController::update(Ship* ship)
         brake = false;
         rotate = sp::toRotationAngle(target->getGlobalPosition2D() - ship->getGlobalPosition2D());
         
-        primary_fire = true;
+        if (ship->weapon[0] && ship->weapon[0]->hasHitPotential(target))
+            primary_fire = true;
+        if (ship->weapon[1] && ship->weapon[1]->hasHitPotential(target))
+            secondary_fire = true;
     }
 }

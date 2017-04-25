@@ -2,6 +2,7 @@
 #define WEAPON_PROJECTILE_H
 
 #include <sp2/scene/node.h>
+#include "../faction.h"
 
 class Ship;
 class Projectile : public sp::SceneNode
@@ -22,6 +23,7 @@ private:
     double damage;
 
     sp::P<Ship> owner;
+    sp::P<Faction> owner_faction;
 };
 
 #endif//WEAPON_BULLET_H

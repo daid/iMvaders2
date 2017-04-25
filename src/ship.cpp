@@ -10,12 +10,12 @@ Ship::Ship()
 {
     reactor = EquipmentTemplate::create("REACTOR-1", this);
     engine = EquipmentTemplate::create("ENGINE-1", this);
-    shield = EquipmentTemplate::create("SHIELD-1", this);
     hull = EquipmentTemplate::create("HULL-1", this);
-    weapon[0] = EquipmentTemplate::create("BASIC-PULSE-LASER", this);
-    weapon[1] = EquipmentTemplate::create("DOUBLE-PULSE-LASER", this);
     
     base_mass = 1.0;
+
+    shield_damage_indicator = 0;
+    hull_damage_indicator = 0;
 }
 
 Ship::~Ship()
@@ -52,6 +52,12 @@ void Ship::takeDamage(double amount)
 {
     if (shield)
         amount = shield->takeDamage(amount);
+
+    if (amount == 0)
+        shield_damage_indicator = 25;
+    else
+        hull_damage_indicator = 25;
+    
     if (hull->takeDamage(amount))
     {
         //We died...
@@ -67,6 +73,24 @@ void Ship::onFixedUpdate()
         weapon[0]->fire = controller->primary_fire;
     if (weapon[1])
         weapon[1]->fire = controller->secondary_fire;
+    
+    if (shield_damage_indicator > 0)
+        shield_damage_indicator--;
+    if (hull_damage_indicator > 0)
+        hull_damage_indicator--;
+    
+    if ((hull_damage_indicator % 2) == 1)
+    {
+        render_data.color = sf::Color(255, 255, 255, 128);
+    }
+    else if ((shield_damage_indicator % 4) >= 2)
+    {
+        render_data.color = sf::Color(255, 255, 255, 192);
+    }
+    else
+    {
+        render_data.color = sf::Color::White;
+    }
 }
 
 bool Ship::changeReactor(sp::string id)
@@ -91,12 +115,20 @@ bool Ship::changeEngine(sp::string id)
 
 bool Ship::changeShield(sp::string id)
 {
-    sp::P<Equipment> e = EquipmentTemplate::create(id, this);
-    if (!e)
-        return false;
-    delete *shield;
-    shield = e;
-    return true;
+    if (id == "")
+    {
+        delete *shield;
+        return true;
+    }
+    else
+    {
+        sp::P<Equipment> e = EquipmentTemplate::create(id, this);
+        if (!e)
+            return false;
+        delete *shield;
+        shield = e;
+        return true;
+    }
 }
 
 bool Ship::changeHull(sp::string id)

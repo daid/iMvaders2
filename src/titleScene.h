@@ -1,13 +1,13 @@
 #ifndef TITLE_SCENE_H
 #define TITLE_SCENE_H
 
-#include <sp2/scene/scene.h>
+#include <sp2/scene/node.h>
 #include <sp2/graphics/scene/graphicslayer.h>
 
-class TitleScene : public sp::Scene
+class TitleController : public sp::SceneNode
 {
 public:
-    TitleScene();
+    TitleController(sp::P<sp::Scene> scene);
     
     virtual void onUpdate(float delta) override;
     

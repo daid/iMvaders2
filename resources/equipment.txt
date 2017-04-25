@@ -62,13 +62,23 @@
     type: engine
 
     forward: 5.0
-    rotation: 4.0
+    rotation: 2.0
     energy: 0.02
 }
 [AI-PULSE-LASER] {
     type: projectile_weapon
     
     rate: 2
-    projectile: PULSE
+    projectile: AI-PULSE
     count: 1
+}
+[AI-PULSE] {
+    type: projectile
+
+    sprite: weapon/bullet.png
+    size: 0.5
+    collision: 1.0, 0.3
+    speed: 5
+    distance: 25
+    damage: 1
 }

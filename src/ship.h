@@ -8,6 +8,7 @@
 #include "shipequipment/hull.h"
 #include "shipequipment/engine.h"
 #include "weapon/weapon.h"
+#include "faction.h"
 
 class Ship : public sp::SceneNode
 {
@@ -30,11 +31,16 @@ public:
     sp::P<Weapon> weapon[2];
     //special item
     
+    sp::P<Faction> faction;
+    
     bool changeReactor(sp::string id);
     bool changeEngine(sp::string id);
     bool changeShield(sp::string id);
     bool changeHull(sp::string id);
     bool changeWeapon(int index, sp::string id);
+    
+    int shield_damage_indicator;
+    int hull_damage_indicator;
 };
 
 #endif//SHIP_H
