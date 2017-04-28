@@ -1,0 +1,43 @@
+[STAGE_SELECT] {
+    stretch: true
+    margin: 0, 0, 300, 100
+    [NAME] {
+        type: label
+        caption: STAGE 1: Welcome back to the jungle
+        alignment: top
+        size: 300, 50
+        theme_data: stage_title
+    }
+    [STAGES] {
+        layout: horizontal
+        match_content_size: true
+        fill_height: true
+        alignment: center
+
+        //Fill with STAGE_ROW items
+    }
+    [SELECTOR] {
+        type: image
+        texture: robot.png
+        size: 100, 100
+    }
+}
+
+[STAGE_ROW] {
+    fill_height: true
+    size: 200, 0
+    [ITEMS] {
+        layout: vertical
+        alignment: center
+        match_content_size: true
+        
+        //Fill with STAGE items
+    }
+}
+[STAGE] {
+    type: button
+    size: 100, 100
+    margin: 0, 50
+    caption: 1-1
+    theme_data: stage_button
+}

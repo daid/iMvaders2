@@ -91,6 +91,15 @@ void Ship::onFixedUpdate()
     {
         render_data.color = sf::Color::White;
     }
+    sp::Vector2d position = getGlobalPosition2D();
+    if (position.x > 15)
+        setLinearVelocity(getLinearVelocity2D() + sp::Vector2d(-(position.x - 15), 0));
+    if (position.y > 20)
+        setLinearVelocity(getLinearVelocity2D() + sp::Vector2d(0, -(position.y - 20)));
+    if (position.x < -15)
+        setLinearVelocity(getLinearVelocity2D() + sp::Vector2d(-(position.x + 15), 0));
+    if (position.y < -20)
+        setLinearVelocity(getLinearVelocity2D() + sp::Vector2d(0, -(position.y + 20)));
 }
 
 bool Ship::changeReactor(sp::string id)

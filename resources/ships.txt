@@ -5,12 +5,19 @@
 
     [UM-M] {
         name: U-Force M-Fighter
-        sprite: ship/u.png
+        sprite: ship/u/new-m.png
         size: 2.0
-        collision: 1.3, 2
+        collision: 1.2, 1.9
         shield: SHIELD-1
         primary_weapon: BASIC-PULSE-LASER
         secondary_weapon: DOUBLE-PULSE-LASER
+        
+        [UM-U] {
+            name: U-Force U-Fighter
+            sprite: ship/u/new-u.png
+            size: 1.8
+            collision: 1.5, 1.5
+        }
     }
     [MAKERBOT-M] {
         name: Makerbot M-Fighter

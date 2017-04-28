@@ -1,0 +1,50 @@
+[TITLE] {
+    stretch: true
+
+    [INSERT] {
+        type: label
+        caption: INSERT CHOCOLATE CHIP COOKIES
+        alignment: bottom
+        margin: 0, 200
+        theme_data: title_label
+    }
+}
+
+[GAME_SELECT] {
+    stretch: true
+    
+    {
+        layout: vertical
+        alignment: bottom
+        match_content_size: true
+        
+        [NEW_GAME_1] {
+            @ref: SELECT_OPTION
+            caption: NEW 1 PLAYER GAME
+        }
+        [NEW_GAME_2] {
+            @ref: SELECT_OPTION
+            caption: NEW 2 PLAYER GAME
+        }
+        [CONTINUE_GAME] {
+            @ref: SELECT_OPTION
+            caption: CONTINUE GAME
+        }
+        
+        {
+            #Filler
+            size: 0, 200
+        }
+    }
+    [SELECTOR] {
+        type: image
+        texture: robot.png
+        size: 80, 80
+    }
+}
+
+[@SELECT_OPTION] {
+    type: button
+    alignment: topleft
+    size: 500, 80
+}

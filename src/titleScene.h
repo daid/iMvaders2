@@ -3,25 +3,35 @@
 
 #include <sp2/scene/node.h>
 #include <sp2/graphics/scene/graphicslayer.h>
+#include <sp2/graphics/gui/widget/widget.h>
 
 class TitleController : public sp::SceneNode
 {
 public:
-    TitleController(sp::P<sp::Scene> scene);
+    TitleController();
+    
+    void show();
+    void hide();
     
     virtual void onUpdate(float delta) override;
-    
-    void setTextScroller(bool enabled) { show_text_scroller = enabled; }
 private:
     static constexpr float text_scroll_speed = 5.0;
     static constexpr float text_scroll_start = -175.0;
+    static constexpr float text_scroll_passed = 175.0;
     static constexpr float text_scroll_end = 340.0;
 
-    bool show_text_scroller;
-    float offset;
+    enum class State
+    {
+        Scroller,
+        GameSelect
+    } state;
+    float state_time;
+    int option_index;
     sp::P<sp::SceneNode> title;
     sp::P<sp::SceneNode> text_scroll;
     sp::P<sp::SceneGraphicsLayer> graphics_layer;
+    sp::P<sp::gui::Widget> title_gui;
+    sp::P<sp::gui::Widget> game_select_gui;
 };
 
 #endif//TITLE_SCENE_H

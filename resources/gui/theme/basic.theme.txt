@@ -1,17 +1,33 @@
 {
     forground.color: #FFFFFF
-    font: gui/theme/basic/sansation.ttf
+    font: gui/theme/basic/forque.ttf
     text.size: 30
 
     [button] {
-        background.image: gui/theme/basic/background.png
         forground.color.disabled: #808080
         forground.color.hovered: #808080
+        text.size: 80
+        [stage_button] {
+            background.image: gui/theme/basic/stage_button.png
+            background.color.disabled: #808080
+            text.size: 50
+            [stage_button_done] {
+                background.image: gui/theme/basic/stage_button_done.png
+            }
+        }
     }
     [panel] {
         background.image: gui/theme/basic/background.png
     }
     [label] {
+        [title_label] {
+            text.size: 60
+        }
+        [stage_title] {
+            text.size: 80
+        }
+    }
+    [image] {
     }
     [progressbar] {
         background.image: gui/theme/basic/progressbar_background.png

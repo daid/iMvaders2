@@ -29,11 +29,11 @@ void Engine::onFixedUpdate()
 
     sp::Vector2d linear_velocity = ship->getLinearVelocity2D();
     double angular_velocity = ship->getAngularVelocity2D();
-    linear_velocity *= 0.98;
+    linear_velocity *= 0.9;
     angular_velocity *= 0.8;
     if (ship->controller->brake)
     {
-        linear_velocity *= 0.9;
+        linear_velocity *= 0.4;
         angular_velocity *= 0.6;
     }
     

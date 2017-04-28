@@ -13,204 +13,42 @@
 #include <sp2/graphics/scene/basicnoderenderpass.h>
 #include <sp2/graphics/scene/collisionrenderpass.h>
 
-SceneManager::SceneManager(sp::P<sp::Scene> scene)
-: sp::SceneNode(scene->getRoot())
+SceneManager* SceneManager::instance;
+
+SceneManager::SceneManager()
 {
-    title_scene = new sp::Scene("title");
-    new TitleController(title_scene);
+    instance = this;
+
+    sp::gui::GraphicsLayer* gui_layer = new sp::gui::GraphicsLayer(100);
+    gui_layer->setMinimalVirtualSize(sf::Vector2f(1280, 960));
+    gui_layer->setMaximumVirtualSize(sf::Vector2f(1280, 80000));
+
+    title_controller = new TitleController();
+    stage_select = new StageSelect();
+    stage_controller = new StageController();
+
+    switchToTitle();
+}
+
+void SceneManager::switchToTitle()
+{
+    title_controller->show();
+    stage_select->hide();
+    stage_controller->hide();
+}
+
+void SceneManager::switchToStageSelect()
+{
+    title_controller->hide();
+    stage_select->show();
+    stage_controller->hide();
+}
+
+void SceneManager::switchToStage(std::string stage_name)
+{
     
-    for(int n=0; n<max_players; n++)
-    {
-        PlayerData pd;
-        pd.state = PlayerData::State::Inactive;
-        pd.gui_layer = new sp::gui::GraphicsLayer(100);
-        pd.gui_layer->setMinimalVirtualSize(sf::Vector2f(1280, 800));
-        pd.gui_layer->setMaximumVirtualSize(sf::Vector2f(1280, 80000));
-        pd.gui_layer->disable();
-        pd.hud = sp::gui::Loader::load("gui/hud.gui", "HUD", pd.gui_layer->getRoot());
-
-        pd.camera = new sp::CameraNode(space_scene->getRoot());
-        pd.camera->setOrtographic(15.0);
-        pd.camera->setRotation(-90);
-        pd.camera->setPosition(sp::Vector2d(10, 0));
-
-        pd.scene_layer = new sp::SceneGraphicsLayer(10);
-        pd.scene_layer->addRenderPass(new sp::BasicNodeRenderPass("window", space_scene, pd.camera));
-#ifdef DEBUG
-        if (n == 0) pd.scene_layer->addRenderPass(new sp::CollisionRenderPass("window", space_scene, pd.camera));
-#endif
-
-        player_data.push_back(pd);
-    }
-
-    std::vector<sp::MeshData::Vertex> vertices;
-    vertices.emplace_back(sf::Vector3f(-1, -1, 1), sp::Vector2f(0, 1));
-    vertices.emplace_back(sf::Vector3f( 1, -1, 1), sp::Vector2f(1, 1));
-    vertices.emplace_back(sf::Vector3f(-1,  1, 1), sp::Vector2f(0, 0));
-    vertices.emplace_back(sf::Vector3f(-1,  1, 1), sp::Vector2f(0, 0));
-    vertices.emplace_back(sf::Vector3f( 1, -1, 1), sp::Vector2f(1, 1));
-    vertices.emplace_back(sf::Vector3f( 1,  1, 1), sp::Vector2f(1, 0));
-
-    background = new sp::SceneNode(space_scene->getRoot());
-    background->render_data.type = sp::RenderData::Type::Normal;
-    background->render_data.shader = sp::Shader::get("shader/star_background.shader");
-    background->render_data.mesh = std::make_shared<sp::MeshData>(vertices);
-    background->render_data.texture = "stars2.png";
-    background->render_data.order = -1;
-    background->render_data.color = sf::Color::White;
-
-    space_scene->disable();
-    title_scene->enable();
-}
-
-void SceneManager::onUpdate(float delta)
-{
-    for(unsigned int n=0; n<max_players; n++)
-    {
-        PlayerData& data = player_data[n];
-        if (data.state == PlayerData::State::Inactive && (player_keys[n]->start.get() || player_keys[n]->primary_fire.get()))
-        {
-            activatePlayer(n);
-        }
-        
-        sp::P<sp::gui::Progressbar> bar;
-        bar = data.gui_layer->getRoot()->getWidgetWithID("ENERGY");
-        if (bar)
-        {
-            if (data.ship && data.ship->reactor)
-            {
-                bar->setValue(data.ship->reactor->getEnergyLevel());
-                bar->setRange(0, data.ship->reactor->getMaxEnergyLevel());
-            }
-            else
-            {
-                bar->setValue(0);
-            }
-        }
-        bar = data.gui_layer->getRoot()->getWidgetWithID("SHIELD");
-        if (bar)
-        {
-            if (data.ship && data.ship->shield)
-            {
-                bar->setValue(data.ship->shield->getChargeLevel());
-                bar->setRange(0, data.ship->shield->getMaxChargeLevel());
-            }
-            else
-            {
-                bar->setValue(0);
-            }
-        }
-        bar = data.gui_layer->getRoot()->getWidgetWithID("HULL");
-        if (bar)
-        {
-            if (data.ship && data.ship->hull)
-            {
-                bar->setValue(data.ship->hull->getHullLevel());
-                bar->setRange(0, data.ship->hull->getMaxHullLevel());
-            }
-            else
-            {
-                bar->setValue(0);
-            }
-        }
-        if (data.ship)
-            data.camera->setPosition(data.ship->getGlobalPosition2D() + data.ship->getLinearVelocity2D() * 0.1);
-    }
-}
-
-void SceneManager::activatePlayer(int index)
-{
-    PlayerData& data = player_data[index];
-    if (data.state != PlayerData::State::Inactive)
-        return;
-    
-    data.state = PlayerData::State::Playing;
-    
-    data.ship = ShipTemplate::create("UM-M");
-    data.ship->faction = new Faction();
-    data.ship->setRotation(sp::random(0, 360));
-    data.ship->controller = new PlayerShipController(index);
-
-    updateViews();
-}
-
-void SceneManager::updateViews()
-{
-    int player_count = 0;
-    for(unsigned int n=0; n<max_players; n++)
-    {
-        if (player_data[n].state != PlayerData::State::Inactive)
-            player_count++;
-    }
-
-    if (player_count == 0)
-    {
-        space_scene->disable();
-        title_scene->enable();
-    }
-    else
-    {
-        title_scene->disable();
-        space_scene->enable();
-        
-        int player_nr = 0;
-        for(unsigned int n=0; n<max_players; n++)
-        {
-            if (player_data[n].state != PlayerData::State::Inactive)
-            {
-                updateViewForPlayer(n, player_nr, player_count);
-                player_nr++;
-                player_data[n].gui_layer->enable();
-                player_data[n].scene_layer->enable();
-            }
-            else
-            {
-                player_data[n].gui_layer->disable();
-                player_data[n].scene_layer->disable();
-            }
-        }
-    }
-}
-
-void SceneManager::updateViewForPlayer(int index, int player_nr, int player_count)
-{
-    PlayerData& data = player_data[index];
-    sf::FloatRect viewport(0, 0, 1, 1);
-    switch(player_count)
-    {
-    case 1:
-        viewport = sf::FloatRect(0, 0, 1, 1);
-        break;
-    case 2:
-        switch(player_nr)
-        {
-        case 0:
-            viewport = sf::FloatRect(0, 0, 0.5, 1);
-            break;
-        case 1:
-            viewport = sf::FloatRect(0.5, 0, 0.5, 1);
-            break;
-        }
-        break;
-    case 3:
-    case 4:
-        switch(player_nr)
-        {
-        case 0:
-            viewport = sf::FloatRect(0, 0, 0.5, 0.5);
-            break;
-        case 1:
-            viewport = sf::FloatRect(0.5, 0, 0.5, 0.5);
-            break;
-        case 2:
-            viewport = sf::FloatRect(0, 0.5, 0.5, 0.5);
-            break;
-        case 3:
-            viewport = sf::FloatRect(0.5, 0.5, 0.5, 0.5);
-            break;
-        }
-        break;
-    }
-    data.gui_layer->setViewport(viewport);
-    data.scene_layer->setViewport(viewport);
+    title_controller->hide();
+    stage_select->hide();
+    stage_controller->loadStage(stage_name);
+    stage_controller->show();
 }

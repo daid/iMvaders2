@@ -8,8 +8,8 @@
     name: Refurbished Engine
     type: engine
 
-    forward: 30.0
-    rotation: 10.0
+    forward: 50.0
+    rotation: 5.0
     energy: 0.02
 }
 [SHIELD-1] {
@@ -50,7 +50,7 @@
     type: projectile
 
     sprite: weapon/bullet.png
-    size: 0.5
+    size: 1.0
     collision: 1.0, 0.3
     speed: 25
     distance: 25
@@ -76,7 +76,7 @@
     type: projectile
 
     sprite: weapon/bullet.png
-    size: 0.5
+    size: 1.0
     collision: 1.0, 0.3
     speed: 5
     distance: 25

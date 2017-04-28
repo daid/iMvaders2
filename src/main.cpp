@@ -39,15 +39,7 @@ int main(int argc, char** argv)
     sp::SpriteManager::create("logo2", "logo2.png", sp::Vector2f(60.0, 60.0 / 512 * 135));
     sp::SpriteManager::create("scrolltext", "scrolltext.png", sp::Vector2f(71.6, 308));
 
-    space_scene = new sp::Scene("space");
-    new SceneManager(new sp::Scene("main"));
-    
-    for(int n=0; n<20; n++)
-    {
-        sp::P<Ship> ship = ShipTemplate::create("MAKERBOT-M");
-        ship->controller = new AIShipController();
-        ship->setPosition(sp::Vector2d(20, n));
-    }
+    new SceneManager();
     engine->run();
     
     return 0;
