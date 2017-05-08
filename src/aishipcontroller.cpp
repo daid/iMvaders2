@@ -20,7 +20,7 @@ void AIShipController::update(Ship* ship)
     
     if (!target)
     {
-        ship->getScene()->queryCollision(ship->getGlobalPosition2D(), 25, [this, ship](sp::P<sp::SceneNode> node)
+        ship->getScene()->queryCollision(ship->getGlobalPosition2D(), 25, [this, ship](sp::P<sp::Node> node)
         {
             sp::P<Ship> other = node;
             if (other && other->faction != ship->faction)

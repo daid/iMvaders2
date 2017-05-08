@@ -1,4 +1,26 @@
-[HUD] {
+[MAIN] {
+    stretch: true
+    
+    [PLA] {
+        layout: horizontal
+        alignment: bottomleft
+        match_content_size: true
+        margin: 50, 30
+        {
+            type: image
+            texture: pickup/pla.png
+            size: 40, 40
+        }
+        [PLA_LABEL] {
+            type: label
+            caption: 0
+            text_alignment: left
+            size: 400, 40
+            margin: 10, 0
+        }
+    }
+}
+[PLAYER] {
     stretch: true
 
     [ENERGY] {
@@ -56,4 +78,26 @@
     text_alignment: bottom
     vertical: true
     margin: 0, 30
+}
+
+[MESSAGE] {
+    type: panel
+    fill_width: true
+    size: 0, 300
+    margin: 50
+    
+    layout: horizontal
+    [FACE] {
+        type: image
+        margin: 30, 0, 30, 30
+        size: 240, 240
+    }
+    [TEXT] {
+        type: label
+        caption: TEST\nTEST2
+        text_alignment: topleft
+        margin: 30
+        size: 500, 240
+        theme_data: message_text
+    }
 }

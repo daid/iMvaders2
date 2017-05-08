@@ -16,6 +16,7 @@ public:
     virtual void setParameter(sp::string key, sp::string value) override;
 private:
     double charge_level;
+    double charge_delay;
     
     double max_charge_level;
     double energy_per_charge;

@@ -2,7 +2,7 @@
     name: Refurbished Reactor
     type: reactor
     energy: 10.0
-    rate: 2.0
+    rate: 1.7
 }
 [ENGINE-1] {
     name: Refurbished Engine
@@ -10,15 +10,15 @@
 
     forward: 50.0
     rotation: 5.0
-    energy: 0.02
+    energy: 0.015
 }
 [SHIELD-1] {
     name: Refurbished Shield
     type: shield
     
-    charge: 5.0
-    energy: 1.0
-    rate: 1.0
+    charge: 1.0
+    energy: 6.0
+    rate: 0.5
 }
 [HULL-1] {
     name: Refurbished Hull
@@ -46,6 +46,7 @@
     offset: 0, 0.5
     energy: 0.4
 }
+
 [PULSE] {
     type: projectile
 
@@ -57,28 +58,14 @@
     damage: 1
 }
 
-
-[AI-ENGINE-1] {
-    type: engine
-
-    forward: 5.0
-    rotation: 2.0
-    energy: 0.02
-}
-[AI-PULSE-LASER] {
-    type: projectile_weapon
-    
-    rate: 2
-    projectile: AI-PULSE
-    count: 1
-}
-[AI-PULSE] {
+[ELECTRIC] {
     type: projectile
 
-    sprite: weapon/bullet.png
-    size: 1.0
+    sprite: weapon/electric.png
+    size: 1.4
     collision: 1.0, 0.3
-    speed: 5
-    distance: 25
+    speed: 0
+    lifetime: 0.2
     damage: 1
+    destroy: false
 }

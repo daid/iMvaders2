@@ -4,7 +4,7 @@
 #include <sp2/scene/node.h>
 
 class Ship;
-class Equipment : public sp::SceneNode
+class Equipment : public sp::Node
 {
 public:
     Equipment(sp::P<Ship> parent);

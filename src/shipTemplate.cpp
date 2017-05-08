@@ -50,9 +50,19 @@ sp::P<Ship> ShipTemplate::create(sp::string id)
     sp::P<Ship> ship = new Ship();
     ship->render_data = sp::SpriteManager::get(st.sprite_name);
     if (st.collision_size.y > 0)
-        ship->setCollisionShape(sp::collision::Box2D(st.collision_size.x, st.collision_size.y));
+    {
+        sp::collision::Box2D shape(st.collision_size.x, st.collision_size.y);
+        shape.setFilterCategory(SpaceObject::collision_player_category);
+        shape.setMaskFilterCategory(SpaceObject::collision_player_category);
+        ship->setCollisionShape(shape);
+    }
     else
-        ship->setCollisionShape(sp::collision::Circle2D(st.collision_size.x));
+    {
+        sp::collision::Circle2D shape(st.collision_size.x);
+        shape.setFilterCategory(SpaceObject::collision_player_category);
+        shape.setMaskFilterCategory(SpaceObject::collision_player_category);
+        ship->setCollisionShape(shape);
+    }
     
     ship->changeReactor(st.reactor);
     ship->changeEngine(st.engine);

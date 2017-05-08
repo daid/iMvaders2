@@ -16,6 +16,7 @@ public:
     sp::io::Keybinding start;
     sp::io::Keybinding primary_fire;
     sp::io::Keybinding secondary_fire;
+    sp::io::Keybinding skip;
     sp::io::Keybinding brake;
     sp::io::Keybinding hold_rotation;
 private:

@@ -3,7 +3,7 @@
 #include <sp2/logging.h>
 
 Equipment::Equipment(sp::P<Ship> parent)
-: sp::SceneNode(parent)
+: sp::Node(parent)
 {
     mass = 0.0;
 }

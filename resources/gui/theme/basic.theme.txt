@@ -26,6 +26,9 @@
         [stage_title] {
             text.size: 80
         }
+        [message_text] {
+            text.size: 60
+        }
     }
     [image] {
     }

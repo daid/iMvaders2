@@ -10,15 +10,16 @@
         collision: 1.2, 1.9
         shield: SHIELD-1
         primary_weapon: BASIC-PULSE-LASER
-        secondary_weapon: DOUBLE-PULSE-LASER
-        
-        [UM-U] {
-            name: U-Force U-Fighter
-            sprite: ship/u/new-u.png
-            size: 1.8
-            collision: 1.5, 1.5
-        }
     }
+    [UM-U] {
+        name: U-Force U-Fighter
+        sprite: ship/u/new-u.png
+        size: 1.8
+        collision: 1.5, 1.5
+        shield: SHIELD-1
+        primary_weapon: DOUBLE-PULSE-LASER
+    }
+    
     [MAKERBOT-M] {
         name: Makerbot M-Fighter
         sprite: ship/m.png

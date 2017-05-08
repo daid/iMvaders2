@@ -33,7 +33,7 @@ void Engine::onFixedUpdate()
     angular_velocity *= 0.8;
     if (ship->controller->brake)
     {
-        linear_velocity *= 0.4;
+        linear_velocity *= 0.6;
         angular_velocity *= 0.6;
     }
     

@@ -8,8 +8,9 @@ class Hull : public Equipment
 public:
     Hull(sp::P<Ship> parent);
     
-    float getHullLevel() const { return hull_level; }
-    float getMaxHullLevel() const { return max_hull_level; }
+    double getHullLevel() const { return hull_level; }
+    void setHullLevel(double hull) { hull_level = std::min(max_hull_level, hull); }
+    double getMaxHullLevel() const { return max_hull_level; }
     bool takeDamage(double amount);
     void repair();
     

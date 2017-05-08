@@ -4,20 +4,31 @@
 #include "ship.h"
 #include "playershipcontroller.h"
 #include "shipTemplate.h"
+#include "enemy.h"
+#include "message.h"
+#include "scenemanager.h"
+#include "pickup.h"
 
+#include <sp2/random.h>
 #include <sp2/graphics/meshdata.h>
 #include <sp2/graphics/gui/guiLoader.h>
 #include <sp2/graphics/gui/widget/progressbar.h>
+#include <sp2/graphics/gui/widget/label.h>
+#include <sp2/graphics/gui/widget/image.h>
 #include <sp2/scene/cameraNode.h>
 #include <sp2/graphics/scene/graphicslayer.h>
 #include <sp2/graphics/scene/basicnoderenderpass.h>
 #include <sp2/graphics/scene/collisionrenderpass.h>
 
 sp::P<sp::Scene> space_scene;
+static int global_time;
+
+StageController* StageController::instance;
 
 StageController::StageController()
-: sp::SceneNode((new sp::Scene("space"))->getRoot())
+: sp::Node((new sp::Scene("space"))->getRoot())
 {
+    instance = this;
     space_scene = getScene();
     
     camera = new sp::CameraNode(space_scene->getRoot());
@@ -28,14 +39,14 @@ StageController::StageController()
     scene_layer = new sp::SceneGraphicsLayer(10);
     scene_layer->addRenderPass(new sp::BasicNodeRenderPass("window", space_scene, camera));
 #ifdef DEBUG
-    //scene_layer->addRenderPass(new sp::CollisionRenderPass("window", space_scene, camera));
+    scene_layer->addRenderPass(new sp::CollisionRenderPass("window", space_scene, camera));
 #endif
 
     for(int n=0; n<max_players; n++)
     {
         PlayerData pd;
         pd.state = PlayerData::State::Inactive;
-        pd.hud = sp::gui::Loader::load("gui/hud.gui", "HUD", nullptr);
+        pd.hud = sp::gui::Loader::load("gui/hud.gui", "PLAYER", nullptr);
         if (n == 1)
         {
             for(auto widget : pd.hud->children)
@@ -52,6 +63,8 @@ StageController::StageController()
 
         player_data.push_back(pd);
     }
+    main_hud = sp::gui::Loader::load("gui/hud.gui", "MAIN", nullptr);
+    message = sp::gui::Loader::load("gui/hud.gui", "MESSAGE", nullptr);
 
     std::vector<sp::MeshData::Vertex> vertices;
     vertices.emplace_back(sf::Vector3f(-1, -1, 1), sp::Vector2f(0, 1));
@@ -61,7 +74,7 @@ StageController::StageController()
     vertices.emplace_back(sf::Vector3f( 1, -1, 1), sp::Vector2f(1, 1));
     vertices.emplace_back(sf::Vector3f( 1,  1, 1), sp::Vector2f(1, 0));
 
-    background = new sp::SceneNode(space_scene->getRoot());
+    background = new sp::Node(space_scene->getRoot());
     background->render_data.type = sp::RenderData::Type::Normal;
     background->render_data.shader = sp::Shader::get("shader/star_background.shader");
     background->render_data.mesh = std::make_shared<sp::MeshData>(vertices);
@@ -73,37 +86,148 @@ StageController::StageController()
 void StageController::show()
 {
     space_scene->enable();
+    message->hide();
+    for(int n=0; n<max_players; n++)
+        player_data[n].hud->hide();
+    for(int n=0; n<SaveData::instance->player_count; n++)
+        player_data[n].hud->show();
+    main_hud->show();
 }
 
 void StageController::hide()
 {
     space_scene->disable();
+    message->hide();
+    for(int n=0; n<max_players; n++)
+    {
+        player_data[n].hud->hide();
+    }
+    main_hud->hide();
+}
+
+static int luaf_include(lua_State* lua)
+{
+    sp::string filename = luaL_checkstring(lua, 1);
+
+    auto resource = sp::io::ResourceProvider::get("stages/" + filename);
+    if (!resource)
+    {
+        return luaL_error(lua, "Failed to find %s", filename);
+    }
+
+    sp::string filecontents = resource->readAll();
+
+    if (luaL_loadbuffer(lua, filecontents.c_str(), filecontents.length(), filename.c_str()))
+    {
+        return lua_error(lua);
+    }
+    
+    //set the environment table it as 1st upvalue for the loaded chunk, else it works in a different environment then where this function was called from.
+    lua_pushvalue(lua, lua_upvalueindex(1));
+    lua_setupvalue(lua, -2, 1);
+
+    lua_call(lua, 0, 0);
+    return 0;
+}
+
+static sp::P<Message> createMessage(sp::string message)
+{
+    Message* m = new Message();
+    m->setText(message);
+    return m;
+}
+
+static sp::P<Enemy> createEnemy(sp::string texture_name, float scale)
+{
+    Enemy* e = new Enemy();
+    e->render_data.shader = sp::Shader::get("shader/basic.shader");
+    e->render_data.type = sp::RenderData::Type::Normal;
+    e->render_data.mesh = sp::MeshData::createQuad(sp::Vector2f(1.0, 1.0));
+    e->render_data.texture = texture_name;
+    e->render_data.scale = sp::Vector3f(scale, scale, 1.0);
+    return e;
+}
+
+static sp::P<Pickup> createPickup(float x, float y)
+{
+    return new Pickup(sp::Vector2d(x, y));
+}
+
+static int getGlobalTime()
+{
+    return global_time;
+}
+
+static void stageDone()
+{
+    StageController::instance->stageDone();
+}
+
+void StageController::stageDone()
+{
+    SceneManager::instance->switchToStageSelect();
+
+    for(int n=0; n<SaveData::instance->player_count; n++)
+    {
+        SaveData::PlayerData& save_data = SaveData::instance->player_data[n];
+        if (player_data[n].ship)
+            save_data.hull = player_data[n].ship->hull->getHullLevel() / player_data[n].ship->hull->getMaxHullLevel();
+        else
+            save_data.hull = 0.0;
+    }
 }
 
 void StageController::loadStage(sp::string name)
 {
     LOG(Info, "Going to load stage:", name);
+    global_time = 0;
     for(auto child : space_scene->getRoot()->getChildren())
     {
         if (child != *camera && child != *background && child != this)
             delete child;
     }
+    background->setPosition(sp::Vector2d(0, 0));
+    background_speed = sp::Vector2d(-5, 0);
     
     for(int index=0; index<SaveData::instance->player_count; index++)
     {
         PlayerData& data = player_data[index];
+        SaveData::PlayerData& save_data = SaveData::instance->player_data[index];
+        
+        if (save_data.hull <= 0.0)
+            continue;
+        
         if ((index % 2) == 0)
             data.ship = ShipTemplate::create("UM-M");
         else
             data.ship = ShipTemplate::create("UM-U");
         data.ship->setRotation(0);
-        data.ship->setPosition(sp::Vector2d(-12, 0));
+        data.ship->setPosition(sp::Vector2d(-12, sp::random(-5, 5)));
         data.ship->controller = new PlayerShipController(index);
+        data.ship->hull->setHullLevel(data.ship->hull->getMaxHullLevel() * save_data.hull);
     }
+    
+    if (script)
+        delete *script;
+    script = new sp::script::Environment();
+    script->setGlobal("include", luaf_include);
+    script->setGlobal("createMessage", createMessage);
+    script->setGlobal("createEnemy", createEnemy);
+    script->setGlobal("createPickup", createPickup);
+    script->setGlobal("getGlobalTime", getGlobalTime);
+    script->setGlobal("random", sp::random);
+    script->setGlobal("stageDone", ::stageDone);
+    script->load(sp::io::ResourceProvider::get("stages/" + name + ".lua"));
+
+    LOG(Info, "Loaded stage:", name);
 }
 
 void StageController::onUpdate(float delta)
 {
+    //Scroll the background
+    background->setPosition(background->getLocalPosition2D() + background_speed * double(delta));
+
+    //Update the camera position
     int ship_count = 0;
     sp::Vector2d position_accumulator;
     for(unsigned int n=0; n<max_players; n++)
@@ -116,114 +240,96 @@ void StageController::onUpdate(float delta)
     }
     if (ship_count > 0)
         camera->setPosition(position_accumulator / double(ship_count) * 0.2);
-}
-/*
-void SceneManager::onUpdate(float delta)
-{
-    for(unsigned int n=0; n<max_players; n++)
+    
+    //Update the message dialog
+    message->hide();
+    for(auto m : Message::messages)
     {
-        PlayerData& data = player_data[n];
-        if (data.state == PlayerData::State::Inactive && (player_keys[n]->start.get() || player_keys[n]->primary_fire.get()))
+        if (m->isActive())
         {
-            activatePlayer(n);
-        }
-        
-        sp::P<sp::gui::Progressbar> bar;
-        bar = data.hud->getWidgetWithID("ENERGY");
-        if (bar)
-        {
-            if (data.ship && data.ship->reactor)
+            message->show();
+            sp::P<sp::gui::Label> label = message->getWidgetWithID("TEXT");
+            label->setAttribute("caption", m->getText());
+            sp::P<sp::gui::Image> image = message->getWidgetWithID("FACE");
+            sp::string face = m->getFace();
+            if (face == "")
             {
-                bar->setValue(data.ship->reactor->getEnergyLevel());
-                bar->setRange(0, data.ship->reactor->getMaxEnergyLevel());
+                image->hide();
             }
             else
             {
-                bar->setValue(0);
+                image->setAttribute("texture", face);
+                image->show();
             }
-        }
-        bar = data.hud->getWidgetWithID("SHIELD");
-        if (bar)
-        {
-            if (data.ship && data.ship->shield)
-            {
-                bar->setValue(data.ship->shield->getChargeLevel());
-                bar->setRange(0, data.ship->shield->getMaxChargeLevel());
-            }
-            else
-            {
-                bar->setValue(0);
-            }
-        }
-        bar = data.hud->getWidgetWithID("HULL");
-        if (bar)
-        {
-            if (data.ship && data.ship->hull)
-            {
-                bar->setValue(data.ship->hull->getHullLevel());
-                bar->setRange(0, data.ship->hull->getMaxHullLevel());
-            }
-            else
-            {
-                bar->setValue(0);
-            }
+            
+            break;
         }
     }
     
-    int ship_count = 0;
-    sp::Vector2d position_accumulator;
-    for(unsigned int n=0; n<max_players; n++)
+    //Update the player HUD
+    for(int n=0; n<SaveData::instance->player_count; n++)
     {
-        if (player_data[n].ship)
-        {
-            position_accumulator += player_data[n].ship->getGlobalPosition2D();
-            ship_count++;
-        }
+        updateHud(player_data[n]);
     }
-    if (ship_count > 0)
-        camera->setPosition(position_accumulator / double(ship_count) * 0.2);
-}
-
-void SceneManager::activatePlayer(int index)
-{
-    PlayerData& data = player_data[index];
-    if (data.state != PlayerData::State::Inactive)
-        return;
     
-    data.state = PlayerData::State::Playing;
-    
-    if ((index % 2) == 0)
-        data.ship = ShipTemplate::create("UM-M");
-    else
-        data.ship = ShipTemplate::create("UM-U");
-    data.ship->faction = new Faction();
-    data.ship->setRotation(0);
-    data.ship->setPosition(sp::Vector2d(-12, 0));
-    data.ship->controller = new PlayerShipController(index);
-
-    updateViews();
-}
-
-void SceneManager::updateViews()
-{
-    int player_count = 0;
-    for(unsigned int n=0; n<max_players; n++)
+    //Update the main hud
+    if (SaveData::instance->pla < 1)
     {
-        if (player_data[n].state != PlayerData::State::Inactive)
-            player_count++;
-    }
-
-    if (player_count == 0)
-    {
-        space_scene->disable();
-        title_scene->enable();
+        main_hud->getWidgetWithID("PLA")->hide();
     }
     else
     {
-        title_scene->disable();
-        space_scene->enable();
-
-        scene_layer->enable();
+        main_hud->getWidgetWithID("PLA")->show();
+        main_hud->getWidgetWithID("PLA_LABEL")->setAttribute("caption", sp::string(SaveData::instance->pla));
     }
 }
-*/
+
+void StageController::onFixedUpdate()
+{
+    global_time++;
+    script->call("update");
+}
+
+void StageController::updateHud(PlayerData& data)
+{
+    sp::P<sp::gui::Progressbar> bar;
+    bar = data.hud->getWidgetWithID("ENERGY");
+    if (bar)
+    {
+        if (data.ship && data.ship->reactor)
+        {
+            bar->setValue(data.ship->reactor->getEnergyLevel());
+            bar->setRange(0, data.ship->reactor->getMaxEnergyLevel());
+        }
+        else
+        {
+            bar->setValue(0);
+        }
+    }
+    bar = data.hud->getWidgetWithID("SHIELD");
+    if (bar)
+    {
+        if (data.ship && data.ship->shield)
+        {
+            bar->setValue(data.ship->shield->getChargeLevel());
+            bar->setRange(0, data.ship->shield->getMaxChargeLevel());
+        }
+        else
+        {
+            bar->setValue(0);
+        }
+    }
+    bar = data.hud->getWidgetWithID("HULL");
+    if (bar)
+    {
+        if (data.ship && data.ship->hull)
+        {
+            bar->setValue(data.ship->hull->getHullLevel());
+            bar->setRange(0, data.ship->hull->getMaxHullLevel());
+        }
+        else
+        {
+            bar->setValue(0);
+        }
+    }
+}

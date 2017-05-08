@@ -17,7 +17,7 @@ ProjectileWeapon::ProjectileWeapon(sp::P<Ship> parent)
     burst_count = 0;
     burst_time = 0.0;
     
-    fire_delay = 0.0;
+    fire_delay = 0.5;
     projectile_burst_count = 0.0;
 }
 
@@ -88,7 +88,7 @@ void ProjectileWeapon::launchProjectiles()
         double f = 1.0;
         if (projectile_count > 1)
             f = double(n) / double(projectile_count - 1);
-        EquipmentTemplate::createProjectile(projectile_name)->launch(ship, spread_offset * -(f * 2.0 - 1.0), fire_angle + -spread_angle / 2.0 + spread_angle * f);
+        EquipmentTemplate::createProjectile(projectile_name)->launch(ship, spread_offset * -(f * 2.0 - 1.0), fire_angle + -spread_angle / 2.0 + spread_angle * f, SpaceObject::DamageSource::Player);
     }
 }
 

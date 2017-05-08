@@ -11,10 +11,11 @@
 #include <sp2/graphics/scene/basicnoderenderpass.h>
 #include <sp2/logging.h>
 #include <sp2/assert.h>
+#include <sp2/random.h>
 #include <sp2/graphics/gui/guiLoader.h>
 
 TitleController::TitleController()
-: sp::SceneNode((new sp::Scene("title"))->getRoot())
+: sp::Node((new sp::Scene("title"))->getRoot())
 {
     sp::P<sp::CameraNode> camera = new sp::CameraNode(getParent());
     camera->setPerspective();
@@ -29,22 +30,22 @@ TitleController::TitleController()
     vertices.emplace_back(sf::Vector3f( 1, -1, 1), sp::Vector2f(1, 1));
     vertices.emplace_back(sf::Vector3f( 1,  1, 1), sp::Vector2f(1, 0));
     
-    sp::P<sp::SceneNode> background = new sp::SceneNode(getParent());
+    sp::P<sp::Node> background = new sp::Node(getParent());
     background->render_data.type = sp::RenderData::Type::Normal;
     background->render_data.shader = sp::Shader::get("shader/background.shader");
     background->render_data.mesh = std::make_shared<sp::MeshData>(vertices);
     background->render_data.texture = "stars.png";
     background->render_data.color = sf::Color::White;
     
-    title = new sp::SceneNode(getParent());
+    title = new sp::Node(getParent());
     title->render_data = sp::SpriteManager::get("logo2");
     title->setPosition(sp::Vector2d(0, 15));
 
-    sp::P<sp::SceneNode> text_scroll_root = new sp::SceneNode(getParent());
+    sp::P<sp::Node> text_scroll_root = new sp::Node(getParent());
     text_scroll_root->setPosition(sp::Vector2d(0, -15));
     text_scroll_root->setRotation(sp::Quaterniond::fromAxisAngle(sp::Vector3d(1, 0, 0), -80));
 
-    text_scroll = new sp::SceneNode(text_scroll_root);
+    text_scroll = new sp::Node(text_scroll_root);
     text_scroll->render_data = sp::SpriteManager::get("scrolltext");
     text_scroll->setPosition(sp::Vector2d(0, 0));
     
@@ -57,16 +58,20 @@ TitleController::TitleController()
 
     game_select_gui->getWidgetWithID("NEW_GAME_1")->setEventCallback([this](sp::Variant v)
     {
-        new SaveData(1);
-        SceneManager::instance->switchToStageSelect();
+        startNewGame(1);
     });
     game_select_gui->getWidgetWithID("NEW_GAME_2")->setEventCallback([this](sp::Variant v)
     {
-        new SaveData(2);
-        SceneManager::instance->switchToStageSelect();
+        startNewGame(2);
     });
     
     hide();
+}
+
+void TitleController::startNewGame(int player_count)
+{
+    new SaveData(player_count);
+    SceneManager::instance->switchToStageSelect();
 }
 
 void TitleController::show()
@@ -170,11 +175,20 @@ void TitleController::onUpdate(float delta)
             }
             if (item)
             {
-                if (player_keys[0]->primary_fire.getDown())
-                    item->onPointerUp(sp::Vector2f(item->layout.rect.left, item->layout.rect.top), -1);
+                for(int n=0; n<max_players; n++)
+                {
+                    if (player_keys[n]->primary_fire.getDown())
+                    {
+                        item->onPointerUp(sp::Vector2f(item->layout.rect.left, item->layout.rect.top), -1);
+                    }
+                }
                 selector->layout.position.x = item->layout.rect.left - selector->layout.size.x;
                 selector->layout.position.y = item->layout.rect.top;
             }
+            if (player_keys[0]->start.getDown())
+                startNewGame(1);
+            if (player_keys[1]->start.getDown())
+                startNewGame(2);
         }
         break;
     }

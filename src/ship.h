@@ -1,7 +1,7 @@
 #ifndef SHIP_H
 #define SHIP_H
 
-#include <sp2/scene/node.h>
+#include "spaceObject.h"
 #include "shipcontroller.h"
 #include "shipequipment/reactor.h"
 #include "shipequipment/shield.h"
@@ -10,7 +10,7 @@
 #include "weapon/weapon.h"
 #include "faction.h"
 
-class Ship : public sp::SceneNode
+class Ship : public SpaceObject
 {
 public:
     Ship();
@@ -18,7 +18,7 @@ public:
     
     sp::P<ShipController> controller;
 
-    void takeDamage(double amount);
+    virtual bool takeDamage(double amount, DamageSource damage_source) override;
     double getTotalMass();
 
     virtual void onFixedUpdate() override;

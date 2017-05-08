@@ -14,7 +14,7 @@
 #include <sp2/graphics/gui/guiLoader.h>
 
 StageSelect::StageSelect()
-: sp::SceneNode((new sp::Scene("stage_select"))->getRoot())
+: sp::Node((new sp::Scene("stage_select"))->getRoot())
 {
     sp::P<sp::CameraNode> camera = new sp::CameraNode(getParent());
     camera->setPerspective();
@@ -29,14 +29,14 @@ StageSelect::StageSelect()
     vertices.emplace_back(sf::Vector3f( 1, -1, 1), sp::Vector2f(1, 1));
     vertices.emplace_back(sf::Vector3f( 1,  1, 1), sp::Vector2f(1, 0));
     
-    sp::P<sp::SceneNode> background = new sp::SceneNode(getParent());
+    sp::P<sp::Node> background = new sp::Node(getParent());
     background->render_data.type = sp::RenderData::Type::Normal;
     background->render_data.shader = sp::Shader::get("shader/background.shader");
     background->render_data.mesh = std::make_shared<sp::MeshData>(vertices);
     background->render_data.texture = "stars.png";
     background->render_data.color = sf::Color::White;
     
-    title = new sp::SceneNode(getParent());
+    title = new sp::Node(getParent());
     title->render_data = sp::SpriteManager::get("logo2");
     title->render_data.scale = sf::Vector3f(0.7, 0.7, 0.7);
     title->setPosition(sp::Vector2d(0, 20));
@@ -175,5 +175,22 @@ void StageSelect::onUpdate(float delta)
         selector->layout.position.y = item->layout.rect.top - gui->layout.margin_top;
         if (player_keys[0]->primary_fire.getDown())
             item->onPointerUp(sp::Vector2f(item->layout.rect.left, item->layout.rect.top), -1);
+    }
+
+    sp::P<sp::gui::Widget> name = gui->getWidgetWithID("NAME");
+    switch(selection_level)
+    {
+    case 0:
+        name->setAttribute("caption", "STAGE 1: Welcome back to the jungle");
+        break;
+    case 1:
+        switch(selection_sublevel)
+        {
+        case 0: name->setAttribute("caption", "STAGE 2-1: For the lulz"); break;
+        case 1: name->setAttribute("caption", "STAGE 2-2: Blast from the past"); break;
+        }
+        break;
+    case 2:
+        break;
     }
 }

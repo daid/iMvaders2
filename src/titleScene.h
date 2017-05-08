@@ -5,7 +5,7 @@
 #include <sp2/graphics/scene/graphicslayer.h>
 #include <sp2/graphics/gui/widget/widget.h>
 
-class TitleController : public sp::SceneNode
+class TitleController : public sp::Node
 {
 public:
     TitleController();
@@ -15,6 +15,8 @@ public:
     
     virtual void onUpdate(float delta) override;
 private:
+    void startNewGame(int player_count);
+    
     static constexpr float text_scroll_speed = 5.0;
     static constexpr float text_scroll_start = -175.0;
     static constexpr float text_scroll_passed = 175.0;
@@ -27,8 +29,8 @@ private:
     } state;
     float state_time;
     int option_index;
-    sp::P<sp::SceneNode> title;
-    sp::P<sp::SceneNode> text_scroll;
+    sp::P<sp::Node> title;
+    sp::P<sp::Node> text_scroll;
     sp::P<sp::SceneGraphicsLayer> graphics_layer;
     sp::P<sp::gui::Widget> title_gui;
     sp::P<sp::gui::Widget> game_select_gui;

@@ -3,14 +3,15 @@
 
 #include <sp2/scene/node.h>
 #include "../faction.h"
+#include "../spaceObject.h"
 
 class Ship;
-class Projectile : public sp::SceneNode
+class Projectile : public sp::Node
 {
 public:
     Projectile();
 
-    void launch(sp::P<Ship> owner, sp::Vector2d position_offset, double angle_offset);
+    void launch(sp::P<sp::Node> owner, sp::Vector2d position_offset, double angle_offset, SpaceObject::DamageSource damage_source);
     
     virtual void onUpdate(float delta) override;
     virtual void onCollision(sp::CollisionInfo& info) override;
@@ -21,9 +22,9 @@ private:
     double travel_speed;
     double lifetime;
     double damage;
-
-    sp::P<Ship> owner;
-    sp::P<Faction> owner_faction;
+    bool destroy_on_hit;
+    
+    SpaceObject::DamageSource damage_source;
 };
 
 #endif//WEAPON_BULLET_H

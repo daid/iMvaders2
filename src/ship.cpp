@@ -6,7 +6,6 @@
 #include <sp2/assert.h>
 
 Ship::Ship()
-: sp::SceneNode(space_scene->getRoot())
 {
     reactor = EquipmentTemplate::create("REACTOR-1", this);
     engine = EquipmentTemplate::create("ENGINE-1", this);
@@ -48,21 +47,27 @@ double Ship::getTotalMass()
     return mass;
 }
 
-void Ship::takeDamage(double amount)
+bool Ship::takeDamage(double amount, DamageSource damage_source)
 {
+    if (damage_source == DamageSource::Player)
+        return false;
+    if (shield_damage_indicator > 0 || hull_damage_indicator > 0)
+        return false;
+    
     if (shield)
         amount = shield->takeDamage(amount);
 
     if (amount == 0)
-        shield_damage_indicator = 25;
+        shield_damage_indicator = 20;
     else
-        hull_damage_indicator = 25;
+        hull_damage_indicator = 20;
     
     if (hull->takeDamage(amount))
     {
         //We died...
         delete this;
     }
+    return true;
 }
 
 void Ship::onFixedUpdate()
@@ -73,6 +78,14 @@ void Ship::onFixedUpdate()
         weapon[0]->fire = controller->primary_fire;
     if (weapon[1])
         weapon[1]->fire = controller->secondary_fire;
+
+    if (shield_damage_indicator > 0 || hull_damage_indicator > 0)
+    {
+        if (weapon[0])
+            weapon[0]->fire = false;
+        if (weapon[1])
+            weapon[1]->fire = false;
+    }
     
     if (shield_damage_indicator > 0)
         shield_damage_indicator--;
@@ -81,11 +94,11 @@ void Ship::onFixedUpdate()
     
     if ((hull_damage_indicator % 2) == 1)
     {
-        render_data.color = sf::Color(255, 255, 255, 128);
+        render_data.color = sf::Color(255, 255, 255, 0);
     }
     else if ((shield_damage_indicator % 4) >= 2)
     {
-        render_data.color = sf::Color(255, 255, 255, 192);
+        render_data.color = sf::Color(255, 255, 255, 0);
     }
     else
     {
