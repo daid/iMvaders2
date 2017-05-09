@@ -9,6 +9,8 @@ public:
     Pickup(sp::Vector2d position);
     
     virtual void onCollision(sp::CollisionInfo& info) override;
+    
+    virtual void onUpdate(float delta) override;
 };
 
 #endif//PICKUP_H

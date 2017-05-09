@@ -29,6 +29,9 @@
         [message_text] {
             text.size: 60
         }
+        [game_over_text] {
+            text.size: 200
+        }
     }
     [image] {
     }

@@ -47,7 +47,7 @@ double Ship::getTotalMass()
     return mass;
 }
 
-bool Ship::takeDamage(double amount, DamageSource damage_source)
+bool Ship::takeDamage(sp::Vector2d position, double amount, DamageSource damage_source)
 {
     if (damage_source == DamageSource::Player)
         return false;

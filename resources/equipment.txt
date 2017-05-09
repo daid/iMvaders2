@@ -8,9 +8,9 @@
     name: Refurbished Engine
     type: engine
 
-    forward: 50.0
+    forward: 100.0
     rotation: 5.0
-    energy: 0.015
+    energy: 0.005
 }
 [SHIELD-1] {
     name: Refurbished Shield
@@ -66,6 +66,28 @@
     collision: 1.0, 0.3
     speed: 0
     lifetime: 0.2
+    damage: 2
+    destroy: false
+}
+
+[LASER] {
+    type: projectile
+
+    sprite: weapon/laser.png
+    size: 50
+    collision: 50.0, 0.3
+    speed: 0
+    lifetime: 1.0
     damage: 1
+    destroy: false
+}
+
+[PRELASER] {
+    type: projectile
+
+    sprite: weapon/pre-laser.png
+    size: 50
+    speed: 0
+    lifetime: 3.0
     destroy: false
 }

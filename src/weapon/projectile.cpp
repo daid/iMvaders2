@@ -40,7 +40,7 @@ void Projectile::onCollision(sp::CollisionInfo& info)
     sp::P<SpaceObject> so = info.other;
     if (so)
     {
-        if (so->takeDamage(damage, damage_source))
+        if (so->takeDamage(info.position, damage, damage_source))
         {
             if (destroy_on_hit)
             {

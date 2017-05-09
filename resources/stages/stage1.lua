@@ -2,6 +2,7 @@
 --"Welcome back to the jungle"
 
 include("util.lua")
+include("stage1_pickup.lua")
 
 --Simple stage that serves as introduction
 --Main enemy: Ztx
@@ -25,9 +26,19 @@ end
 function startWave1()
     log("Wave 1")
     
-    update = basicEndOfWaveCheck(postWave1)
+    if getPlaytroughCount() == 0 then
+        update = basicEndOfWaveCheck(startExplainPickup)
+    else
+        update = basicEndOfWaveCheck(postWave1)
+    end
     createEnemyGroup(4,-8, 0, 1, function(group, position) createZTX_X_Fighter(group, true).target = position end)
     createEnemyGroup(4, 8, 0, 1, function(group, position) createZTX_X_Fighter(group, true).target = position end)
+    
+    if getPlaytroughCount() == 0 then
+        for _, enemy in ipairs(all_enemies) do
+            enemy.onDestroy(nil)
+        end
+    end
 end
 
 function postWave1()
@@ -64,7 +75,66 @@ function startWave3()
     createZTX_T_Fighter(5)
 end
 
---start()
---startWave1()
---startWave2()
-startWave3()
+function postWave3()
+    transmission(
+        "[Face:jaime]What is this?|I though we defeated the M corperation!",
+        "[Face:marvin]They must be trying to make allies.",
+        "Too late for that, just blast them to bits!",
+        startWave4
+    )
+end
+
+function startWave4()
+    log("Wave 4")
+    
+    update = basicEndOfWaveCheck(postWave4)
+    createEnemyGroup(1, 0, 2.5, 10, function(group, position) createM_M_Fighter(group).target = position end)
+    
+    createZTX_T_Fighter(-7)
+    createZTX_T_Fighter(0)
+    createZTX_T_Fighter(7)
+end
+
+function postWave4()
+    update = delayUpdate(50, startWave5)
+end
+
+function startWave5()
+    log("Wave 5")
+    update = basicEndOfWaveCheck(postWave5)
+
+    createEnemyGroup(8, 0, 2, 10, function(group, position) createZTX_Z_Fighter(group).target = position end)
+    createEnemyGroup(5, 0, 5, 4, function(group, position) createZTX_X_Fighter(group).target = position end)
+    
+    createZTX_T_Fighter(-16)
+    createZTX_T_Fighter(16)
+end
+
+function postWave5()
+    transmission(
+        "[Face:jaime]Large object inbound!",
+        "[Face:marvin]Looks like they just|mashed something together.",
+        "Watch out.|This could be a tough fight.",
+        startBoss
+    )
+end
+
+function startBoss()
+    log("Boss")
+    
+    update = basicEndOfWaveCheck(postBoss)
+    createZTX_Boss()
+end
+
+function postBoss()
+    transmission(
+        "[Face:jaime]You did it!",
+        "[Face:marvin]Well done commander.",
+        "Your mission here is complete|See you in the next round.",
+        stageDone
+    )
+end
+
+start()
+--startExplainPickup()
+--startBoss()

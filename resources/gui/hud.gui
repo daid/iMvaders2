@@ -19,6 +19,13 @@
             margin: 10, 0
         }
     }
+    
+    [GAMEOVER] {
+        type: label
+        stretch: true
+        caption: GAME OVER
+        theme_data: game_over_text
+    }
 }
 [PLAYER] {
     stretch: true

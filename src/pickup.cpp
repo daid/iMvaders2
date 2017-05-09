@@ -36,3 +36,9 @@ void Pickup::onCollision(sp::CollisionInfo& info)
         delete this;
     }
 }
+
+void Pickup::onUpdate(float delta)
+{
+    if (getGlobalPosition2D().x < -30)
+        delete this;
+}

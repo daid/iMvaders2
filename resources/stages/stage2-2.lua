@@ -25,12 +25,12 @@ function startWave1()
     createEnemyGroup(8, 0, 2.5, 8, function(group, position) createM_M_Fighter(group, true).target = position end)
     createEnemyGroup(5, 0, 2.5, 10, function(group, position) createM_M_Fighter(group).target = position end)
     createEnemyGroup(2,-8, 2.5, 4, function(group, position)
-        ship = createM_M_Fighter(group)
+        local ship = createM_M_Fighter(group)
         ship.target = position
         ship.onWeaponUpdate(chargeShotWeapon)
     end)
     createEnemyGroup(2, 8, 2.5, 4, function(group, position)
-        ship = createM_M_Fighter(group)
+        local ship = createM_M_Fighter(group)
         ship.target = position
         ship.onWeaponUpdate(chargeShotWeapon)
     end)
@@ -46,24 +46,28 @@ function postWave1()
 end
 
 function giveBonus1()
--- Bonus powerup
-    postBonus1()
+    -- Bonus powerup
+    update = basicEndOfWaveCheck(postBonus1)
+    createM_Rep2(1)
+    createM_Rep2(-1)
 end
 
 function postBonus1()
-	transmission(
+    update = delayUpdate(50, function() transmission(
         "[Face:daid]Large object inbound",
+        launchZ18,  --We launch this thing early. Just to mess with you.
         "[Face:jaime]Watch out!|It is the|Replicator Z18",
         "[Face:daid]It does not|seem to do|anything",
         "Maybe the firmware|is not installed",
         "[Face:jaime]It is on a crash|course towards us",
-        "Blast your way|trough it!",
-        launchZ18
-    )
+        "Blast your way|trough it!"
+    ) end)
 end
 
 function launchZ18()
--- Z18
+    -- Z18
+    update = basicEndOfWaveCheck(postZ18)
+    table.insert(all_enemies, createSpecial("Z18"))
 end
 
 function postZ18()
@@ -74,22 +78,30 @@ function postZ18()
 end
 
 function startWave2()
--- Wave, 8 shielded 4 burst shielded, 2 digitizers
+    -- Wave, 8 shielded 4 burst shielded, 2 digitizers
+    update = basicEndOfWaveCheck(postWave2)
+    
+    createEnemyGroup(8, 0, 12, 2, function(group, position) createM_Digitizer(group).target = position end)
 end
 
 function postWave2()
--- Bonus powerup
+    -- Bonus powerup
+    update = basicEndOfWaveCheck(postBonus2)
+    createM_Rep2()
 end
 
-function postPowerup2()
-	transmission(
+function postBonus2()
+    update = delayUpdate(50, function() transmission(
         "[Face:jaime]Watch out",
         "You are flying into|a field of abandoned|printers",
         startPrinterField
-    )
+    ) end)
 end
 
 --Start of printer field (+dive bombers?)
+function startPrinterField()
+    
+end
 
 function startWave3()
     -- Wave, 2 digitizers
@@ -124,4 +136,7 @@ function postBoss()
     )
 end
 
-start()
+--TODO: Bonus game
+
+--start()
+startWave2()

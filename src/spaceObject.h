@@ -15,7 +15,7 @@ public:
     SpaceObject();
     ~SpaceObject();
     
-    virtual bool takeDamage(double amount, DamageSource damage_source) = 0;
+    virtual bool takeDamage(sp::Vector2d position, double amount, DamageSource damage_source) = 0;
 
     //Collision categories, to reduce the load on collision detection, by filtering away unneeded collisions.
     static constexpr int collision_generic_category = 1;

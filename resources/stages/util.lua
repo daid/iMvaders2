@@ -70,3 +70,18 @@ function basicEndOfWaveCheck(next)
     end
 end
 
+function delayUpdate(delay, next)
+    return function()
+        if delay > 0 then
+            delay = delay - 1
+        else
+            update = nil
+            next()
+        end
+    end
+end
+
+function getPlaytroughCount()
+    --Placeholder
+    return 0
+end

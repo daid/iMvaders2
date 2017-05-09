@@ -117,7 +117,7 @@ function wingmanController(self)
             self.setPosition(20, random(-20, 20))
             self.setRotation(random(160, 200))
         end
-        self.fire = self.getPosition() > 15
+        self.fire = self.getPosition() > -5
     end
 end
 
@@ -158,4 +158,13 @@ function inAndOutController(self)
             self.target.y = random(-16, 16)
         end
     end
+end
+
+function sinusWaveController(self)
+    local x, y = self.getPosition()
+    y = y + self.speed
+    if y > 25 then y = -25 end
+    if y < -25 then y = 25 end
+    self.setPosition(math.sin(y / 3.0) * 3.0, y)
+    self.fire = true
 end

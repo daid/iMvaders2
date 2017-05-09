@@ -19,7 +19,7 @@ public:
     
     void show();
     void hide();
-    void loadStage(sp::string name);
+    bool loadStage(sp::string name);
     void stageDone();
 
     virtual void onUpdate(float delta) override;
@@ -51,6 +51,8 @@ private:
     sp::Vector2d background_speed;
     
     sp::P<sp::script::Environment> script;
+    
+    float game_over_delay;
 };
 
 #endif//SPACE_SCENE

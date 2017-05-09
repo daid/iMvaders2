@@ -1,6 +1,7 @@
 function basicPulseWeapon(self)
     if not self.fire then return end
-    if self.weapon_delay == nil then self.weapon_delay = random(70, 150) end
+    if self.weapon_delay_modifier == nil then self.weapon_delay_modifier = 1.0 end
+    if self.weapon_delay == nil then self.weapon_delay = random(70, 150) * self.weapon_delay_modifier end
     if self.weapon_delay > 0 then
         self.weapon_delay = self.weapon_delay - 1
     else
@@ -11,7 +12,8 @@ end
 
 function dualPulseWeapon(self)
     if not self.fire then return end
-    if self.weapon_delay == nil then self.weapon_delay = random(70, 150) end
+    if self.weapon_delay_modifier == nil then self.weapon_delay_modifier = 1.0 end
+    if self.weapon_delay == nil then self.weapon_delay = random(70, 150) * self.weapon_delay_modifier end
     if self.weapon_delay > 0 then
         self.weapon_delay = self.weapon_delay - 1
     else

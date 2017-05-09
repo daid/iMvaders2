@@ -8,6 +8,7 @@
 #include "message.h"
 #include "scenemanager.h"
 #include "pickup.h"
+#include "special/z18.h"
 
 #include <sp2/random.h>
 #include <sp2/graphics/meshdata.h>
@@ -153,9 +154,21 @@ static sp::P<Pickup> createPickup(float x, float y)
     return new Pickup(sp::Vector2d(x, y));
 }
 
+static sp::P<SpaceObject> createSpecial(sp::string name)
+{
+    if (name == "Z18")
+        return new Z18();
+    return nullptr;
+}
+
 static int getGlobalTime()
 {
     return global_time;
+}
+
+static int getPlaCount()
+{
+    return SaveData::instance->pla;
 }
 
 static void stageDone()
@@ -177,7 +190,7 @@ void StageController::stageDone()
     }
 }
 
-void StageController::loadStage(sp::string name)
+bool StageController::loadStage(sp::string name)
 {
     LOG(Info, "Going to load stage:", name);
     global_time = 0;
@@ -214,12 +227,19 @@ void StageController::loadStage(sp::string name)
     script->setGlobal("createMessage", createMessage);
     script->setGlobal("createEnemy", createEnemy);
     script->setGlobal("createPickup", createPickup);
+    script->setGlobal("createSpecial", createSpecial);
     script->setGlobal("getGlobalTime", getGlobalTime);
+    script->setGlobal("getPlaCount", getPlaCount);
     script->setGlobal("random", sp::random);
     script->setGlobal("stageDone", ::stageDone);
-    script->load(sp::io::ResourceProvider::get("stages/" + name + ".lua"));
+    if (!script->load(sp::io::ResourceProvider::get("stages/" + name + ".lua")))
+    {
+        LOG(Error, "Error while loading stage.");
+        return false;
+    }
 
     LOG(Info, "Loaded stage:", name);
+    return true;
 }
 
 void StageController::onUpdate(float delta)
@@ -281,6 +301,21 @@ void StageController::onUpdate(float delta)
     {
         main_hud->getWidgetWithID("PLA")->show();
         main_hud->getWidgetWithID("PLA_LABEL")->setAttribute("caption", sp::string(SaveData::instance->pla));
+    }
+    
+    if (ship_count > 0)
+    {
+        main_hud->getWidgetWithID("GAMEOVER")->hide();
+        game_over_delay = 3.0;
+    }
+    else
+    {
+        main_hud->getWidgetWithID("GAMEOVER")->show();
+        game_over_delay -= delta;
+        if (game_over_delay <= 0.0)
+        {
+            SceneManager::instance->switchToTitle();
+        }
     }
 }
 

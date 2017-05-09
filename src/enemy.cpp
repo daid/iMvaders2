@@ -18,6 +18,7 @@ Enemy::Enemy()
     damage_indicator = 0;
     protection_time_on_damage = 20;
     
+    invincible = false;
     shield = max_shield = 0;
     shield_charge_delay = 0;
     shield_charge_time = 0;
@@ -95,10 +96,12 @@ void Enemy::onFixedUpdate()
         render_data.color.a = 255;
 }
 
-bool Enemy::takeDamage(double amount, DamageSource damage_source)
+bool Enemy::takeDamage(sp::Vector2d position, double amount, DamageSource damage_source)
 {
     if (damage_source == DamageSource::Enemy)
         return false;
+    if (invincible)
+        return true;
     if (damage_indicator > 0)
         return true;
     if (shield > 0)
@@ -134,7 +137,7 @@ void Enemy::onCollision(sp::CollisionInfo& info)
     sp::P<SpaceObject> so = info.other;
     if (so)
     {
-        so->takeDamage(1.0, SpaceObject::DamageSource::Enemy);
+        so->takeDamage(info.position, 1.0, SpaceObject::DamageSource::Enemy);
     }
 }
 
@@ -208,6 +211,7 @@ void Enemy::onRegisterScriptBindings(sp::ScriptBindingClass& script_binding_clas
     script_binding_class.bind("setShield", setShield);
     script_binding_class.bind("setGlow", setGlow);
     script_binding_class.bind("disableGlow", disableGlow);
+    script_binding_class.bind("setInvincible", setInvincible);
     script_binding_class.bind("createProjectile", createProjectile);
 
     script_binding_class.bind("onDestroy", onDestroy);

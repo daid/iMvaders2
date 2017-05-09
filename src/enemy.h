@@ -10,11 +10,12 @@ public:
     Enemy();
     ~Enemy();
 
-    virtual bool takeDamage(double amount, DamageSource damage_source) override;
+    virtual bool takeDamage(sp::Vector2d position, double amount, DamageSource damage_source) override;
     virtual void onCollision(sp::CollisionInfo& info) override;
     virtual void onUpdate(float delta) override;
     virtual void onFixedUpdate() override;
 private:
+    bool invincible;
     float health;
     float size;
     float shield;
@@ -42,6 +43,7 @@ private:
     void setShield(float amount, int recharge_time, sp::string texture);
     void setGlow(float speed);
     void disableGlow();
+    void setInvincible(bool invincible) { this->invincible = invincible; }
     
     sp::P<Projectile> createProjectile(sp::string name, float x, float y, float angle);
 
