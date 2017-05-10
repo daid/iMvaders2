@@ -9,6 +9,7 @@
 #include "scenemanager.h"
 #include "pickup.h"
 #include "special/z18.h"
+#include "special/abandondedPrinter.h"
 
 #include <sp2/random.h>
 #include <sp2/graphics/meshdata.h>
@@ -158,6 +159,8 @@ static sp::P<SpaceObject> createSpecial(sp::string name)
 {
     if (name == "Z18")
         return new Z18();
+    if (name == "AbandondedPrinter")
+        return new AbandondedPrinter();
     return nullptr;
 }
 
