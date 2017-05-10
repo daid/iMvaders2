@@ -124,11 +124,14 @@ function startBoss()
     
     update = basicEndOfWaveCheck(postBoss)
     createZTX_Boss()
+    if getPlaytroughCount() > 0 then
+        createZTX_Boss().setPosition(52, random(-16, 16))
+    end
 end
 
 function postBoss()
     transmission(
-        "[Face:jaime]You did it!",
+        "[Face:jaime]You did it!|The mothership is no more.",
         "[Face:marvin]Well done commander.",
         "Your mission here is complete|See you in the next round.",
         stageDone

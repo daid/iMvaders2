@@ -178,22 +178,15 @@ static void stageDone()
 
 void StageController::stageDone()
 {
-    SceneManager::instance->switchToStageSelect();
-
-    for(int n=0; n<SaveData::instance->player_count; n++)
-    {
-        SaveData::PlayerData& save_data = SaveData::instance->player_data[n];
-        if (player_data[n].ship)
-            save_data.hull = player_data[n].ship->hull->getHullLevel() / player_data[n].ship->hull->getMaxHullLevel();
-        else
-            save_data.hull = 0.0;
-    }
+    stage_done = true;
+    stage_done_time = 0;
 }
 
 bool StageController::loadStage(sp::string name)
 {
     LOG(Info, "Going to load stage:", name);
     global_time = 0;
+    stage_done = false;
     for(auto child : space_scene->getRoot()->getChildren())
     {
         if (child != *camera && child != *background && child != this)
@@ -259,7 +252,29 @@ void StageController::onUpdate(float delta)
         }
     }
     if (ship_count > 0)
-        camera->setPosition(position_accumulator / double(ship_count) * 0.2);
+    {
+        sp::Vector2d position = position_accumulator / double(ship_count) * 0.2;
+        if (stage_done)
+        {
+            stage_done_time += delta;
+            background_speed.x -= stage_done_time;
+            position.x -= stage_done_time * stage_done_time * 10.0;
+            if (position.x < -30.0)
+            {
+                SceneManager::instance->switchToStageSelect();
+
+                for(int n=0; n<SaveData::instance->player_count; n++)
+                {
+                    SaveData::PlayerData& save_data = SaveData::instance->player_data[n];
+                    if (player_data[n].ship)
+                        save_data.hull = player_data[n].ship->hull->getHullLevel() / player_data[n].ship->hull->getMaxHullLevel();
+                    else
+                        save_data.hull = 0.0;
+                }
+            }
+        }
+        camera->setPosition(position);
+    }
     
     //Update the message dialog
     message->hide();
@@ -316,6 +331,23 @@ void StageController::onUpdate(float delta)
         {
             SceneManager::instance->switchToTitle();
         }
+    }
+    
+    sp::P<sp::gui::Progressbar> boss = main_hud->getWidgetWithID("BOSS");
+    if (Enemy::bosses.size() > 0)
+    {
+        float health = 0.0;
+        for(Enemy* e : Enemy::bosses)
+            health += e->getHealth();
+        boss->show();
+        boss->setValue(health);
+        if (health > boss->getMaxRange())
+            boss->setRange(0, health);
+    }
+    else
+    {
+        boss->hide();
+        boss->setRange(0, 0);
     }
 }
 

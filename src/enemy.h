@@ -14,6 +14,10 @@ public:
     virtual void onCollision(sp::CollisionInfo& info) override;
     virtual void onUpdate(float delta) override;
     virtual void onFixedUpdate() override;
+    
+    static sp::PList<Enemy> bosses;
+    
+    float getHealth() { return health; }
 private:
     bool invincible;
     float health;
@@ -44,6 +48,7 @@ private:
     void setGlow(float speed);
     void disableGlow();
     void setInvincible(bool invincible) { this->invincible = invincible; }
+    void setBoss() { bosses.add(this); }
     
     sp::P<Projectile> createProjectile(sp::string name, float x, float y, float angle);
 

@@ -23,9 +23,4 @@ void PlayerShipController::update(Ship* ship)
     
     primary_fire = keys->primary_fire.get();
     secondary_fire = keys->secondary_fire.get();
-    
-    if (keys->brake.get())
-        new Explosion(sp::Vector2d(0, 0), 1.0);
-    if (keys->hold_rotation.get())
-        new Explosion(sp::Vector2d(0, 0), 10.0);
 }

@@ -69,6 +69,7 @@ function createZTX_Boss()
     table.insert(all_enemies, center)
     center.setCollisionBox(5, 2.8)
     center.setHealth(8)
+    center.setBoss()
     center.onControlUpdate(ztxBossController)
     center.onWeaponUpdate(electroBoltWeapon)
     center.target = Vector2(3, 0)
@@ -78,6 +79,7 @@ function createZTX_Boss()
     table.insert(all_enemies, center.left_x)
     center.left_x.setCollisionBox(3.8, 3)
     center.left_x.setHealth(8)
+    center.left_x.setBoss()
     center.left_x.onControlUpdate(wingmanController)
     center.left_x.onWeaponUpdate(dualPulseWeapon)
     center.left_x.weapon_delay_modifier = 0.5
@@ -88,6 +90,7 @@ function createZTX_Boss()
     table.insert(all_enemies, center.right_x)
     center.right_x.setCollisionBox(3.8, 3)
     center.right_x.setHealth(8)
+    center.right_x.setBoss()
     center.right_x.onControlUpdate(wingmanController)
     center.right_x.onWeaponUpdate(dualPulseWeapon)
     center.right_x.weapon_delay_modifier = 0.5
@@ -98,6 +101,7 @@ function createZTX_Boss()
     table.insert(all_enemies, center.left_z)
     center.left_z.setCollisionBox(1, 1)
     center.left_z.setHealth(4)
+    center.left_z.setBoss()
     center.left_z.onControlUpdate(wingmanController)
     center.left_z.onWeaponUpdate(basicPulseWeapon)
     center.left_z.weapon_delay_modifier = 0.4
@@ -108,6 +112,7 @@ function createZTX_Boss()
     table.insert(all_enemies, center.right_z)
     center.right_z.setCollisionBox(1, 1)
     center.right_z.setHealth(4)
+    center.right_x.setBoss()
     center.right_z.onControlUpdate(wingmanController)
     center.right_z.onWeaponUpdate(basicPulseWeapon)
     center.right_z.weapon_delay_modifier = 0.4
@@ -118,6 +123,7 @@ function createZTX_Boss()
     table.insert(all_enemies, center.left_z2)
     center.left_z2.setCollisionBox(1, 1)
     center.left_z2.setHealth(4)
+    center.left_z2.setBoss()
     center.left_z2.onControlUpdate(wingmanController)
     center.left_z2.onWeaponUpdate(basicPulseWeapon)
     center.left_z2.weapon_delay_modifier = 0.4
@@ -128,6 +134,7 @@ function createZTX_Boss()
     table.insert(all_enemies, center.right_z2)
     center.right_z2.setCollisionBox(1, 1)
     center.right_z2.setHealth(4)
+    center.right_z2.setBoss()
     center.right_z2.onControlUpdate(wingmanController)
     center.right_z2.onWeaponUpdate(basicPulseWeapon)
     center.right_z2.weapon_delay_modifier = 0.4
@@ -137,6 +144,7 @@ function createZTX_Boss()
     center.setPosition(22, 0)
     
     center.onDestroy(spawnPickup(12))
+    return center
 end
 
 function ztxBossController(self)
@@ -150,8 +158,7 @@ function ztxBossController(self)
         self.setRotation(random(160, 200))
     end
     self.fire = self.getPosition() < 15
-    
-    
+
     self.setInvincible(self.left_x.valid or self.right_x.valid)
     if self.left_x.valid then
         self.left_x.setInvincible(self.left_z.valid or self.left_z2.valid)

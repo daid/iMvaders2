@@ -48,5 +48,8 @@
         [progressbar_hull] {
             forground.color: #808040
         }
+        [healthbar_boss] {
+            forground.color: #aa1010
+        }
     }
 }

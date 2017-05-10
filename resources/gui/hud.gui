@@ -26,6 +26,15 @@
         caption: GAME OVER
         theme_data: game_over_text
     }
+    
+    [BOSS] {
+        type: progressbar
+        alignment: top
+        margin: 50
+        size: 600, 40
+        progress_alignment: left
+        theme_data: healthbar_boss
+    }
 }
 [PLAYER] {
     stretch: true

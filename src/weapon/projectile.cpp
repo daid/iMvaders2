@@ -56,6 +56,7 @@ void Projectile::setParameter(sp::string key, sp::string value)
     if (key == "sprite")
     {
         render_data = sp::SpriteManager::get(value);
+        render_data.order = 1;
     }
     else if (key == "size")
     {

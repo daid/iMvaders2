@@ -53,6 +53,8 @@ private:
     sp::P<sp::script::Environment> script;
     
     float game_over_delay;
+    bool stage_done;
+    float stage_done_time;
 };
 
 #endif//SPACE_SCENE

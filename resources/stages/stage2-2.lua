@@ -24,16 +24,8 @@ function startWave1()
     update = basicEndOfWaveCheck(postWave1)
     createEnemyGroup(8, 0, 2.5, 8, function(group, position) createM_M_Fighter(group, true).target = position end)
     createEnemyGroup(5, 0, 2.5, 10, function(group, position) createM_M_Fighter(group).target = position end)
-    createEnemyGroup(2,-8, 2.5, 4, function(group, position)
-        local ship = createM_M_Fighter(group)
-        ship.target = position
-        ship.onWeaponUpdate(chargeShotWeapon)
-    end)
-    createEnemyGroup(2, 8, 2.5, 4, function(group, position)
-        local ship = createM_M_Fighter(group)
-        ship.target = position
-        ship.onWeaponUpdate(chargeShotWeapon)
-    end)
+    createEnemyGroup(2,-8, 2.5, 4, function(group, position) createM_M_FighterBurst(group).target = position end)
+    createEnemyGroup(2, 8, 2.5, 4, function(group, position) createM_M_FighterBurst(group).target = position end)
 end
 
 function postWave1()
@@ -82,6 +74,10 @@ function startWave2()
     update = basicEndOfWaveCheck(postWave2)
     
     createEnemyGroup(8, 0, 12, 2, function(group, position) createM_Digitizer(group).target = position end)
+    createEnemyGroup(3, 0, 2.5, 8, function(group, position) createM_M_Fighter(group, true).target = position end)
+    
+    createEnemyGroup(0.5,-8, 2.5, 2, function(group, position) createM_M_FighterBurst(group, true).target = position end)
+    createEnemyGroup(0.5, 8, 2.5, 2, function(group, position) createM_M_FighterBurst(group, true).target = position end)
 end
 
 function postWave2()
@@ -100,19 +96,28 @@ end
 
 --Start of printer field (+dive bombers?)
 function startPrinterField()
-    
+    update = delayUpdate(120, startWave3)
 end
 
 function startWave3()
     -- Wave, 2 digitizers
+    update = basicEndOfWaveCheck(function() update = delayUpdate(30, startWave4) end)
+    createEnemyGroup(8, 0, 12, 2, function(group, position) createM_Digitizer(group).target = position end)
 end
 
 function startWave4()
     -- Wave, 3 digitizers, 8 enemies
+    update = basicEndOfWaveCheck(function() update = delayUpdate(30, startWave5) end)
+    createEnemyGroup(3, 0, 2.5, 8, function(group, position) createM_M_Fighter(group).target = position end)
+    createEnemyGroup(8, 0, 10, 3, function(group, position) createM_Digitizer(group).target = position end)
 end
 
 function startWave5()
     -- Wave, 4 digitizers, 8 enemies, 8 enemies
+    update = basicEndOfWaveCheck(function() update = delayUpdate(60, preBoss) end)
+    createEnemyGroup(0, 0, 2.5, 8, function(group, position) createM_M_Fighter(group, true).target = position end)
+    createEnemyGroup(3, 0, 2.5, 8, function(group, position) createM_M_Fighter(group, true).target = position end)
+    createEnemyGroup(8, 0, 8, 4, function(group, position) createM_Digitizer(group).target = position end)
 end
 
 function preBoss()
@@ -138,5 +143,6 @@ end
 
 --TODO: Bonus game
 
---start()
-startWave2()
+start()
+--startWave5()
+--postBoss()

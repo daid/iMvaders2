@@ -9,6 +9,8 @@
 #include <sp2/collision/2d/circle.h>
 #include <sp2/collision/2d/box.h>
 
+sp::PList<Enemy> Enemy::bosses;
+
 Enemy::Enemy()
 {
     setRotation(180);
@@ -212,6 +214,7 @@ void Enemy::onRegisterScriptBindings(sp::ScriptBindingClass& script_binding_clas
     script_binding_class.bind("setGlow", setGlow);
     script_binding_class.bind("disableGlow", disableGlow);
     script_binding_class.bind("setInvincible", setInvincible);
+    script_binding_class.bind("setBoss", setBoss);
     script_binding_class.bind("createProjectile", createProjectile);
 
     script_binding_class.bind("onDestroy", onDestroy);

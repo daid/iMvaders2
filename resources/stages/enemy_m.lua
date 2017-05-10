@@ -15,6 +15,12 @@ function createM_M_Fighter(group, shield)
     return ship
 end
 
+function createM_M_FighterBurst(group, shield)
+    local ship = createM_M_Fighter(group, shield)
+    ship.onWeaponUpdate(chargeShotWeapon)
+    return ship
+end
+
 function createM_Rep2(direction)
     local ship = createEnemy("ship/m/rep2.png", 4.0)
     table.insert(all_enemies, ship)
