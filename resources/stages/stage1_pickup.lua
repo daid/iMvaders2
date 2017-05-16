@@ -46,7 +46,7 @@ function nowYouAreJustTryingToFuckup()
         "Oh, I know.|Here you go.|You cannot miss now",
         function()
             update = basicEndOfWaveCheck(nowYouAreJustTryingToFuckupFinished)
-            for n=-24, 24 do
+            for n=-24, 24, 2 do
                 table.insert(all_enemies, createPickup(20, n))
             end
         end
@@ -58,10 +58,10 @@ function nowYouAreJustTryingToFuckupFinished()
         "[Face:nyan]See. There you go.",
         "I knew you would see the|importance of getting|these pickups now.",
         "We do have a problem now.",
-        "Because of your screwing|around, you got|an advantage of now.",
+        "Because of your screwing|around, you got|an advantage now.",
         "We should not be rewarding|this behaviour...",
         "So...|              |What shall we do with you.",
-        "I have an idea.",
+        "I have an idea,|so where did I put this...|Ah, yes.",
         "Have fun!",
         nowYouAreJustTryingToFuckupFuckYouStart
     )
@@ -73,22 +73,24 @@ function nowYouAreJustTryingToFuckupFuckYouStart()
     createEnemyGroup(3, 0, 6.6, 4, function(group, position) createZTX_X_Fighter(group, true).target = position end)
     createEnemyGroup(6,-7, 2, 6, function(group, position) createZTX_Z_Fighter(group).target = position end)
     createEnemyGroup(6, 7, 2, 6, function(group, position) createZTX_Z_Fighter(group).target = position end)
+    createEnemyGroup(6, 0, 1, 20, function(group, position) createZTX_Z_Fighter(group).onControlUpdate(diveBomberController) end)
     
     createEnemyGroup(8, 0, 2.5, 12, function(group, position) createM_M_Fighter(group, true).target = position end)
     createEnemyGroup(5, 0, 2.5, 16, function(group, position) createM_M_Fighter(group, true).target = position end)
-    createEnemyGroup(2,-10, 2.5, 8, function(group, position)
-        local ship = createM_M_Fighter(group, true)
-        ship.target = position
-        ship.onWeaponUpdate(chargeShotWeapon)
-    end)
-    createEnemyGroup(2, 10, 2.5, 8, function(group, position)
-        local ship = createM_M_Fighter(group, true)
-        ship.target = position
-        ship.onWeaponUpdate(chargeShotWeapon)
-    end)
+    createEnemyGroup(2,-10, 2.5, 8, function(group, position) createM_M_FighterBurst(group, true).target = position end)
+    createEnemyGroup(2, 10, 2.5, 8, function(group, position) createM_M_FighterBurst(group, true).target = position end)
 
     for n=-20,20,5 do
         createZTX_T_Fighter(n)
+        createZTX_T_Fighter(n).target.x = 8
+    end
+    
+    createZTX_Boss()
+    createZTX_Boss().setPosition(52, random(-16, 16))
+    createZTX_Boss().setPosition(82, random(-16, 16))
+    
+    for _, enemy in ipairs(all_enemies) do
+        enemy.onDestroy(nil)
     end
 end
 

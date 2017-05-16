@@ -16,6 +16,7 @@ SaveData::SaveData(int player_count)
     
     score = 0;
     pla = 0;
+    playtrough_count = 0;
 }
 
 int SaveData::unlockedStageLevel() const
@@ -27,6 +28,8 @@ int SaveData::unlockedStageLevel() const
     }
 #ifdef DEBUG
     level += 2;
+#else
+    level = 1;
 #endif
     return level;
 }

@@ -7,7 +7,7 @@
 #include "weapon/projectile.h"
 
 #include <sp2/logging.h>
-#include <sp2/graphics/spritemanager.h>
+#include <sp2/graphics/spriteManager.h>
 #include <sp2/io/keyValueTreeLoader.h>
 
 std::map<sp::string, EquipmentTemplate> EquipmentTemplate::templates;

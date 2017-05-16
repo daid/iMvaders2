@@ -15,7 +15,7 @@ public:
         render_data.texture = "ship/m/z18.png";
         render_data.order = -1;
 
-        setPosition(sp::Vector2d(50, -(index - 24) + 0.5));
+        setPosition(sp::Vector2d(60, -(index - 24) + 0.5));
         
         updateToSize();
     }
@@ -87,7 +87,7 @@ Z18::Z18()
         size[n] = 80.0;
     for(int n=0;n<part_count;n++)
         parts[n] = new Z18Part(this, n);
-    setPosition(sp::Vector2d(50, 0));
+    setPosition(sp::Vector2d(60, 0));
     pickup_at_total_size = 75;
 }
 

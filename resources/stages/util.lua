@@ -81,7 +81,7 @@ function delayUpdate(delay, next)
     end
 end
 
-function getPlaytroughCount()
-    --Placeholder
-    return 0
+--Function that can be used to multiply delays with, this reduces the delay the every time the game is finished, but with an acceptable difficulty curve.
+function getDifficultyTimeScaleFactor()
+    return 1.0 / math.log(10.0 + getPlaytroughCount() * 2.0)
 end

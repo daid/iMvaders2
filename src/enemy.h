@@ -48,7 +48,10 @@ private:
     void setGlow(float speed);
     void disableGlow();
     void setInvincible(bool invincible) { this->invincible = invincible; }
+    void setHitProtectionTime(int time) { this->protection_time_on_damage = time; }
     void setBoss() { bosses.add(this); }
+    void setDrawOrder(int order) { render_data.order = order; }
+    void destroy();
     
     sp::P<Projectile> createProjectile(sp::string name, float x, float y, float angle);
 

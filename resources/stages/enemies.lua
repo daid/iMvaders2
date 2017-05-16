@@ -1,6 +1,7 @@
 include("weapons.lua")
 include("enemy_ztx.lua")
 include("enemy_m.lua")
+include("enemy_lulz.lua")
 
 function addEnemyToGroup(ship, group)
     ship.group = group

@@ -81,7 +81,7 @@ StageController::StageController()
     background->render_data.shader = sp::Shader::get("shader/star_background.shader");
     background->render_data.mesh = std::make_shared<sp::MeshData>(vertices);
     background->render_data.texture = "stars.png";
-    background->render_data.order = -1;
+    background->render_data.order = -10;
     background->render_data.color = sf::Color::White;
 }
 
@@ -114,7 +114,7 @@ static int luaf_include(lua_State* lua)
     auto resource = sp::io::ResourceProvider::get("stages/" + filename);
     if (!resource)
     {
-        return luaL_error(lua, "Failed to find %s", filename);
+        return luaL_error(lua, "Failed to find %s", filename.c_str());
     }
 
     sp::string filecontents = resource->readAll();
@@ -174,6 +174,11 @@ static int getPlaCount()
     return SaveData::instance->pla;
 }
 
+static int getPlaytroughCount()
+{
+    return SaveData::instance->playtrough_count;
+}
+
 static void stageDone()
 {
     StageController::instance->stageDone();
@@ -226,6 +231,7 @@ bool StageController::loadStage(sp::string name)
     script->setGlobal("createSpecial", createSpecial);
     script->setGlobal("getGlobalTime", getGlobalTime);
     script->setGlobal("getPlaCount", getPlaCount);
+    script->setGlobal("getPlaytroughCount", getPlaytroughCount);
     script->setGlobal("random", sp::random);
     script->setGlobal("stageDone", ::stageDone);
     if (!script->load(sp::io::ResourceProvider::get("stages/" + name + ".lua")))

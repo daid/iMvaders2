@@ -190,7 +190,8 @@ void StageSelect::onUpdate(float delta)
         case 1: name->setAttribute("caption", "STAGE 2-2: Blast from the past"); break;
         }
         break;
-    case 2:
+    default:
+        name->setAttribute("caption", "STAGE ?: ???");
         break;
     }
 }

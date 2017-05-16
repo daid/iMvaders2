@@ -18,7 +18,7 @@ void Hull::setParameter(sp::string key, sp::string value)
 bool Hull::takeDamage(double amount)
 {
     hull_level -= amount;
-    if (hull_level < 0.0)
+    if (hull_level <= 0.0)
         return true;
     return false;
 }

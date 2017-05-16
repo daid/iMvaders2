@@ -112,13 +112,17 @@ function wingmanController(self)
         self.setPosition((Vector2(self.master.getPosition()) + self.offset:rotate(self.master.getRotation())):unpack())
         self.setRotation(self.master.getRotation())
     else
-        self.setPosition((Vector2(self.getPosition()) + Vector2(-self.speed, 0):rotate(self.getRotation())):unpack())
-        if self.getPosition() < -20 then
-            self.setPosition(20, random(-20, 20))
-            self.setRotation(random(160, 200))
-        end
-        self.fire = self.getPosition() > -5
+        diveBomberController(self)
     end
+end
+
+function diveBomberController(self)
+    self.setPosition((Vector2(self.getPosition()) + Vector2(-self.speed, 0):rotate(self.getRotation())):unpack())
+    if self.getPosition() < -20 then
+        self.setPosition(20, random(-20, 20))
+        self.setRotation(random(160, 200))
+    end
+    self.fire = self.getPosition() > -5
 end
 
 function inAndOutController(self)

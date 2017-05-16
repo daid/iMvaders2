@@ -16,6 +16,7 @@ AbandondedPrinter::AbandondedPrinter()
         render_data.texture = "ship/m/thingomatic.png";
     float scale = 4.0;
     render_data.scale = sp::Vector3f(scale, scale, 1.0);
+    render_data.order = -1;
 
     sp::collision::Box2D shape(3, 4);
     shape.type = sp::collision::Shape::Type::Dynamic;

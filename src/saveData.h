@@ -11,6 +11,7 @@ public:
     
     int score;
     int pla;
+    int playtrough_count;
     
     class PlayerData
     {

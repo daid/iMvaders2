@@ -3,7 +3,7 @@
 #include "../ship.h"
 #include "../enemy.h"
 #include "../explosion.h"
-#include <sp2/graphics/spritemanager.h>
+#include <sp2/graphics/spriteManager.h>
 #include <sp2/collision/2d/box.h>
 #include <sp2/collision/2d/circle.h>
 #include <sp2/logging.h>
