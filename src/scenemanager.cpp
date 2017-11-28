@@ -51,7 +51,5 @@ void SceneManager::switchToStage(std::string stage_name)
         title_controller->hide();
         stage_select->hide();
         stage_controller->show();
-    }else{
-        switchToStageSelect();
     }
 }

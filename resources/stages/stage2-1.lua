@@ -65,10 +65,17 @@ end
 function startWave3()
     log("Wave 3")
     
-    update = basicEndOfWaveCheck(postWave2)
+    update = basicEndOfWaveCheck(postWave3)
     
-    createEnemyGroup(8, 0, 3.5, 4, function(group, position) createLulz_Lulz_Spinner(true).target = position end)
+    createEnemyGroup(8, 0, 6.5, 2, function(group, position) createLulz_Lulz_Spinner(true).target = position end)
+    
+    local main_group = {}
+    createEnemyGroup(8, 0, 3.5 * 4, 2, function(group, position) createLulz_Lulz_FighterBurst({}).target = position end)
+    createEnemyGroup(5, 0, 3.5 * 3, 2, function(group, position) createLulz_Lulz_Fighter({}).target = position end)
+    createEnemyGroup(2, 0, 3.5 * 2, 2, function(group, position) createLulz_Lulz_Fighter({}).target = position end)
+    createEnemyGroup(-1, 0, 3.5, 2, function(group, position) createLulz_Lulz_Fighter({}, true).target = position end)
+    createEnemyGroup(-4, 0, 3.5, 1, function(group, position) createLulz_Lulz_Fighter({}, true).target = position end)
 end
 
---start()
-postWave2()
+start()
+--postWave2()

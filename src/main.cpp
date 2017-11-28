@@ -12,8 +12,8 @@
 
 #include "scenemanager.h"
 #include "spacescene.h"
-#include "shiptemplate.h"
-#include "equipmenttemplate.h"
+#include "shipTemplate.h"
+#include "equipmentTemplate.h"
 #include "keys.h"
 #include "playershipcontroller.h"
 #include "aishipcontroller.h"
