@@ -12,6 +12,7 @@ public:
     int score;
     int pla;
     int playtrough_count;
+    bool shop_unlocked;
     
     class PlayerData
     {

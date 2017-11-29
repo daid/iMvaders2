@@ -32,7 +32,7 @@ AbandondedPrinter::AbandondedPrinter()
     health = 20;
 }
 
-bool AbandondedPrinter::takeDamage(sp::Vector2d position, double amount, DamageSource damage_source)
+bool AbandondedPrinter::takeDamage(sp::Vector2d position, double amount, DamageSource damage_source, DamageType type)
 {
     if (damage_source != DamageSource::Player)
         return false;
@@ -52,7 +52,7 @@ void AbandondedPrinter::onCollision(sp::CollisionInfo& info)
     {
         if (info.force > 10)
         {
-            ship->takeDamage(info.position, 1.0, SpaceObject::DamageSource::Enemy);
+            ship->takeDamage(info.position, 1.0, SpaceObject::DamageSource::Enemy, DamageType::Normal);
         }
     }
 }

@@ -14,7 +14,7 @@ sp::PList<Enemy> Enemy::bosses;
 Enemy::Enemy()
 {
     setRotation(180);
-    setPosition(-50, -50);
+    setPosition(sp::Vector2d(-50, -50));
     health = 1.0;
     size = 1.0;
     damage_indicator = 0;
@@ -28,6 +28,9 @@ Enemy::Enemy()
     glow_enabled = false;
     glow_delta = 0.0;
     glow_speed = 1.0;
+
+    touch_damage_amount = 1.0;
+    touch_damage_type = DamageType::Normal;
 }
 
 Enemy::~Enemy()
@@ -37,26 +40,6 @@ Enemy::~Enemy()
 void Enemy::setHealth(float health)
 {
     this->health = health;
-}
-
-void Enemy::setPosition(float x, float y)
-{
-    sp::Node::setPosition(sp::Vector2d(x, y));
-}
-
-sp::Vector2d Enemy::getPosition()
-{
-    return getGlobalPosition2D();
-}
-
-void Enemy::setRotation(float angle)
-{
-    sp::Node::setRotation(angle);
-}
-
-float Enemy::getRotation()
-{
-    return getGlobalRotation2D();
 }
 
 void Enemy::onUpdate(float delta)
@@ -98,9 +81,11 @@ void Enemy::onFixedUpdate()
         render_data.color.a = 255;
 }
 
-bool Enemy::takeDamage(sp::Vector2d position, double amount, DamageSource damage_source)
+bool Enemy::takeDamage(sp::Vector2d position, double amount, DamageSource damage_source, DamageType type)
 {
     if (damage_source == DamageSource::Enemy)
+        return false;
+    if (type != DamageType::Normal && type != DamageType::Shield)
         return false;
     if (invincible)
         return true;
@@ -120,6 +105,8 @@ bool Enemy::takeDamage(sp::Vector2d position, double amount, DamageSource damage
         damage_indicator = protection_time_on_damage;
     }
     shield_charge_time = shield_charge_delay;
+    if (type == DamageType::Shield)
+        return true;
     onDamage.call(amount);
     if (health <= 0.0)
     {
@@ -139,7 +126,7 @@ void Enemy::onCollision(sp::CollisionInfo& info)
     sp::P<SpaceObject> so = info.other;
     if (so)
     {
-        so->takeDamage(info.position, 1.0, SpaceObject::DamageSource::Enemy);
+        so->takeDamage(info.position, touch_damage_amount, DamageSource::Enemy, touch_damage_type);
     }
 }
 
@@ -192,11 +179,6 @@ void Enemy::disableGlow()
     glow_enabled = false;
 }
 
-void Enemy::destroy()
-{
-    delete this;
-}
-
 sp::P<Projectile> Enemy::createProjectile(sp::string name, float x, float y, float angle)
 {
     sp::P<Projectile> projectile = EquipmentTemplate::createProjectile(name);
@@ -206,13 +188,9 @@ sp::P<Projectile> Enemy::createProjectile(sp::string name, float x, float y, flo
 
 void Enemy::onRegisterScriptBindings(sp::ScriptBindingClass& script_binding_class)
 {
-    sp::Node::onRegisterScriptBindings(script_binding_class);
+    SpaceObject::onRegisterScriptBindings(script_binding_class);
 
     script_binding_class.bind("setHealth", &setHealth);
-    script_binding_class.bind("setPosition", &setPosition);
-    script_binding_class.bind("getPosition", &getPosition);
-    script_binding_class.bind("setRotation", &setRotation);
-    script_binding_class.bind("getRotation", &getRotation);
     script_binding_class.bind("setCollisionCircle", &setCollisionCircle);
     script_binding_class.bind("setCollisionBox", &setCollisionBox);
     script_binding_class.bind("setShield", &setShield);
@@ -223,7 +201,7 @@ void Enemy::onRegisterScriptBindings(sp::ScriptBindingClass& script_binding_clas
     script_binding_class.bind("setHitProtectionTime", &setHitProtectionTime);
     script_binding_class.bind("setBoss", &setBoss);
     script_binding_class.bind("createProjectile", &createProjectile);
-    script_binding_class.bind("destroy", &destroy);
+    script_binding_class.bind("setTouchDamage", &setTouchDamage);
 
     script_binding_class.bind("onDestroy", onDestroy);
     script_binding_class.bind("onDamage", onDamage);

@@ -17,6 +17,7 @@ SaveData::SaveData(int player_count)
     score = 0;
     pla = 0;
     playtrough_count = 0;
+    shop_unlocked = false;
 }
 
 int SaveData::unlockedStageLevel() const

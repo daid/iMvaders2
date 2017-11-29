@@ -125,6 +125,23 @@ function diveBomberController(self)
     self.fire = self.getPosition() > -5
 end
 
+function aimedDiveBomberController(self)
+    local position = Vector2(self.getPosition())
+    self.setPosition((position + Vector2(-self.speed, 0):rotate(self.getRotation())):unpack())
+    if position.x < -20 or position.y < -25 or position.y > 25 then
+        self.setPosition(20, random(-20, 20))
+        
+        position = Vector2(self.getPosition())
+        player = getRandomPlayer()
+        if player then
+            self.setRotation((Vector2(player:getPosition()) - position):angle())
+        else
+            self.setRotation(random(160, 200))
+        end
+    end
+    self.fire = self.getPosition() > -5
+end
+
 function inAndOutController(self)
     if self.state == nil then
         self.state = "flyin"

@@ -11,6 +11,7 @@ public:
     float getEnergyLevel() const { return energy_level; }
     float getMaxEnergyLevel() const { return max_energy_level; }
     bool useEnergy(double amount);
+    void drainEnergy(double amount);
     
     virtual void onUpdate(float delta) override;
     virtual void setParameter(sp::string key, sp::string value) override;

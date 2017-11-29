@@ -15,6 +15,7 @@ Projectile::Projectile()
     travel_speed = 25.0;
     damage = 1.0;
     lifetime = travel_distance / travel_speed;
+    type = SpaceObject::DamageType::Normal;
     destroy_on_hit = true;
 }
 
@@ -40,7 +41,7 @@ void Projectile::onCollision(sp::CollisionInfo& info)
     sp::P<SpaceObject> so = info.other;
     if (so)
     {
-        if (so->takeDamage(info.position, damage, damage_source))
+        if (so->takeDamage(info.position, damage, damage_source, type))
         {
             if (destroy_on_hit)
             {
@@ -80,6 +81,24 @@ void Projectile::setParameter(sp::string key, sp::string value)
     else if (key == "damage")
     {
         damage = value.toFloat();
+    }
+    else if (key == "type")
+    {
+        value = value.lower();
+        if (value == "normal")
+            type = SpaceObject::DamageType::Normal;
+        else if (value == "shield")
+            type = SpaceObject::DamageType::Shield;
+        else if (value.startswith("energy"))
+            type = SpaceObject::DamageType::EnergyDrain;
+        else if (value.startswith("reactor"))
+            type = SpaceObject::DamageType::ReactorDisrupt;
+        else if (value.startswith("weapon"))
+            type = SpaceObject::DamageType::WeaponDisrupt;
+        else if (value.startswith("engine"))
+            type = SpaceObject::DamageType::EngineDisrupt;
+        else
+            LOG(Warning, "Unknown projectile damage type:", value);
     }
     else if (key == "collision")
     {

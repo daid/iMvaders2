@@ -10,6 +10,10 @@ include("stage1_pickup.lua")
 
 --Wave1: 2 X fighters with 2 Z wingman each
 --Wave2: 4 X fighters with 2 Z wingman each, and 2 rows of single Z fighters.
+--Wave3: 2 T fighters
+--Wave4: 3 T fighters, 10 m fighters
+--Wave5: 4 X fighters with 2 Z wingman each, 2 T fighters, and 1 rows of single Z fighters.
+--Boss
 
 function start()
     transmission(

@@ -10,7 +10,7 @@ public:
     Enemy();
     ~Enemy();
 
-    virtual bool takeDamage(sp::Vector2d position, double amount, DamageSource damage_source) override;
+    virtual bool takeDamage(sp::Vector2d position, double amount, DamageSource damage_source, DamageType type) override;
     virtual void onCollision(sp::CollisionInfo& info) override;
     virtual void onUpdate(float delta) override;
     virtual void onFixedUpdate() override;
@@ -33,15 +33,14 @@ private:
     
     int protection_time_on_damage;
     
+    float touch_damage_amount;
+    DamageType touch_damage_type;
+    
     bool glow_enabled;
     float glow_delta;
     float glow_speed;
 
     void setHealth(float health);
-    void setPosition(float x, float y);
-    sp::Vector2d getPosition();
-    void setRotation(float angle);
-    float getRotation();
     void setCollisionCircle(float size);
     void setCollisionBox(float width, float height);
     void setShield(float amount, int recharge_time, sp::string texture);
@@ -51,7 +50,7 @@ private:
     void setHitProtectionTime(int time) { this->protection_time_on_damage = time; }
     void setBoss() { bosses.add(this); }
     void setDrawOrder(int order) { render_data.order = order; }
-    void destroy();
+    void setTouchDamage(float amount, DamageType type) { touch_damage_amount = amount; touch_damage_type = type; }
     
     sp::P<Projectile> createProjectile(sp::string name, float x, float y, float angle);
 

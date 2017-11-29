@@ -41,7 +41,7 @@ StageController::StageController()
     scene_layer = new sp::SceneGraphicsLayer(10);
     scene_layer->addRenderPass(new sp::BasicNodeRenderPass("window", space_scene, camera));
 #ifdef DEBUG
-    scene_layer->addRenderPass(new sp::CollisionRenderPass("window", space_scene, camera));
+    //scene_layer->addRenderPass(new sp::CollisionRenderPass("window", space_scene, camera));
 #endif
 
     for(int n=0; n<max_players; n++)
@@ -179,6 +179,11 @@ static int getPlaytroughCount()
     return SaveData::instance->playtrough_count;
 }
 
+static sp::P<Ship> getPlayer(int index)
+{
+    return StageController::instance->getPlayerShip(index);
+}
+
 static void stageDone()
 {
     StageController::instance->stageDone();
@@ -232,6 +237,7 @@ bool StageController::loadStage(sp::string name)
     script->setGlobal("getGlobalTime", getGlobalTime);
     script->setGlobal("getPlaCount", getPlaCount);
     script->setGlobal("getPlaytroughCount", getPlaytroughCount);
+    script->setGlobal("getPlayer", getPlayer);
     script->setGlobal("random", sp::random);
     script->setGlobal("stageDone", ::stageDone);
     if (!script->load(sp::io::ResourceProvider::get("stages/" + name + ".lua")))
@@ -364,6 +370,13 @@ void StageController::onFixedUpdate()
 {
     global_time++;
     script->call("update");
+}
+
+sp::P<Ship> StageController::getPlayerShip(int index)
+{
+    if (index < 0 || index >= int(player_data.size()))
+        return nullptr;
+    return player_data[index].ship;
 }
 
 void StageController::updateHud(PlayerData& data)

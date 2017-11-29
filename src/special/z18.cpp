@@ -20,7 +20,7 @@ public:
         updateToSize();
     }
 
-    virtual bool takeDamage(sp::Vector2d position, double amount, DamageSource damage_source) override
+    virtual bool takeDamage(sp::Vector2d position, double amount, DamageSource damage_source, DamageType type) override
     {
         if (damage_source != SpaceObject::DamageSource::Player)
             return false;
@@ -33,7 +33,7 @@ public:
         sp::P<SpaceObject> so = info.other;
         if (so)
         {
-            so->takeDamage(info.position, 1.0, SpaceObject::DamageSource::Enemy);
+            so->takeDamage(info.position, 1.0, SpaceObject::DamageSource::Enemy, DamageType::Normal);
         }
     }
     
@@ -91,7 +91,7 @@ Z18::Z18()
     pickup_at_total_size = 75;
 }
 
-bool Z18::takeDamage(sp::Vector2d position, double amount, SpaceObject::DamageSource damage_source)
+bool Z18::takeDamage(sp::Vector2d position, double amount, SpaceObject::DamageSource damage_source, DamageType type)
 {
     if (damage_source != SpaceObject::DamageSource::Player)
         return false;
@@ -103,7 +103,7 @@ void Z18::onCollision(sp::CollisionInfo& info)
     sp::P<SpaceObject> so = info.other;
     if (so)
     {
-        so->takeDamage(info.position, 1.0, SpaceObject::DamageSource::Enemy);
+        so->takeDamage(info.position, 1.0, SpaceObject::DamageSource::Enemy, DamageType::Normal);
     }
 }
 

@@ -24,6 +24,7 @@ private:
     double damage;
     bool destroy_on_hit;
     
+    SpaceObject::DamageType type;
     SpaceObject::DamageSource damage_source;
 };
 

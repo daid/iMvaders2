@@ -47,27 +47,43 @@ double Ship::getTotalMass()
     return mass;
 }
 
-bool Ship::takeDamage(sp::Vector2d position, double amount, DamageSource damage_source)
+bool Ship::takeDamage(sp::Vector2d position, double amount, DamageSource damage_source, DamageType type)
 {
     if (damage_source == DamageSource::Player)
         return false;
-    if (shield_damage_indicator > 0 || hull_damage_indicator > 0)
-        return false;
     
-    if (shield)
-        amount = shield->takeDamage(amount);
-
-    if (amount == 0)
-        shield_damage_indicator = 20;
-    else
-        hull_damage_indicator = 20;
-    
-    if (hull->takeDamage(amount))
+    switch(type)
     {
-        //We died...
-        delete this;
+    default:
+    case DamageType::Normal:
+    case DamageType::Shield:
+        if (shield_damage_indicator > 0 || hull_damage_indicator > 0)
+            return false;
+        
+        if (shield)
+            amount = shield->takeDamage(amount);
+        if (type == DamageType::Shield)
+            amount = 0;
+
+        if (amount == 0)
+            shield_damage_indicator = 20;
+        else
+            hull_damage_indicator = 20;
+        
+        if (hull->takeDamage(amount))
+        {
+            //We died...
+            delete this;
+        }
+        return true;
+    case DamageType::EnergyDrain:
+        reactor->drainEnergy(amount);
+        return true;
+    case DamageType::ReactorDisrupt:
+    case DamageType::WeaponDisrupt:
+    case DamageType::EngineDisrupt:
+        return true;
     }
-    return true;
 }
 
 void Ship::onFixedUpdate()

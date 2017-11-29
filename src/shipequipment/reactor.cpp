@@ -26,6 +26,13 @@ bool Reactor::useEnergy(double amount)
     return true;
 }
 
+void Reactor::drainEnergy(double amount)
+{
+    energy_level -= amount;
+    if (energy_level < 0)
+        energy_level = 0;
+}
+
 void Reactor::onUpdate(float delta)
 {
     energy_level = std::min(max_energy_level, energy_level + charge_rate * delta);

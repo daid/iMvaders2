@@ -3,6 +3,18 @@
 --100% filled with M Corperation enemies
 --"Blast from the past"
 
+-- Wave 1 - 8 shielded enemies, 10 normal enemies, 2x4 burst shot enemies.
+-- Bonus powerup
+-- Z18
+-- Wave 2 - 8 shielded 4 burst shielded, 2 digitizers
+-- Bonus powerup
+--Start of printer field (TODO: dive bombers)
+-- Wave 3 - 2 digitizers
+-- Wave 4 - 3 digitizers, 8 enemies
+-- Wave 5 - 4 digitizers, 8 enemies, 8 enemies
+--End printer field
+-- Boss
+
 include("util.lua")
 
 function start()

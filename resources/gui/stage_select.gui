@@ -21,6 +21,14 @@
         texture: robot.png
         size: 100, 100
     }
+    [SHOP] {
+        type: button
+        caption: Shop at the UltiShop!
+        alignment: bottom
+        size: 600, 100
+        position: 0, 50
+        theme_data: stage_button
+    }
 }
 
 [STAGE_ROW] {

@@ -23,6 +23,7 @@ private:
     
     int selection_level;
     int selection_sublevel;
+    bool shop_selected;
 };
 
 #endif//STAGE_SELECT_H

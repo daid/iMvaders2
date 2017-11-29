@@ -85,3 +85,21 @@ end
 function getDifficultyTimeScaleFactor()
     return 1.0 / math.log(10.0 + getPlaytroughCount() * 2.0)
 end
+
+--Return a random player that is alive, or nil if no players are alive
+function getRandomPlayer()
+    local p0 = getPlayer(0)
+    local p1 = getPlayer(1)
+    if p0 and p1 then
+        if random(0, 100) < 50 then
+            return p0
+        else
+            return p1
+        end
+    end
+    if p0 then
+        return p0
+    else
+        return p1
+    end
+end

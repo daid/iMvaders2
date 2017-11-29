@@ -18,7 +18,7 @@ public:
     
     sp::P<ShipController> controller;
 
-    virtual bool takeDamage(sp::Vector2d position, double amount, DamageSource damage_source) override;
+    virtual bool takeDamage(sp::Vector2d position, double amount, DamageSource damage_source, DamageType type) override;
     double getTotalMass();
 
     virtual void onFixedUpdate() override;

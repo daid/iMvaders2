@@ -78,6 +78,10 @@ void StageSelect::show()
 
     selection_level = SaveData::instance->unlockedStageLevel() - 1;
     selection_sublevel = 0;
+
+    sp::P<sp::gui::Widget> shop = gui->getWidgetWithID("SHOP");
+    if (!SaveData::instance->shop_unlocked)
+        shop->hide();
 }
 
 void StageSelect::addStageButton(sp::P<sp::gui::Widget> row, int level, int sublevel)
@@ -125,13 +129,23 @@ void StageSelect::onUpdate(float delta)
 {
     for(int n=0; n<max_players; n++)
     {
-        if (player_keys[n]->up.getDown())
-            selection_sublevel = selection_sublevel + 1;
         if (player_keys[n]->down.getDown())
-            selection_sublevel = selection_sublevel - 1;
-        if (player_keys[n]->right.getDown())
+        {
+            if (shop_selected)
+                shop_selected = false;
+            else
+                selection_sublevel = selection_sublevel + 1;
+        }
+        if (player_keys[n]->up.getDown())
+        {
+            if (shop_selected)
+                shop_selected = false;
+            else
+                selection_sublevel = selection_sublevel - 1;
+        }
+        if (player_keys[n]->right.getDown() && !shop_selected)
             selection_level = selection_level + 1;
-        if (player_keys[n]->left.getDown())
+        if (player_keys[n]->left.getDown() && !shop_selected)
             selection_level = selection_level - 1;
     }
     
@@ -156,9 +170,17 @@ void StageSelect::onUpdate(float delta)
     {
         sp::P<sp::gui::Widget> stages = row->getWidgetWithID("ITEMS");
         if (selection_sublevel < 0)
+        {
             selection_sublevel = stages->children.size() - 1;
+            if (SaveData::instance->shop_unlocked)
+                shop_selected = true;
+        }
         if (selection_sublevel > stages->children.size() - 1)
+        {
             selection_sublevel = 0;
+            if (SaveData::instance->shop_unlocked)
+                shop_selected = true;
+        }
 
         n=0;
         for(auto child : stages->children)
@@ -167,6 +189,11 @@ void StageSelect::onUpdate(float delta)
                 item = child;
             n++;
         }
+    }
+    
+    if (shop_selected)
+    {
+        item = gui->getWidgetWithID("SHOP");
     }
     if (item)
     {
@@ -178,20 +205,25 @@ void StageSelect::onUpdate(float delta)
     }
 
     sp::P<sp::gui::Widget> name = gui->getWidgetWithID("NAME");
-    switch(selection_level)
+    if (shop_selected)
     {
-    case 0:
-        name->setAttribute("caption", "STAGE 1: Welcome back to the jungle");
-        break;
-    case 1:
-        switch(selection_sublevel)
+        name->setAttribute("caption", "UltiShop: spend you hard earned polymers");
+    }else{
+        switch(selection_level)
         {
-        case 0: name->setAttribute("caption", "STAGE 2-1: For the lulz"); break;
-        case 1: name->setAttribute("caption", "STAGE 2-2: Blast from the past"); break;
+        case 0:
+            name->setAttribute("caption", "STAGE 1: Welcome back to the jungle");
+            break;
+        case 1:
+            switch(selection_sublevel)
+            {
+            case 0: name->setAttribute("caption", "STAGE 2-1: For the lulz"); break;
+            case 1: name->setAttribute("caption", "STAGE 2-2: Blast from the past"); break;
+            }
+            break;
+        default:
+            name->setAttribute("caption", "STAGE ?: ???");
+            break;
         }
-        break;
-    default:
-        name->setAttribute("caption", "STAGE ?: ???");
-        break;
     }
 }

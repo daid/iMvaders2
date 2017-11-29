@@ -2,6 +2,11 @@
 --Lulzbot area.
 --"For the lulz"
 
+-- Wave 1: 8 shielded enemies, 10 normal enemies, 2x4 burst shot enemies.
+-- Wave 2: 4 spinners
+-- Wave 3: 2 spinners, empty V formation of enemies
+--Start space octopusses
+
 include("util.lua")
 
 function start()
@@ -77,5 +82,67 @@ function startWave3()
     createEnemyGroup(-4, 0, 3.5, 1, function(group, position) createLulz_Lulz_Fighter({}, true).target = position end)
 end
 
+function postWave3()
+    update = delayUpdate(50, function() transmission(
+        "[Face:lola]Lets see how you like these!",
+        "[Face:harma]What? Space octopuses?|You have to be kidding me.",
+        "[Face:harma]Touching them will drain your energy,|so be careful!",
+        startOctoField
+    ) end)
+end
+
+function startOctoField()
+    octo_group = {}
+    update = octoFieldUpdate(delayUpdate(120, startWave4))
+end
+
+function octoFieldUpdate(next)
+    return function()
+        if octo_count_down and octo_count_down > 0 then
+            octo_count_down = octo_count_down - 1
+        else
+            local ship = createEnemy("ship/lulz/octo.png", 5.0)
+            ship.setCollisionCircle(2.2)
+            ship.setHealth(2)
+            ship.setPosition(-22, 0)
+            ship.setTouchDamage(0.4, "energyDrain")
+            ship.speed = 0.6
+            ship.onControlUpdate(aimedDiveBomberController)
+            ship.setDrawOrder(-1)
+            table.insert(octo_group, ship)
+
+            octo_count_down = 80
+        end
+        next()
+    end
+end
+
+function startWave4()
+    update = octoFieldUpdate(basicEndOfWaveCheck(function() update = octoFieldUpdate(delayUpdate(30, startWave5)) end))
+    createEnemyGroup(8, 0, 4, 5, function(group, position) createLulz_Lulz_Fighter(group).target = position end)
+    createEnemyGroup(5, 0, 4, 3, function(group, position) createLulz_Lulz_Fighter({}, true).target = position end)
+end
+
+function startWave5()
+    update = octoFieldUpdate(basicEndOfWaveCheck(function() update = octoFieldEnd(postWave5) end))
+    createEnemyGroup(8, 0, 8, 2, function(group, position) createLulz_Lulz_Spinner(true).target = position end)
+    createEnemyGroup(5, 0, 4, 5, function(group, position) createLulz_Lulz_Fighter(group, true).target = position end)
+end
+
+function octoFieldEnd(next)
+    return function()
+        for _, enemy in ipairs(octo_group) do
+            if enemy.valid then
+                return
+            end
+        end
+        update = nil
+        next()
+    end
+end
+
+function postWave5()
+    print("DONE")
+end
+
 start()
---postWave2()

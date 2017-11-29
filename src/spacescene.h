@@ -24,6 +24,8 @@ public:
 
     virtual void onUpdate(float delta) override;
     virtual void onFixedUpdate() override;
+    
+    sp::P<Ship> getPlayerShip(int index);
 private:
     class PlayerData
     {
