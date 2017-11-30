@@ -41,7 +41,7 @@ StageController::StageController()
     scene_layer = new sp::SceneGraphicsLayer(10);
     scene_layer->addRenderPass(new sp::BasicNodeRenderPass("window", space_scene, camera));
 #ifdef DEBUG
-    //scene_layer->addRenderPass(new sp::CollisionRenderPass("window", space_scene, camera));
+    scene_layer->addRenderPass(new sp::CollisionRenderPass("window", space_scene, camera));
 #endif
 
     for(int n=0; n<max_players; n++)
@@ -239,6 +239,7 @@ bool StageController::loadStage(sp::string name)
     script->setGlobal("getPlaytroughCount", getPlaytroughCount);
     script->setGlobal("getPlayer", getPlayer);
     script->setGlobal("random", sp::random);
+    script->setGlobal("irandom", sp::irandom);
     script->setGlobal("stageDone", ::stageDone);
     if (!script->load(sp::io::ResourceProvider::get("stages/" + name + ".lua")))
     {

@@ -103,3 +103,10 @@ function getRandomPlayer()
         return p1
     end
 end
+
+function angleDiff(angle_a, angle_b)
+    local ret = angle_b - angle_a
+    while ret > 180 do ret = ret - 360 end
+    while ret < -180 do ret = ret + 360 end
+    return ret
+end

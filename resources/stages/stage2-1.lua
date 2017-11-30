@@ -142,7 +142,26 @@ function octoFieldEnd(next)
 end
 
 function postWave5()
-    print("DONE")
+    update = delayUpdate(150, function() transmission(
+        "[Face:harma]There it is, the lulz-base!",
+        "[Face:harma]Go get it, take it out.|No matter the cost.",
+        "[Face:lola]There is no stopping us!|We will be victorious!",
+        startBoss
+    ) end)
+end
+
+function startBoss()
+    update = basicEndOfWaveCheck(postBoss)
+    createLulz_Lulz_Boss()
+end
+
+function postBoss()
+    transmission(
+        "[Face:harma]You did it|You eliminated the lulz force!",
+        "[Face:lola]We will be back!",
+        "[Face:marvin]We will drive you back|again.",
+        stageDone
+    )
 end
 
 start()
