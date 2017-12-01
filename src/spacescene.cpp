@@ -437,6 +437,7 @@ void StageController::updateHud(PlayerData& data)
     else
     {
         data.hud->getWidgetWithID("PLA")->show();
+        data.hud->getWidgetWithID("PLA_LABEL")->show();
         data.hud->getWidgetWithID("PLA_LABEL")->setAttribute("caption", sp::string(pla));
     }
 }

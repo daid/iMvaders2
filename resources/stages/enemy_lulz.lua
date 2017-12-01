@@ -78,6 +78,8 @@ function createLulz_Lulz_Boss()
     center.setHealth(50)
     center.setBoss()
     center.onControlUpdate(lulzBossController)
+    center.onWeaponUpdate(lulzBossWeapons)
+    center.onDestroy(lulzBossDestroyed)
     center.target = Vector2(3, 0)
     center.slow_speed = 0.10
     center.high_speed = 0.40
@@ -165,6 +167,24 @@ function lulzBossController(self)
 
                 self.shield_regen_counter = self.shield_regen_delay
             end
+        end
+    end
+end
+
+function lulzBossWeapons(self)
+    --The lulz boss has 6 types of weapons, one for each direction of the core. Only the front 3 are firing.
+    --1) Period spread shot
+    --2) Launch lulz fighter dive bomber
+    --3) Launch mini-octo
+    --4) Laser blast, digitizer laser XL
+    --5) Homing missile, sets target position at firing moment
+    --6) ?
+end
+
+function lulzBossDestroyed(self)
+    for n=1,6 do
+        if self.shields[n].valid then
+            self.shields[n].destroy()
         end
     end
 end
