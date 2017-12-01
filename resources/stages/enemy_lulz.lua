@@ -72,24 +72,27 @@ function lulzTrippleShot(self)
 end
 
 function createLulz_Lulz_Boss()
-    local center = createEnemy("ship/lulz/core.png", 10.0)
-    table.insert(all_enemies, center)
-    center.setCollisionCircle(3.8)
-    center.setHealth(50)
-    center.setBoss()
-    center.onControlUpdate(lulzBossController)
-    center.onWeaponUpdate(lulzBossWeapons)
-    center.onDestroy(lulzBossDestroyed)
-    center.target = Vector2(3, 0)
-    center.slow_speed = 0.10
-    center.high_speed = 0.40
-    center.setPosition(25, 0)
+    local self = createEnemy("ship/lulz/core.png", 10.0)
+    table.insert(all_enemies, self)
+    self.setCollisionCircle(3.8)
+    self.setHealth(50)
+    self.setBoss()
+    self.onControlUpdate(lulzBossController)
+    self.onWeaponUpdate(lulzBossWeapons)
+    self.onDestroy(lulzBossDestroyed)
+    self.setPosition(25, 0)
 
-    center.shields = {}
-    center.target_angle = 3
-    center.shield_regen_delay = 1000
+    self.slow_speed = 0.10
+    self.high_speed = 0.40
+    self.weapon1_delay = 60
+    self.shields = {}
+    self.target_angle = 3
+    self.shield_regen_delay = 1000
     
-    center.shield_regen_counter = center.shield_regen_delay
+    self.shield_regen_counter = self.shield_regen_delay
+    self.weapon1_counter = self.weapon1_delay
+    self.weapon2_state = 0
+    self.weapon5_state = 0
 
     for n=1,6 do
         local shield = createEnemy("ship/lulz/core-shield.png", 5.5)
@@ -97,7 +100,7 @@ function createLulz_Lulz_Boss()
         shield.setPosition(25, 0)
         shield.setHealth(10)
         shield.setDrawOrder(1)
-        center.shields[n] = shield
+        self.shields[n] = shield
     end
 end
 
@@ -175,10 +178,78 @@ function lulzBossWeapons(self)
     --The lulz boss has 6 types of weapons, one for each direction of the core. Only the front 3 are firing.
     --1) Period spread shot
     --2) Launch lulz fighter dive bomber
-    --3) Launch mini-octo
-    --4) Laser blast, digitizer laser XL
-    --5) Homing missile, sets target position at firing moment
+    --3) Laser blast, digitizer laser XL
+    --4) Homing missile, sets target position at firing moment
+    --5) Launch mini-octo
     --6) ?
+    local a = -self.getRotation()
+    local pos = Vector2(self.getPosition())
+    if math.abs(angleDiff(a, 0)) > 90 then
+        if self.weapon1_counter > 0 then
+            self.weapon1_counter = self.weapon1_counter - 1
+        else
+            for n=-2,2 do
+                self.createProjectile("PULSE", 4, n, n * 7);
+            end
+            self.weapon1_counter = self.weapon1_delay
+        end
+    end
+    if math.abs(angleDiff(a, 60)) > 90 then
+        if self.weapon2_state == 0 then
+            if pos.x < 4 then
+                self.weapon2_state = 1
+                local ship = createEnemy("ship/lulz/lulz.png", 3.0)
+                ship.setCollisionCircle(1.2)
+                ship.setHealth(2)
+                ship.onControlUpdate(diveBomberController)
+                ship.onWeaponUpdate(basicPulseWeapon)
+                ship.speed = 0.4
+                ship.setPosition((pos + Vector2(-4, 0):rotate(self.getRotation() + 60)):unpack())
+                ship.setRotation(self.getRotation() + 60)
+                ship.setDrawOrder(1)
+            end
+        elseif self.weapon2_state == 1 and pos.x > 20 then
+            self.weapon2_state = 0
+        end
+    end
+    if math.abs(angleDiff(a, 120)) > 90 then
+        --self.createProjectile("PULSE", 0, 0, 120);
+    end
+    if math.abs(angleDiff(a, 180)) > 90 then
+        --self.createProjectile("PULSE", 0, 0, 180);
+    end
+    if math.abs(angleDiff(a, 240)) > 90 then
+        if self.weapon5_state == 0 then
+            if pos.x < 4 then
+                self.weapon5_state = 1
+
+                local ship = createEnemy("ship/lulz/octo.png", 2.5)
+                ship.setCollisionCircle(1.1)
+                ship.setHealth(2)
+                ship.setPosition((pos + Vector2(-4, 2):rotate(self.getRotation() + 240)):unpack())
+                ship.setRotation(self.getRotation() + 240)
+                ship.setTouchDamage(1.4, "energyDrain")
+                ship.speed = 0.6
+                ship.onControlUpdate(aimedDiveBomberController)
+                ship.setDrawOrder(1)
+
+                local ship = createEnemy("ship/lulz/octo.png", 2.5)
+                ship.setCollisionCircle(1.1)
+                ship.setHealth(2)
+                ship.setPosition((pos + Vector2(-4, -2):rotate(self.getRotation() + 240)):unpack())
+                ship.setRotation(self.getRotation() + 240)
+                ship.setTouchDamage(1.4, "energyDrain")
+                ship.speed = 0.6
+                ship.onControlUpdate(aimedDiveBomberController)
+                ship.setDrawOrder(1)
+            end
+        elseif self.weapon5_state == 1 and pos.x > 20 then
+            self.weapon5_state = 0
+        end
+    end
+    if math.abs(angleDiff(a, 300)) > 90 then
+        --self.createProjectile("PULSE", 0, 0, 300);
+    end
 end
 
 function lulzBossDestroyed(self)
