@@ -1,25 +1,6 @@
 [MAIN] {
     stretch: true
     
-    [PLA] {
-        layout: horizontal
-        alignment: bottomleft
-        match_content_size: true
-        margin: 50, 30
-        {
-            type: image
-            texture: pickup/pla.png
-            size: 40, 40
-        }
-        [PLA_LABEL] {
-            type: label
-            caption: 0
-            text_alignment: left
-            size: 400, 40
-            margin: 10, 0
-        }
-    }
-    
     [GAMEOVER] {
         type: label
         stretch: true
@@ -79,6 +60,23 @@
             @ref: INFO_LABEL_V
             caption: SHIELD
         }
+    }
+
+    [PLA] {
+        alignment: bottomleft
+        match_content_size: true
+        margin: 50, 30
+        type: image
+        texture: pickup/pla.png
+        size: 40, 40
+    }
+    [PLA_LABEL] {
+        type: label
+        caption: 0
+        text_alignment: left
+        alignment: bottomleft
+        size: 400, 40
+        margin: 100, 30
     }
 }
 

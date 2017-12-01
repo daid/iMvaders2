@@ -59,6 +59,12 @@ StageController::StageController()
                     widget->layout.alignment = sp::gui::Widget::Alignment::Right;
                 if (widget->layout.alignment == sp::gui::Widget::Alignment::TopLeft)
                     widget->layout.alignment = sp::gui::Widget::Alignment::TopRight;
+                sp::gui::Label* label = dynamic_cast<sp::gui::Label*>(widget);
+                if (label)
+                {
+                    if (label->getTextAlignment() == sp::gui::Widget::Alignment::Left)
+                        label->setTextAlignment(sp::gui::Widget::Alignment::Right);
+                }
             }
         }
         pd.hud->hide();
@@ -169,9 +175,18 @@ static int getGlobalTime()
     return global_time;
 }
 
-static int getPlaCount()
+static int getPlaCount(int index)
 {
-    return SaveData::instance->pla;
+    if (index < 0)
+    {
+        int total = 0;
+        for(int n=0; n<SaveData::instance->player_count; n++)
+            total += SaveData::instance->player_data[n].pla;
+        return total;
+    }
+    if (index < SaveData::instance->player_count)
+        return SaveData::instance->player_data[index].pla;
+    return 0;
 }
 
 static int getPlaytroughCount()
@@ -212,6 +227,7 @@ bool StageController::loadStage(sp::string name)
     {
         PlayerData& data = player_data[index];
         SaveData::PlayerData& save_data = SaveData::instance->player_data[index];
+        data.index = index;
         
         if (save_data.hull <= 0.0)
             continue;
@@ -323,17 +339,6 @@ void StageController::onUpdate(float delta)
         updateHud(player_data[n]);
     }
     
-    //Update the main hud
-    if (SaveData::instance->pla < 1)
-    {
-        main_hud->getWidgetWithID("PLA")->hide();
-    }
-    else
-    {
-        main_hud->getWidgetWithID("PLA")->show();
-        main_hud->getWidgetWithID("PLA_LABEL")->setAttribute("caption", sp::string(SaveData::instance->pla));
-    }
-    
     if (ship_count > 0)
     {
         main_hud->getWidgetWithID("GAMEOVER")->hide();
@@ -421,5 +426,17 @@ void StageController::updateHud(PlayerData& data)
         {
             bar->setValue(0);
         }
+    }
+
+    int pla = SaveData::instance->player_data[data.index].pla;
+    if (pla < 1)
+    {
+        data.hud->getWidgetWithID("PLA")->hide();
+        data.hud->getWidgetWithID("PLA_LABEL")->hide();
+    }
+    else
+    {
+        data.hud->getWidgetWithID("PLA")->show();
+        data.hud->getWidgetWithID("PLA_LABEL")->setAttribute("caption", sp::string(pla));
     }
 }

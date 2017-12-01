@@ -33,10 +33,13 @@ Pickup::Pickup(sp::Vector2d position)
 void Pickup::onCollision(sp::CollisionInfo& info)
 {
     sp::P<Ship> ship = info.other;
-    if (ship)
+    for(int index=0; index<SaveData::instance->player_count; index++)
     {
-        SaveData::instance->pla++;
-        delete this;
+        if (info.other == StageController::instance->getPlayerShip(index))
+        {
+            SaveData::instance->player_data[index].pla++;
+            delete this;
+        }
     }
 }
 

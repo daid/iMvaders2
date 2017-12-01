@@ -35,6 +35,7 @@ private:
             Inactive,
             Playing
         };
+        int index;
         State state;
         sp::P<Ship> ship;
         sp::P<sp::gui::Widget> hud;

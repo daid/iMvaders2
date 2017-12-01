@@ -8,7 +8,7 @@ function startExplainPickup()
         function() update = function()
             if not explain_pickup.valid then
                 update = nil
-                if getPlaCount() == 0 then
+                if getPlaCount(-1) == 0 then
                     explainPickupAgain()
                 else
                     postWave1()
@@ -26,7 +26,7 @@ function explainPickupAgain()
         function() update = function()
             if not explain_pickup.valid then
                 update = nil
-                if getPlaCount() == 0 then
+                if getPlaCount(-1) == 0 then
                     nowYouAreJustTryingToFuckup()
                 else
                     postWave1()

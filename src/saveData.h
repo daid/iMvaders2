@@ -10,7 +10,6 @@ public:
     int player_count;
     
     int score;
-    int pla;
     int playtrough_count;
     bool shop_unlocked;
     
@@ -18,10 +17,11 @@ public:
     {
     public:
         PlayerData()
-        : hull(1.0)
+        : hull(1.0), pla(0)
         {}
         
         float hull;
+        int pla;
     };
     
     std::set<std::pair<int, int>> finished_stages;
