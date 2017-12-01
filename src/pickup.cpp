@@ -19,6 +19,9 @@ Pickup::Pickup(sp::Vector2d position)
     
     sp::collision::Circle2D shape(0.5);
     shape.type = sp::collision::Shape::Type::Sensor;
+    shape.setMaskFilterCategory(SpaceObject::collision_enemy_category);
+    shape.setMaskFilterCategory(SpaceObject::collision_projectile_category);
+
     setCollisionShape(shape);
 
     setPosition(position);
