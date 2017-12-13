@@ -92,6 +92,8 @@ function createLulz_Lulz_Boss()
     self.shield_regen_counter = self.shield_regen_delay
     self.weapon1_counter = self.weapon1_delay
     self.weapon2_state = 0
+    self.weapon3_state = 0
+    self.weapon3_delay = 0
     self.weapon5_state = 0
 
     for n=1,6 do
@@ -178,13 +180,14 @@ function lulzBossWeapons(self)
     --The lulz boss has 6 types of weapons, one for each direction of the core. Only the front 3 are firing.
     --1) Period spread shot
     --2) Launch lulz fighter dive bomber
-    --3) Laser blast, digitizer laser XL
-    --4) Homing missile, sets target position at firing moment
+    --3! Laser blast, digitizer laser XL
+    --4! Homing missile, sets target position at firing moment
     --5) Launch mini-octo
-    --6) ?
+    --6! ?
     local a = -self.getRotation()
     local pos = Vector2(self.getPosition())
     if math.abs(angleDiff(a, 0)) > 90 then
+        --1) Period spread shot
         if self.weapon1_counter > 0 then
             self.weapon1_counter = self.weapon1_counter - 1
         else
@@ -195,6 +198,7 @@ function lulzBossWeapons(self)
         end
     end
     if math.abs(angleDiff(a, 60)) > 90 then
+        --2) Launch lulz fighter dive bomber
         if self.weapon2_state == 0 then
             if pos.x < 4 then
                 self.weapon2_state = 1
@@ -213,12 +217,62 @@ function lulzBossWeapons(self)
         end
     end
     if math.abs(angleDiff(a, 120)) > 90 then
-        --self.createProjectile("PULSE", 0, 0, 120);
+        --3! Laser blast, digitizer laser XL
+        print(self.weapon3_state, self.weapon3_delay)
+
+        if self.weapon3_state == 0 then
+            if self.weapon3_delay > 0 then
+                self.weapon3_delay = self.weapon3_delay - 1
+            else
+                local pre_blast = createEnemy("weapon/pre-laser.png", 1000.0)
+                pre_blast.setPosition((pos + Vector2(-500, 0):rotate(self.getRotation() + 120)):unpack())
+                pre_blast.setRotation(self.getRotation() + 120)
+                pre_blast.setInvincible(true)
+                pre_blast.setDrawOrder(-1)
+                self.weapon3_object = pre_blast
+                self.weapon3_state = 1
+                self.weapon3_delay = 60
+            end
+        elseif self.weapon3_state == 1 then
+            self.weapon3_object.setPosition((pos + Vector2(-500, 0):rotate(self.getRotation() + 120)):unpack())
+            self.weapon3_object.setRotation(self.getRotation() + 120)
+            if self.weapon3_delay > 0 then
+                self.weapon3_delay = self.weapon3_delay - 1
+            else
+                self.weapon3_object.destroy()
+                self.weapon3_state = 2
+                self.weapon3_delay = 40
+
+                local blast = createEnemy("weapon/laser.png", 1000.0)
+                blast.setPosition((pos + Vector2(-500, 0):rotate(self.getRotation() + 120)):unpack())
+                blast.setRotation(self.getRotation() + 120)
+                blast.setCollisionBox(1000, 5)
+                blast.setInvincible(true)
+                blast.setDrawOrder(-1)
+                self.weapon3_object = blast
+            end
+        elseif self.weapon3_state == 2 then
+            self.weapon3_object.setPosition((pos + Vector2(-500, 0):rotate(self.getRotation() + 120)):unpack())
+            self.weapon3_object.setRotation(self.getRotation() + 120)
+            if self.weapon3_delay > 0 then
+                self.weapon3_delay = self.weapon3_delay - 1
+            else
+                self.weapon3_object.destroy()
+                self.weapon3_state = 0
+                self.weapon3_delay = random(60, 200)
+            end
+        end
+    else
+        if self.weapon3_object ~= nil and self.weapon3_object.valid then
+            self.weapon3_object.destroy()
+        end
+        self.weapon3_state = 0
     end
     if math.abs(angleDiff(a, 180)) > 90 then
-        --self.createProjectile("PULSE", 0, 0, 180);
+        --4! Homing missile, sets target position at firing moment
     end
     if math.abs(angleDiff(a, 240)) > 90 then
+        --5) Launch mini-octo
         if self.weapon5_state == 0 then
             if pos.x < 4 then
                 self.weapon5_state = 1
@@ -248,7 +302,7 @@ function lulzBossWeapons(self)
         end
     end
     if math.abs(angleDiff(a, 300)) > 90 then
-        --self.createProjectile("PULSE", 0, 0, 300);
+        --6! ?
     end
 end
 
@@ -257,5 +311,8 @@ function lulzBossDestroyed(self)
         if self.shields[n].valid then
             self.shields[n].destroy()
         end
+    end
+    if self.weapon3_object ~= nil and self.weapon3_object.valid then
+        self.weapon3_object.destroy()
     end
 end
