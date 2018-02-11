@@ -7,7 +7,6 @@
 #include "weapon/projectile.h"
 
 #include <sp2/logging.h>
-#include <sp2/graphics/spriteManager.h>
 #include <sp2/io/keyValueTreeLoader.h>
 
 std::map<sp::string, EquipmentTemplate> EquipmentTemplate::templates;
@@ -25,7 +24,7 @@ void EquipmentTemplate::init()
         
         if (data["type"] == "projectile")
         {
-            sp::SpriteManager::create(data["sprite"], data["sprite"], data["size"].toFloat());
+            //TODO:sp::SpriteManager::create(data["sprite"], data["sprite"], sp::stringutil::convert::toFloat(data["size"]));
         }
         
         templates[id] = et;

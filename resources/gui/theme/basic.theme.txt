@@ -1,23 +1,25 @@
 {
-    forground.color: #FFFFFF
+    color: #FFFFFF
     font: gui/theme/basic/forque.ttf
     text.size: 30
 
-    [button] {
-        forground.color.disabled: #808080
-        forground.color.hovered: #808080
+    [button.label] {
+        color.disabled: #808080
+        color.hovered: #808080
         text.size: 80
+    }
+    [button.background] {
         [stage_button] {
-            background.image: gui/theme/basic/stage_button.png
-            background.color.disabled: #808080
+            image: gui/theme/basic/stage_button.png
+            color.disabled: #808080
             text.size: 50
             [stage_button_done] {
-                background.image: gui/theme/basic/stage_button_done.png
+                image: gui/theme/basic/stage_button_done.png
             }
         }
     }
     [panel] {
-        background.image: gui/theme/basic/background.png
+        image: gui/theme/basic/background.png
     }
     [label] {
         [title_label] {
@@ -36,20 +38,20 @@
     [image] {
     }
     [progressbar] {
-        background.image: gui/theme/basic/progressbar_background.png
-        forground.image: gui/theme/basic/progressbar_fill.png
+        image: gui/theme/basic/progressbar_background.png
+        image: gui/theme/basic/progressbar_fill.png
         
         [progressbar_energy] {
-            forground.color: #33a020
+            color: #33a020
         }
         [progressbar_shield] {
-            forground.color: #8080ff
+            color: #8080ff
         }
         [progressbar_hull] {
-            forground.color: #808040
+            color: #808040
         }
         [healthbar_boss] {
-            forground.color: #aa1010
+            color: #aa1010
         }
     }
 }

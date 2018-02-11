@@ -8,6 +8,7 @@
 #include <sp2/tween.h>
 #include <sp2/collision/2d/circle.h>
 #include <sp2/collision/2d/box.h>
+#include <sp2/graphics/textureManager.h>
 
 sp::PList<Enemy> Enemy::bosses;
 
@@ -126,7 +127,8 @@ void Enemy::onCollision(sp::CollisionInfo& info)
     sp::P<SpaceObject> so = info.other;
     if (so)
     {
-        so->takeDamage(info.position, touch_damage_amount, DamageSource::Enemy, touch_damage_type);
+        if (so->takeDamage(info.position, touch_damage_amount, DamageSource::Enemy, touch_damage_type))
+            onPlayerDamage.call(so);
     }
 }
 
@@ -161,9 +163,9 @@ void Enemy::setShield(float amount, int recharge_time, sp::string texture)
     shield_charge_time = 0;
     
     unshielded_texture = render_data.texture;
-    shielded_texture = texture;
+    shielded_texture = sp::textureManager.get(texture);
     
-    render_data.texture = texture;
+    render_data.texture = shielded_texture;
 }
 
 void Enemy::setGlow(float speed)
@@ -205,6 +207,7 @@ void Enemy::onRegisterScriptBindings(sp::ScriptBindingClass& script_binding_clas
 
     script_binding_class.bind("onDestroy", onDestroy);
     script_binding_class.bind("onDamage", onDamage);
+    script_binding_class.bind("onPlayerDamage", onPlayerDamage);
     script_binding_class.bind("onControlUpdate", onControlUpdate);
     script_binding_class.bind("onWeaponUpdate", onWeaponUpdate);
 }

@@ -11,9 +11,9 @@ Reactor::Reactor(sp::P<Ship> parent)
 void Reactor::setParameter(sp::string key, sp::string value)
 {
     if (key == "energy")
-        energy_level = max_energy_level = value.toFloat();
+        energy_level = max_energy_level = sp::stringutil::convert::toFloat(value);
     else if (key == "rate")
-        charge_rate = value.toFloat();
+        charge_rate = sp::stringutil::convert::toFloat(value);
     else
         Equipment::setParameter(key, value);
 }

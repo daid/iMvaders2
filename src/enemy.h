@@ -28,8 +28,8 @@ private:
     int shield_charge_delay;
     int shield_charge_time;
     
-    sp::string shielded_texture;
-    sp::string unshielded_texture;
+    sp::Texture* shielded_texture;
+    sp::Texture* unshielded_texture;
     
     int protection_time_on_damage;
     
@@ -56,6 +56,7 @@ private:
 
     sp::script::Callback onDestroy;
     sp::script::Callback onDamage;
+    sp::script::Callback onPlayerDamage;    //Called when damaging the player
     sp::script::Callback onControlUpdate;
     sp::script::Callback onWeaponUpdate;
     

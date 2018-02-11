@@ -3,6 +3,7 @@
 #include "../explosion.h"
 #include <sp2/random.h>
 #include <sp2/graphics/meshdata.h>
+#include <sp2/graphics/textureManager.h>
 #include <sp2/collision/2d/box.h>
 
 AbandondedPrinter::AbandondedPrinter()
@@ -11,9 +12,9 @@ AbandondedPrinter::AbandondedPrinter()
     render_data.type = sp::RenderData::Type::Normal;
     render_data.mesh = sp::MeshData::createQuad(sp::Vector2f(1.0, 1.0));
     if (sp::random(0, 100) < 50)
-        render_data.texture = "ship/m/cupcake.png";
+        render_data.texture = sp::textureManager.get("ship/m/cupcake.png");
     else
-        render_data.texture = "ship/m/thingomatic.png";
+        render_data.texture = sp::textureManager.get("ship/m/thingomatic.png");
     float scale = 4.0;
     render_data.scale = sp::Vector3f(scale, scale, 1.0);
     render_data.order = -1;

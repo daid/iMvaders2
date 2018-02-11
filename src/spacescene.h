@@ -2,8 +2,8 @@
 #define SPACE_SCENE_H
 
 #include "ship.h"
-#include <sp2/scene/cameraNode.h>
-#include <sp2/graphics/gui/graphicslayer.h>
+#include <sp2/scene/camera.h>
+#include <sp2/graphics/gui/scene.h>
 #include <sp2/graphics/scene/graphicslayer.h>
 #include <sp2/scene/scene.h>
 #include <sp2/script/environment.h>
@@ -43,8 +43,7 @@ private:
 
     void updateHud(PlayerData& data);
 
-    sp::P<sp::CameraNode> camera;
-    sp::P<sp::SceneGraphicsLayer> scene_layer;
+    sp::P<sp::Camera> camera;
     
     std::vector<PlayerData> player_data;
     sp::P<sp::Node> background;

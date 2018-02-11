@@ -2,6 +2,7 @@
 #include "../explosion.h"
 #include "../pickup.h"
 #include <sp2/graphics/meshdata.h>
+#include <sp2/graphics/textureManager.h>
 #include <sp2/collision/2d/box.h>
 
 class Z18Part : public SpaceObject
@@ -12,7 +13,7 @@ public:
     {
         render_data.shader = sp::Shader::get("shader/basic.shader");
         render_data.type = sp::RenderData::Type::Normal;
-        render_data.texture = "ship/m/z18.png";
+        render_data.texture = sp::textureManager.get("ship/m/z18.png");
         render_data.order = -1;
 
         setPosition(sp::Vector2d(60, -(index - 24) + 0.5));
@@ -39,7 +40,7 @@ public:
     
     virtual void onFixedUpdate()
     {
-        setPosition(getLocalPosition2D() - sp::Vector2d(Z18::speed, 0));
+        setPosition(getPosition2D() - sp::Vector2d(Z18::speed, 0));
     }
     
     void updateToSize()
@@ -66,8 +67,8 @@ public:
 
         render_data.shader = sp::Shader::get("shader/basic.shader");
         render_data.type = sp::RenderData::Type::Normal;
-        render_data.mesh = sp::MeshData::create(vertices);
-        render_data.texture = "ship/m/z18.png";
+        render_data.mesh = sp::MeshData::create(std::move(vertices));
+        render_data.texture = sp::textureManager.get("ship/m/z18.png");
         render_data.order = -1;
 
         sp::collision::Box2D shape(s, 1.0, 0.5 * (80.0 - s), 0);
@@ -109,8 +110,8 @@ void Z18::onCollision(sp::CollisionInfo& info)
 
 void Z18::onFixedUpdate()
 {
-    setPosition(getLocalPosition2D() - sp::Vector2d(speed, 0));
-    if (getLocalPosition2D().x < -60)
+    setPosition(getPosition2D() - sp::Vector2d(speed, 0));
+    if (getPosition2D().x < -60)
     {
         for(int n=0;n<part_count;n++)
             if (parts[n])

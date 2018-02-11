@@ -14,11 +14,11 @@ Engine::Engine(sp::P<Ship> parent)
 void Engine::setParameter(sp::string key, sp::string value)
 {
     if (key == "forward")
-        forward_trust = value.toFloat();
+        forward_trust = sp::stringutil::convert::toFloat(value);
     else if (key == "rotation")
-        rotation_trust = value.toFloat();
+        rotation_trust = sp::stringutil::convert::toFloat(value);
     else if (key == "energy")
-        energy_per_trust = value.toFloat();
+        energy_per_trust = sp::stringutil::convert::toFloat(value);
     else
         Equipment::setParameter(key, value);
 }

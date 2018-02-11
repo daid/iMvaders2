@@ -5,8 +5,7 @@
 #include "stageSelect.h"
 #include "spacescene.h"
 #include "ship.h"
-#include <sp2/scene/cameraNode.h>
-#include <sp2/graphics/gui/graphicslayer.h>
+#include <sp2/scene/camera.h>
 
 class SceneManager
 {

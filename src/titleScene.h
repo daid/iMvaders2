@@ -2,7 +2,6 @@
 #define TITLE_SCENE_H
 
 #include <sp2/scene/node.h>
-#include <sp2/graphics/scene/graphicslayer.h>
 #include <sp2/graphics/gui/widget/widget.h>
 
 class TitleController : public sp::Node
@@ -31,7 +30,6 @@ private:
     int option_index;
     sp::P<sp::Node> title;
     sp::P<sp::Node> text_scroll;
-    sp::P<sp::SceneGraphicsLayer> graphics_layer;
     sp::P<sp::gui::Widget> title_gui;
     sp::P<sp::gui::Widget> game_select_gui;
 };

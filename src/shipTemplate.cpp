@@ -1,5 +1,4 @@
 #include "shipTemplate.h"
-#include <sp2/graphics/spriteManager.h>
 #include <sp2/io/keyValueTreeLoader.h>
 #include <sp2/logging.h>
 #include <sp2/collision/2d/circle.h>
@@ -19,9 +18,9 @@ void ShipTemplate::init()
         st.name = data["name"];
         st.sprite_name = "ship-" + id;
         std::vector<sp::string> collision = data["collision"].split(",");
-        st.collision_size.x = collision[0].toFloat();
+        st.collision_size.x = sp::stringutil::convert::toFloat(collision[0]);
         if (collision.size() > 1)
-            st.collision_size.y = collision[1].toFloat();
+            st.collision_size.y = sp::stringutil::convert::toFloat(collision[1]);
         else
             st.collision_size.y = -1;
 
@@ -32,7 +31,7 @@ void ShipTemplate::init()
         st.weapon[0] = data["primary_weapon"];
         st.weapon[1] = data["secondary_weapon"];
 
-        sp::SpriteManager::create(st.sprite_name, data["sprite"], data["size"].toFloat());
+        //TODO:sp::SpriteManager::create(st.sprite_name, data["sprite"], sp::stringutil::convert::toFloat(data["size"]));
         templates[id] = st;
     }
     delete *tree;
@@ -48,7 +47,7 @@ sp::P<Ship> ShipTemplate::create(sp::string id)
     }
     ShipTemplate& st = it->second;
     sp::P<Ship> ship = new Ship();
-    ship->render_data = sp::SpriteManager::get(st.sprite_name);
+    //TODO:ship->render_data = sp::SpriteManager::get(st.sprite_name);
     if (st.collision_size.y > 0)
     {
         sp::collision::Box2D shape(st.collision_size.x, st.collision_size.y);

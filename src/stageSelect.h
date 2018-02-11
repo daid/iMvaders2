@@ -18,12 +18,11 @@ private:
     void addStageButton(sp::P<sp::gui::Widget> row, int level, int sublevel);
 
     sp::P<sp::Node> title;
-    sp::P<sp::SceneGraphicsLayer> graphics_layer;
     sp::P<sp::gui::Widget> gui;
     
-    int selection_level;
-    int selection_sublevel;
-    bool shop_selected;
+    int selection_level = 0;
+    int selection_sublevel = 0;
+    bool shop_selected = false;
 };
 
 #endif//STAGE_SELECT_H

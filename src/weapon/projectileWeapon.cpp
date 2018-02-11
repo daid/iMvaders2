@@ -26,24 +26,23 @@ void ProjectileWeapon::setParameter(sp::string key, sp::string value)
     if (key == "projectile")
         projectile_name = value;
     else if (key == "rate")
-        fire_rate = value.toFloat();
+        fire_rate = sp::stringutil::convert::toFloat(value);
     else if (key == "count")
-        projectile_count = value.toInt();
+        projectile_count = sp::stringutil::convert::toInt(value);
     else if (key == "energy")
-        energy_per_shot = value.toFloat();
+        energy_per_shot = sp::stringutil::convert::toFloat(value);
     else if (key == "angle")
-        fire_angle = value.toFloat();
+        fire_angle = sp::stringutil::convert::toFloat(value);
     else if (key == "spread")
-        spread_angle = value.toFloat();
+        spread_angle = sp::stringutil::convert::toFloat(value);
     else if (key == "offset")
     {
-        spread_offset.x = value.split(",")[0].toFloat();
-        spread_offset.y = value.split(",")[1].toFloat();
+        spread_offset = sp::stringutil::convert::toVector2d(value);
     }
     else if (key == "burst")
     {
-        burst_count = value.split(",")[0].toInt();
-        burst_time = value.split(",")[1].toFloat();
+        burst_count = sp::stringutil::convert::toInt(value.split(",")[0]);
+        burst_time = sp::stringutil::convert::toFloat(value.split(",")[1]);
     }
     else
         Equipment::setParameter(key, value);

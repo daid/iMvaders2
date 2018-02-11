@@ -15,7 +15,7 @@ void Equipment::setParameter(sp::string key, sp::string value)
     else if (key == "name")
         name = value;
     else if (key == "mass")
-        mass = value.toFloat();
+        mass = sp::stringutil::convert::toFloat(value);
     else
         LOG(Warning, "Setting unknown equipment parameter", key, value);
 }

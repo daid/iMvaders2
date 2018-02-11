@@ -15,13 +15,13 @@ void Shield::setParameter(sp::string key, sp::string value)
 {
     if (key == "charge")
     {
-        max_charge_level = value.toFloat();
+        max_charge_level = sp::stringutil::convert::toFloat(value);
         charge_level = max_charge_level;
     }
     else if (key == "energy")
-        energy_per_charge = value.toFloat();
+        energy_per_charge = sp::stringutil::convert::toFloat(value);
     else if (key == "rate")
-        charge_rate = value.toFloat();
+        charge_rate = sp::stringutil::convert::toFloat(value);
     else
         Equipment::setParameter(key, value);
 }

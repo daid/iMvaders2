@@ -85,6 +85,7 @@ function createLulz_Lulz_Boss()
     self.slow_speed = 0.10
     self.high_speed = 0.40
     self.weapon1_delay = 60
+    self.weapon4_delay = 150
     self.shields = {}
     self.target_angle = 3
     self.shield_regen_delay = 1000
@@ -94,6 +95,7 @@ function createLulz_Lulz_Boss()
     self.weapon2_state = 0
     self.weapon3_state = 0
     self.weapon3_delay = 0
+    self.weapon4_counter = self.weapon4_delay
     self.weapon5_state = 0
 
     for n=1,6 do
@@ -181,7 +183,7 @@ function lulzBossWeapons(self)
     --1) Period spread shot
     --2) Launch lulz fighter dive bomber
     --3! Laser blast, digitizer laser XL
-    --4! Homing missile, sets target position at firing moment
+    --4! Homing missile
     --5) Launch mini-octo
     --6! ?
     local a = -self.getRotation()
@@ -268,8 +270,29 @@ function lulzBossWeapons(self)
         end
         self.weapon3_state = 0
     end
-    if math.abs(angleDiff(a, 180)) > 90 then
-        --4! Homing missile, sets target position at firing moment
+    if math.abs(angleDiff(a, 180)) > 90 or 1 then
+        --4! Homing missile
+        if self.weapon4_counter > 0 then
+            self.weapon4_counter = self.weapon4_counter - 1
+        else
+            local ship = createEnemy("weapon/missile.png", 2.0)
+            ship.setCollisionBox(2, 0.8)
+            ship.setHealth(3)
+            ship.setPosition((pos + Vector2(-4, 0):rotate(self.getRotation() + 180)):unpack())
+            ship.setRotation(self.getRotation() + 180)
+            ship.speed = 0.2
+            ship.onControlUpdate(function(s)
+                if s.player == nil or not s.player.valid then
+                    s.player = getRandomPlayer()
+                end
+                s.setPosition((Vector2(s.getPosition()) + Vector2(-s.speed, 0):rotate(s.getRotation())):unpack())
+                if s.player then
+                    s.setRotation((Vector2(s.player.getPosition()) - Vector2(s.getPosition())):angle())
+                end
+            end)
+            ship.setDrawOrder(1)
+            self.weapon4_counter = self.weapon4_delay
+        end
     end
     if math.abs(angleDiff(a, 240)) > 90 then
         --5) Launch mini-octo

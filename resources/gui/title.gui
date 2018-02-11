@@ -46,5 +46,5 @@
 [@SELECT_OPTION] {
     type: button
     alignment: topleft
-    size: 500, 80
+    size: 700, 80
 }

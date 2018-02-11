@@ -10,7 +10,7 @@ Hull::Hull(sp::P<Ship> parent)
 void Hull::setParameter(sp::string key, sp::string value)
 {
     if (key == "damage")
-        hull_level = max_hull_level = value.toFloat();
+        hull_level = max_hull_level = sp::stringutil::convert::toFloat(value);
     else
         Equipment::setParameter(key, value);
 }

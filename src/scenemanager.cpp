@@ -6,9 +6,9 @@
 
 #include <sp2/random.h>
 #include <sp2/graphics/meshdata.h>
-#include <sp2/graphics/gui/guiLoader.h>
+#include <sp2/graphics/gui/loader.h>
 #include <sp2/graphics/gui/widget/progressbar.h>
-#include <sp2/scene/cameraNode.h>
+#include <sp2/scene/camera.h>
 #include <sp2/graphics/scene/graphicslayer.h>
 #include <sp2/graphics/scene/basicnoderenderpass.h>
 #include <sp2/graphics/scene/collisionrenderpass.h>
@@ -19,9 +19,7 @@ SceneManager::SceneManager()
 {
     instance = this;
 
-    sp::gui::GraphicsLayer* gui_layer = new sp::gui::GraphicsLayer(100);
-    gui_layer->setMinimalVirtualSize(sf::Vector2f(1280, 960));
-    gui_layer->setMaximumVirtualSize(sf::Vector2f(1280, 80000));
+    new sp::gui::Scene(sp::Vector2d(1280, 960), sp::gui::Scene::Direction::Horizontal);
 
     title_controller = new TitleController();
     stage_select = new StageSelect();

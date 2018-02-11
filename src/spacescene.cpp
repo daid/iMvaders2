@@ -13,14 +13,12 @@
 
 #include <sp2/random.h>
 #include <sp2/graphics/meshdata.h>
-#include <sp2/graphics/gui/guiLoader.h>
+#include <sp2/graphics/textureManager.h>
+#include <sp2/graphics/gui/loader.h>
 #include <sp2/graphics/gui/widget/progressbar.h>
 #include <sp2/graphics/gui/widget/label.h>
 #include <sp2/graphics/gui/widget/image.h>
-#include <sp2/scene/cameraNode.h>
-#include <sp2/graphics/scene/graphicslayer.h>
-#include <sp2/graphics/scene/basicnoderenderpass.h>
-#include <sp2/graphics/scene/collisionrenderpass.h>
+#include <sp2/scene/camera.h>
 
 sp::P<sp::Scene> space_scene;
 static int global_time;
@@ -33,16 +31,10 @@ StageController::StageController()
     instance = this;
     space_scene = getScene();
     
-    camera = new sp::CameraNode(space_scene->getRoot());
+    camera = new sp::Camera(space_scene->getRoot());
     camera->setOrtographic(15.0);
     camera->setRotation(-90);
     camera->setPosition(sp::Vector2d(10, 0));
-
-    scene_layer = new sp::SceneGraphicsLayer(10);
-    scene_layer->addRenderPass(new sp::BasicNodeRenderPass("window", space_scene, camera));
-#ifdef DEBUG
-    scene_layer->addRenderPass(new sp::CollisionRenderPass("window", space_scene, camera));
-#endif
 
     for(int n=0; n<max_players; n++)
     {
@@ -51,19 +43,20 @@ StageController::StageController()
         pd.hud = sp::gui::Loader::load("gui/hud.gui", "PLAYER", nullptr);
         if (n == 1)
         {
-            for(auto widget : pd.hud->children)
+            for(auto child : pd.hud->getChildren())
             {
-                if (widget->layout.alignment == sp::gui::Widget::Alignment::BottomLeft)
-                    widget->layout.alignment = sp::gui::Widget::Alignment::BottomRight;
-                if (widget->layout.alignment == sp::gui::Widget::Alignment::Left)
-                    widget->layout.alignment = sp::gui::Widget::Alignment::Right;
-                if (widget->layout.alignment == sp::gui::Widget::Alignment::TopLeft)
-                    widget->layout.alignment = sp::gui::Widget::Alignment::TopRight;
-                sp::gui::Label* label = dynamic_cast<sp::gui::Label*>(widget);
+                sp::P<sp::gui::Widget> widget = sp::P<sp::Node>(child); if (!widget) continue;
+                if (widget->layout.alignment == sp::Alignment::BottomLeft)
+                    widget->layout.alignment = sp::Alignment::BottomRight;
+                if (widget->layout.alignment == sp::Alignment::Left)
+                    widget->layout.alignment = sp::Alignment::Right;
+                if (widget->layout.alignment == sp::Alignment::TopLeft)
+                    widget->layout.alignment = sp::Alignment::TopRight;
+                sp::P<sp::gui::Label> label = widget;
                 if (label)
                 {
-                    if (label->getTextAlignment() == sp::gui::Widget::Alignment::Left)
-                        label->setTextAlignment(sp::gui::Widget::Alignment::Right);
+                    if (label->getTextAlignment() == sp::Alignment::Left)
+                        label->setTextAlignment(sp::Alignment::Right);
                 }
             }
         }
@@ -85,8 +78,8 @@ StageController::StageController()
     background = new sp::Node(space_scene->getRoot());
     background->render_data.type = sp::RenderData::Type::Normal;
     background->render_data.shader = sp::Shader::get("shader/star_background.shader");
-    background->render_data.mesh = std::make_shared<sp::MeshData>(vertices);
-    background->render_data.texture = "stars.png";
+    background->render_data.mesh = std::make_shared<sp::MeshData>(std::move(vertices));
+    background->render_data.texture = sp::textureManager.get("stars.png");
     background->render_data.order = -10;
     background->render_data.color = sf::Color::White;
 }
@@ -151,7 +144,7 @@ static sp::P<Enemy> createEnemy(sp::string texture_name, float scale)
     e->render_data.shader = sp::Shader::get("shader/basic.shader");
     e->render_data.type = sp::RenderData::Type::Normal;
     e->render_data.mesh = sp::MeshData::createQuad(sp::Vector2f(1.0, 1.0));
-    e->render_data.texture = texture_name;
+    e->render_data.texture = sp::textureManager.get(texture_name);
     e->render_data.scale = sp::Vector3f(scale, scale, 1.0);
     return e;
 }
@@ -270,7 +263,7 @@ bool StageController::loadStage(sp::string name)
 void StageController::onUpdate(float delta)
 {
     //Scroll the background
-    background->setPosition(background->getLocalPosition2D() + background_speed * double(delta));
+    background->setPosition(background->getPosition2D() + background_speed * double(delta));
 
     //Update the camera position
     int ship_count = 0;

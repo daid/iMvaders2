@@ -3,7 +3,7 @@
 #include "../ship.h"
 #include "../enemy.h"
 #include "../explosion.h"
-#include <sp2/graphics/spriteManager.h>
+#include <sp2/graphics/textureManager.h>
 #include <sp2/collision/2d/box.h>
 #include <sp2/collision/2d/circle.h>
 #include <sp2/logging.h>
@@ -56,7 +56,7 @@ void Projectile::setParameter(sp::string key, sp::string value)
 {
     if (key == "sprite")
     {
-        render_data = sp::SpriteManager::get(value);
+        //TODO:render_data = sp::SpriteManager::get(value);
         render_data.order = 1;
     }
     else if (key == "size")
@@ -64,23 +64,23 @@ void Projectile::setParameter(sp::string key, sp::string value)
     }
     else if (key == "distance")
     {
-        travel_distance = value.toFloat();
+        travel_distance = sp::stringutil::convert::toFloat(value);
         lifetime = travel_distance / travel_speed;
     }
     else if (key == "speed")
     {
-        travel_speed = value.toFloat();
+        travel_speed = sp::stringutil::convert::toFloat(value);
         if (travel_distance > 0.0)
             lifetime = travel_distance / travel_speed;
     }
     else if (key == "lifetime")
     {
-        lifetime = value.toFloat();
+        lifetime = sp::stringutil::convert::toFloat(value);
         travel_distance = 0.0;
     }
     else if (key == "damage")
     {
-        damage = value.toFloat();
+        damage = sp::stringutil::convert::toFloat(value);
     }
     else if (key == "type")
     {
@@ -105,7 +105,7 @@ void Projectile::setParameter(sp::string key, sp::string value)
         std::vector<sp::string> collision = value.split(",");
         if (collision.size() > 1)
         {
-            sp::collision::Box2D shape(collision[0].toFloat(), collision[1].toFloat());
+            sp::collision::Box2D shape(sp::stringutil::convert::toFloat(collision[0]), sp::stringutil::convert::toFloat(collision[1]));
             shape.type = sp::collision::Shape::Type::Sensor;
             shape.setFilterCategory(SpaceObject::collision_projectile_category);
             shape.setMaskFilterCategory(SpaceObject::collision_projectile_category);
@@ -113,7 +113,7 @@ void Projectile::setParameter(sp::string key, sp::string value)
         }
         else
         {
-            sp::collision::Circle2D shape(collision[0].toFloat());
+            sp::collision::Circle2D shape(sp::stringutil::convert::toFloat(collision[0]));
             shape.type = sp::collision::Shape::Type::Sensor;
             shape.setFilterCategory(SpaceObject::collision_projectile_category);
             shape.setMaskFilterCategory(SpaceObject::collision_projectile_category);
