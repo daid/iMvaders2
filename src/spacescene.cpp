@@ -35,6 +35,7 @@ StageController::StageController()
     camera->setOrtographic(15.0);
     camera->setRotation(-90);
     camera->setPosition(sp::Vector2d(10, 0));
+    space_scene->setDefaultCamera(camera);
 
     for(int n=0; n<max_players; n++)
     {

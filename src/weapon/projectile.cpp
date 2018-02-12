@@ -4,6 +4,7 @@
 #include "../enemy.h"
 #include "../explosion.h"
 #include <sp2/graphics/textureManager.h>
+#include <sp2/graphics/meshdata.h>
 #include <sp2/collision/2d/box.h>
 #include <sp2/collision/2d/circle.h>
 #include <sp2/logging.h>
@@ -56,11 +57,14 @@ void Projectile::setParameter(sp::string key, sp::string value)
 {
     if (key == "sprite")
     {
-        //TODO:render_data = sp::SpriteManager::get(value);
+        render_data.type = sp::RenderData::Type::Normal;
+        render_data.shader = sp::Shader::get("internal:basic.shader");
+        render_data.texture = sp::textureManager.get(value);
         render_data.order = 1;
     }
     else if (key == "size")
     {
+        render_data.mesh = sp::MeshData::createQuad(sp::stringutil::convert::toVector2f(value));
     }
     else if (key == "distance")
     {

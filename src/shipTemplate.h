@@ -12,7 +12,8 @@ public:
 
 private:
     sp::string name;
-    sp::string sprite_name;
+    sp::Texture* texture;
+    sp::Vector2f sprite_size;
     sp::Vector2d collision_size;
     
     sp::string reactor;

@@ -22,11 +22,6 @@ void EquipmentTemplate::init()
         EquipmentTemplate et;
         et.data = data;
         
-        if (data["type"] == "projectile")
-        {
-            //TODO:sp::SpriteManager::create(data["sprite"], data["sprite"], sp::stringutil::convert::toFloat(data["size"]));
-        }
-        
         templates[id] = et;
     }
     delete *tree;
