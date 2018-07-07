@@ -96,7 +96,7 @@ bool ProjectileWeapon::hasHitPotential(sp::P<Ship> target)
     sp::P<Ship> ship = getParent();
     
     sp::Vector2d position_diff = target->getGlobalPosition2D() - ship->getGlobalPosition2D();
-    double target_rotation = sp::toRotationAngle(position_diff);
+    double target_rotation = position_diff.angle();
     if (std::abs(sp::angleDifference(target_rotation, ship->getGlobalRotation2D())) < 15)
         return true;
     return false;

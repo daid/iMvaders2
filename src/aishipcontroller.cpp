@@ -34,9 +34,9 @@ void AIShipController::update(Ship* ship)
     
     if (target)
     {
-        trust = sp::normalize(target->getGlobalPosition2D() - ship->getGlobalPosition2D());
+        trust = (target->getGlobalPosition2D() - ship->getGlobalPosition2D()).normalized();
         brake = false;
-        rotate = sp::toRotationAngle(target->getGlobalPosition2D() - ship->getGlobalPosition2D());
+        rotate = (target->getGlobalPosition2D() - ship->getGlobalPosition2D()).angle();
         
         if (ship->weapon[0] && ship->weapon[0]->hasHitPotential(target))
             primary_fire = true;

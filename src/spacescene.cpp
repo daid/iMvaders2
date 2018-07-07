@@ -68,21 +68,20 @@ StageController::StageController()
     main_hud = sp::gui::Loader::load("gui/hud.gui", "MAIN", nullptr);
     message = sp::gui::Loader::load("gui/hud.gui", "MESSAGE", nullptr);
 
-    std::vector<sp::MeshData::Vertex> vertices;
-    vertices.emplace_back(sf::Vector3f(-1, -1, 1), sp::Vector2f(0, 1));
-    vertices.emplace_back(sf::Vector3f( 1, -1, 1), sp::Vector2f(1, 1));
-    vertices.emplace_back(sf::Vector3f(-1,  1, 1), sp::Vector2f(0, 0));
-    vertices.emplace_back(sf::Vector3f(-1,  1, 1), sp::Vector2f(0, 0));
-    vertices.emplace_back(sf::Vector3f( 1, -1, 1), sp::Vector2f(1, 1));
-    vertices.emplace_back(sf::Vector3f( 1,  1, 1), sp::Vector2f(1, 0));
+    sp::MeshData::Vertices vertices;
+    sp::MeshData::Indices indices{0,1,2,2,1,3};
+    vertices.emplace_back(sp::Vector3f(-1, -1, 1), sp::Vector2f(0, 1));
+    vertices.emplace_back(sp::Vector3f( 1, -1, 1), sp::Vector2f(1, 1));
+    vertices.emplace_back(sp::Vector3f(-1,  1, 1), sp::Vector2f(0, 0));
+    vertices.emplace_back(sp::Vector3f( 1,  1, 1), sp::Vector2f(1, 0));
 
     background = new sp::Node(space_scene->getRoot());
     background->render_data.type = sp::RenderData::Type::Normal;
     background->render_data.shader = sp::Shader::get("shader/star_background.shader");
-    background->render_data.mesh = std::make_shared<sp::MeshData>(std::move(vertices));
-    background->render_data.texture = sp::textureManager.get("stars.png");
+    background->render_data.mesh = std::make_shared<sp::MeshData>(std::move(vertices), std::move(indices));
+    background->render_data.texture = sp::texture_manager.get("stars.png");
     background->render_data.order = -10;
-    background->render_data.color = sf::Color::White;
+    background->render_data.color = sp::Color(1,1,1);
 }
 
 void StageController::show()
@@ -145,7 +144,7 @@ static sp::P<Enemy> createEnemy(sp::string texture_name, float scale)
     e->render_data.shader = sp::Shader::get("shader/basic.shader");
     e->render_data.type = sp::RenderData::Type::Normal;
     e->render_data.mesh = sp::MeshData::createQuad(sp::Vector2f(1.0, 1.0));
-    e->render_data.texture = sp::textureManager.get(texture_name);
+    e->render_data.texture = sp::texture_manager.get(texture_name);
     e->render_data.scale = sp::Vector3f(scale, scale, 1.0);
     return e;
 }

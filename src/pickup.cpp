@@ -14,7 +14,7 @@ Pickup::Pickup(sp::Vector2d position)
     render_data.shader = sp::Shader::get("shader/basic.shader");
     render_data.type = sp::RenderData::Type::Normal;
     render_data.mesh = sp::MeshData::createQuad(sp::Vector2f(1.0, 1.0));
-    render_data.texture = sp::textureManager.get("pickup/pla.png");
+    render_data.texture = sp::texture_manager.get("pickup/pla.png");
     float scale = 1.0;
     render_data.scale = sp::Vector3f(scale, scale, 1.0);
     

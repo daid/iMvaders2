@@ -109,15 +109,15 @@ void Ship::onFixedUpdate()
     
     if ((hull_damage_indicator % 2) == 1)
     {
-        render_data.color = sf::Color(255, 255, 255, 0);
+        render_data.color = sp::Color(1, 1, 1, 0);
     }
     else if ((shield_damage_indicator % 4) >= 2)
     {
-        render_data.color = sf::Color(255, 255, 255, 0);
+        render_data.color = sp::Color(1, 1, 1, 0);
     }
     else
     {
-        render_data.color = sf::Color::White;
+        render_data.color = sp::Color(1, 1, 1);
     }
     sp::Vector2d position = getGlobalPosition2D();
     if (position.x > 15)

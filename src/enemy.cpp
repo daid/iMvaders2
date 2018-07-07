@@ -163,7 +163,7 @@ void Enemy::setShield(float amount, int recharge_time, sp::string texture)
     shield_charge_time = 0;
     
     unshielded_texture = render_data.texture;
-    shielded_texture = sp::textureManager.get(texture);
+    shielded_texture = sp::texture_manager.get(texture);
     
     render_data.texture = shielded_texture;
 }

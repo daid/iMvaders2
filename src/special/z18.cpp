@@ -13,7 +13,7 @@ public:
     {
         render_data.shader = sp::Shader::get("shader/basic.shader");
         render_data.type = sp::RenderData::Type::Normal;
-        render_data.texture = sp::textureManager.get("ship/m/z18.png");
+        render_data.texture = sp::texture_manager.get("ship/m/z18.png");
         render_data.order = -1;
 
         setPosition(sp::Vector2d(60, -(index - 24) + 0.5));
@@ -55,20 +55,21 @@ public:
             return;
         }
     
-        std::vector<sp::MeshData::Vertex> vertices;
+        sp::MeshData::Vertices vertices;
+        sp::MeshData::Indices indices{0,1,2,3,4,5};
         float uv_y = 0.5 + (1.0/80.0) * (index - 24);
-        vertices.emplace_back(sf::Vector3f( 40,           -0.5, 0.0f), sp::Vector2f(1.0, uv_y + 1.0/80.0));
-        vertices.emplace_back(sf::Vector3f( 40 - s0,  0.5, 0.0f), sp::Vector2f(1.0-s0/80.0, uv_y));
-        vertices.emplace_back(sf::Vector3f( 40 - s1, -0.5, 0.0f), sp::Vector2f(1.0-s1/80.0, uv_y + 1.0/80.0));
+        vertices.emplace_back(sp::Vector3f( 40,           -0.5, 0.0f), sp::Vector2f(1.0, uv_y + 1.0/80.0));
+        vertices.emplace_back(sp::Vector3f( 40 - s0,  0.5, 0.0f), sp::Vector2f(1.0-s0/80.0, uv_y));
+        vertices.emplace_back(sp::Vector3f( 40 - s1, -0.5, 0.0f), sp::Vector2f(1.0-s1/80.0, uv_y + 1.0/80.0));
         
-        vertices.emplace_back(sf::Vector3f( 40 - s0,  0.5, 0.0f), sp::Vector2f(1.0-s0/80.0, uv_y));
-        vertices.emplace_back(sf::Vector3f( 40, -0.5, 0.0f), sp::Vector2f(1, uv_y + 1.0/80.0));
-        vertices.emplace_back(sf::Vector3f( 40,  0.5, 0.0f), sp::Vector2f(1, uv_y));
+        vertices.emplace_back(sp::Vector3f( 40 - s0,  0.5, 0.0f), sp::Vector2f(1.0-s0/80.0, uv_y));
+        vertices.emplace_back(sp::Vector3f( 40, -0.5, 0.0f), sp::Vector2f(1, uv_y + 1.0/80.0));
+        vertices.emplace_back(sp::Vector3f( 40,  0.5, 0.0f), sp::Vector2f(1, uv_y));
 
         render_data.shader = sp::Shader::get("shader/basic.shader");
         render_data.type = sp::RenderData::Type::Normal;
-        render_data.mesh = sp::MeshData::create(std::move(vertices));
-        render_data.texture = sp::textureManager.get("ship/m/z18.png");
+        render_data.mesh = sp::MeshData::create(std::move(vertices), std::move(indices));
+        render_data.texture = sp::texture_manager.get("ship/m/z18.png");
         render_data.order = -1;
 
         sp::collision::Box2D shape(s, 1.0, 0.5 * (80.0 - s), 0);

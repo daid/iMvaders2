@@ -42,9 +42,9 @@ public:
 };
 
 namespace sp::script {
-    static inline SpaceObject::DamageType convertFromLua(typeIdentifier<SpaceObject::DamageType>, int index)
+    static inline SpaceObject::DamageType convertFromLua(lua_State* L, typeIdentifier<SpaceObject::DamageType>, int index)
     {
-        sp::string str = luaL_checkstring(global_lua_state, index);
+        sp::string str = luaL_checkstring(L, index);
         str = str.lower();
         if (str == "normal")
             return SpaceObject::DamageType::Normal;
@@ -58,7 +58,7 @@ namespace sp::script {
             return SpaceObject::DamageType::WeaponDisrupt;
         else if (str.startswith("engine"))
             return SpaceObject::DamageType::EngineDisrupt;
-        luaL_error(global_lua_state, "Unkown damage type [%s]", luaL_checkstring(global_lua_state, index));
+        luaL_error(L, "Unkown damage type [%s]", luaL_checkstring(L, index));
         return SpaceObject::DamageType::Normal;
     }
 }

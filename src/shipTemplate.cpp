@@ -10,7 +10,7 @@ std::map<sp::string, ShipTemplate> ShipTemplate::templates;
 
 void ShipTemplate::init()
 {
-    sp::P<sp::KeyValueTree> tree = sp::io::KeyValueTreeLoader::load("ships.txt");
+    sp::KeyValueTreePtr tree = sp::io::KeyValueTreeLoader::load("ships.txt");
     for(auto it : tree->getFlattenNodesByIds())
     {
         const sp::string& id = it.first;
@@ -18,7 +18,7 @@ void ShipTemplate::init()
 
         ShipTemplate st;
         st.name = data["name"];
-        st.texture = sp::textureManager.get(data["sprite"]);
+        st.texture = sp::texture_manager.get(data["sprite"]);
         st.sprite_size = sp::stringutil::convert::toVector2f(data["size"]);
         std::vector<sp::string> collision = data["collision"].split(",");
         st.collision_size.x = sp::stringutil::convert::toFloat(collision[0]);
@@ -36,7 +36,6 @@ void ShipTemplate::init()
 
         templates[id] = st;
     }
-    delete *tree;
 }
 
 sp::P<Ship> ShipTemplate::create(sp::string id)

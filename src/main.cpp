@@ -30,14 +30,15 @@ int main(int argc, char** argv)
     sp::gui::Theme::loadTheme("default", "gui/theme/basic.theme.txt");
     
     //Create a window to render on, and our engine.
-    new sp::Window(4.0/3.0);
+    sp::P<sp::Window> window = new sp::Window(4.0/3.0);
     sp::P<sp::Engine> engine = new sp::Engine();
 
     sp::SceneGraphicsLayer* scene_layer = new sp::SceneGraphicsLayer(1);
-    scene_layer->addRenderPass(new sp::BasicNodeRenderPass("window"));
+    scene_layer->addRenderPass(new sp::BasicNodeRenderPass());
 #ifdef DEBUG
-    scene_layer->addRenderPass(new sp::CollisionRenderPass("window"));
+    scene_layer->addRenderPass(new sp::CollisionRenderPass());
 #endif
+    window->addLayer(scene_layer);
     
     //Initialize the player keys, needs to be done before keybindings are loaded.
     PlayerKeys::init();

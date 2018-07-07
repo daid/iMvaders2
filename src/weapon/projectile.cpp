@@ -59,7 +59,7 @@ void Projectile::setParameter(sp::string key, sp::string value)
     {
         render_data.type = sp::RenderData::Type::Normal;
         render_data.shader = sp::Shader::get("internal:basic.shader");
-        render_data.texture = sp::textureManager.get(value);
+        render_data.texture = sp::texture_manager.get(value);
         render_data.order = 1;
     }
     else if (key == "size")

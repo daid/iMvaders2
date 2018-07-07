@@ -13,7 +13,7 @@ std::map<sp::string, EquipmentTemplate> EquipmentTemplate::templates;
 
 void EquipmentTemplate::init()
 {
-    sp::P<sp::KeyValueTree> tree = sp::io::KeyValueTreeLoader::load("equipment.txt");
+    sp::KeyValueTreePtr tree = sp::io::KeyValueTreeLoader::load("equipment.txt");
     for(auto it : tree->getFlattenNodesByIds())
     {
         const sp::string& id = it.first;
@@ -24,7 +24,6 @@ void EquipmentTemplate::init()
         
         templates[id] = et;
     }
-    delete *tree;
 }
 
 sp::P<Equipment> EquipmentTemplate::create(sp::string id, sp::P<Ship> target_ship)
