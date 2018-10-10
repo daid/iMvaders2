@@ -10,9 +10,9 @@ SpaceObject::~SpaceObject()
 {
 }
 
-void SpaceObject::setPosition2f(float x, float y)
+void SpaceObject::setPosition(sp::Vector2d position)
 {
-    sp::Node::setPosition(sp::Vector2d(x, y));
+    sp::Node::setPosition(position);
 }
 
 sp::Vector2d SpaceObject::getPosition()
@@ -39,7 +39,7 @@ void SpaceObject::onRegisterScriptBindings(sp::ScriptBindingClass& script_bindin
 {
     sp::Node::onRegisterScriptBindings(script_binding_class);
 
-    script_binding_class.bind("setPosition", &setPosition2f);
+    script_binding_class.bind("setPosition", &setPosition);
     script_binding_class.bind("getPosition", &getPosition);
     script_binding_class.bind("setRotation", &setRotation);
     script_binding_class.bind("getRotation", &getRotation);

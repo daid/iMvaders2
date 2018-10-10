@@ -1,5 +1,5 @@
 
-Curve = newClass({delta = 0.0, p0=Vector2(), p1=Vector2(), cp0=Vector2(), cp1=Vector2()})
+Curve = newClass({delta = 0.0, p0=Vector2(0, 0), p1=Vector2(0, 0), cp0=Vector2(0, 0), cp1=Vector2(0, 0)})
 
 function Curve:get(offset)
     local f = self.delta + (offset or 0.0)

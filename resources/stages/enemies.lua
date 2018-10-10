@@ -30,7 +30,7 @@ function spawnPickup(amount)
         if amount > 1 then
             local size = math.sqrt(amount)
             for n=1,amount do
-                createPickup((Vector2(self.getPosition()) + Vector2(random(-size, size), random(-size, size))):unpack())
+                createPickup(self.getPosition() + Vector2(random(-size, size), random(-size, size)))
             end
         else
             if random(0, 1) <= amount then

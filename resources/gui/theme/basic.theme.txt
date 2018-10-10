@@ -1,18 +1,17 @@
 {
     color: #FFFFFF
     font: gui/theme/basic/forque.ttf
-    text.size: 30
+    size: 30
 
     [button.label] {
         color.disabled: #808080
         color.hovered: #808080
-        text.size: 80
+        size: 80
     }
     [button.background] {
         [stage_button] {
             image: gui/theme/basic/stage_button.png
             color.disabled: #808080
-            text.size: 50
             [stage_button_done] {
                 image: gui/theme/basic/stage_button_done.png
             }
@@ -23,16 +22,16 @@
     }
     [label] {
         [title_label] {
-            text.size: 60
+            size: 60
         }
         [stage_title] {
-            text.size: 80
+            size: 80
         }
         [message_text] {
-            text.size: 60
+            size: 60
         }
         [game_over_text] {
-            text.size: 200
+            size: 200
         }
     }
     [image] {

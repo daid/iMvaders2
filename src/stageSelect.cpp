@@ -49,6 +49,9 @@ void StageSelect::show()
 {
     getScene()->enable();
     gui->show();
+
+    sp::P<sp::gui::Widget> selector = gui->getWidgetWithID("SELECTOR");
+    selector->setParent(gui);
     
     sp::P<sp::gui::Widget> stages = gui->getWidgetWithID("STAGES");
     for(auto child : stages->getChildren())

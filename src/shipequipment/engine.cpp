@@ -29,12 +29,12 @@ void Engine::onFixedUpdate()
 
     sp::Vector2d linear_velocity = ship->getLinearVelocity2D();
     double angular_velocity = ship->getAngularVelocity2D();
-    linear_velocity *= 0.85;
-    angular_velocity *= 0.8;
+    linear_velocity *= 0.9;
+    angular_velocity *= 0.9;
     if (ship->controller->brake)
     {
-        linear_velocity *= 0.6;
-        angular_velocity *= 0.6;
+        linear_velocity *= 0.7;
+        angular_velocity *= 0.7;
     }
     
     sp::Vector2d trust_request;

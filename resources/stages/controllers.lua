@@ -58,7 +58,7 @@ function spaceInvaderController(self)
     end
     
     if self.state == "wait" then
-        self.setPosition(-100, -100) --Place the enemy way off screen
+        self.setPosition(Vector2(-100, -100)) --Place the enemy way off screen
         if self.group.state == "flyin" then
             if self.delay > 0 then
                 self.delay = self.delay - 1
@@ -74,14 +74,14 @@ function spaceInvaderController(self)
     elseif self.state == "flyin" then
         self.curve.p1 = self.target + Vector2(0, move_offset)
         self.curve:advance(self.speed)
-        self.setPosition(self.curve:get():unpack())
+        self.setPosition(self.curve:get())
         self.setRotation((self.curve:get(0.1) - self.curve:get()):angle())
         if self.curve.delta >= 1.0 then
             self.state = "center"
             self.setRotation(180)
         end
     elseif self.state == "center" then
-        self.setPosition((self.target + Vector2(0, move_offset)):unpack())
+        self.setPosition(self.target + Vector2(0, move_offset))
         self.fire = true
         if self.group.state == "flyout" then
             if self.delay > 0 then
@@ -98,7 +98,7 @@ function spaceInvaderController(self)
         end
     elseif self.state == "flyout" then
         self.curve:advance(self.speed)
-        self.setPosition(self.curve:get():unpack())
+        self.setPosition(self.curve:get())
         self.setRotation((self.curve:get(0.1) - self.curve:get()):angle())
         if self.curve.delta >= 1.0 then
             self.state = "wait"
@@ -109,7 +109,7 @@ end
 function wingmanController(self)
     if self.master.valid then
         self.fire = self.master.fire
-        self.setPosition((Vector2(self.master.getPosition()) + self.offset:rotate(self.master.getRotation())):unpack())
+        self.setPosition(self.master.getPosition() + self.offset:rotate(self.master.getRotation()))
         self.setRotation(self.master.getRotation())
     else
         diveBomberController(self)
@@ -117,35 +117,35 @@ function wingmanController(self)
 end
 
 function diveBomberController(self)
-    self.setPosition((Vector2(self.getPosition()) + Vector2(-self.speed, 0):rotate(self.getRotation())):unpack())
-    if self.getPosition() < -20 then
-        self.setPosition(20, random(-20, 20))
+    self.setPosition(self.getPosition() + Vector2(self.speed, 0):rotate(self.getRotation()))
+    if self.getPosition().x < -20 then
+        self.setPosition(Vector2(20, random(-20, 20)))
         self.setRotation(random(160, 200))
     end
-    self.fire = self.getPosition() > -5
+    self.fire = self.getPosition().x > -5
 end
 
 function aimedDiveBomberController(self)
-    local position = Vector2(self.getPosition())
-    self.setPosition((position + Vector2(-self.speed, 0):rotate(self.getRotation())):unpack())
+    local position = self.getPosition()
+    self.setPosition(position + Vector2(self.speed, 0):rotate(self.getRotation()))
     if position.x < -20 or position.y < -25 or position.y > 25 then
-        self.setPosition(20, random(-20, 20))
+        self.setPosition(Vector2(20, random(-20, 20)))
         
-        position = Vector2(self.getPosition())
+        position = self.getPosition()
         player = getRandomPlayer()
         if player then
-            self.setRotation((Vector2(player:getPosition()) - position):angle())
+            self.setRotation((player:getPosition() - position):angle())
         else
             self.setRotation(random(160, 200))
         end
     end
-    self.fire = self.getPosition() > -5
+    self.fire = self.getPosition().x > -5
 end
 
 function inAndOutController(self)
     if self.state == nil then
         self.state = "flyin"
-        self.setPosition(20, self.target.y)
+        self.setPosition(Vector2(20, self.target.y))
         if self.target == nil then
             self.target = Vector2(4, random(-16, 16))
         end
@@ -153,11 +153,11 @@ function inAndOutController(self)
             self.center_time = 100
         end
     end
-    local x, y = self.getPosition()
+    local position = self.getPosition()
     if self.state == "flyin" then
-        if x > self.target.x then
-            x = x - self.speed
-            self.setPosition(x, self.target.y)
+        if position.x > self.target.x then
+            position.x = position.x - self.speed
+            self.setPosition(Vector2(position.x, self.target.y))
         else
             self.fire = true
             self.state = "center"
@@ -171,9 +171,9 @@ function inAndOutController(self)
             self.state = "flyout"
         end
     elseif self.state == "flyout" then
-        if x < 20 then
-            x = x + self.speed
-            self.setPosition(x, self.target.y)
+        if position.x < 20 then
+            position.x = position.x + self.speed
+            self.setPosition(Vector2(position.x, self.target.y))
         else
             self.state = "flyin"
             self.target.y = random(-16, 16)
@@ -182,10 +182,10 @@ function inAndOutController(self)
 end
 
 function sinusWaveController(self)
-    local x, y = self.getPosition()
-    y = y + self.speed
-    if y > 25 then y = -25 end
-    if y < -25 then y = 25 end
-    self.setPosition(math.sin(y / 3.0) * 3.0, y)
+    local position = self.getPosition()
+    position.y = position.y + self.speed
+    if position.y > 25 then position.y = -25 end
+    if position.y < -25 then position.y = 25 end
+    self.setPosition(Vector2(math.sin(position.y / 3.0) * 3.0, position.y))
     self.fire = true
 end

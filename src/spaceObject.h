@@ -32,7 +32,7 @@ public:
     static constexpr int collision_enemy_category = 3;
     static constexpr int collision_projectile_category = 4;
 
-    void setPosition2f(float x, float y);
+    void setPosition(sp::Vector2d position);
     sp::Vector2d getPosition();
     void setRotation(float angle);
     float getRotation();

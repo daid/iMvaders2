@@ -22,7 +22,7 @@
     
     [MAKERBOT-M] {
         name: Makerbot M-Fighter
-        sprite: ship/m.png
+        sprite: ship/m/m.png
         size: 2.0
         collision: 1
         
@@ -31,7 +31,7 @@
     }
     [LULZ-FIG] {
         name: LulzFig
-        sprite: ship/lulz.png
+        sprite: ship/lulz/lulz.png
         size: 2.0
         collision: 1
     }

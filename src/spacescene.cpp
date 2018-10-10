@@ -149,9 +149,9 @@ static sp::P<Enemy> createEnemy(sp::string texture_name, float scale)
     return e;
 }
 
-static sp::P<Pickup> createPickup(float x, float y)
+static sp::P<Pickup> createPickup(sp::Vector2d position)
 {
-    return new Pickup(sp::Vector2d(x, y));
+    return new Pickup(position);
 }
 
 static sp::P<SpaceObject> createSpecial(sp::string name)

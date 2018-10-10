@@ -3,7 +3,7 @@ function startExplainPickup()
     transmission(
         "[Face:marvin]Well done",
         "It seems like some|polylactic acid polymers|wher dropped here.",
-        function() explain_pickup = createPickup(20, 0) end,
+        function() explain_pickup = createPickup(Vector2(20, 0)) end,
         "Pick them up, they could|provide to be useful later on",
         function() update = function()
             if not explain_pickup.valid then
@@ -22,7 +22,7 @@ function explainPickupAgain()
     transmission(
         "[Face:marvin]You missed it!",
         "Here, try again.",
-        function() explain_pickup = createPickup(20, 0) end,
+        function() explain_pickup = createPickup(Vector2(20, 0)) end,
         function() update = function()
             if not explain_pickup.valid then
                 update = nil
@@ -47,7 +47,7 @@ function nowYouAreJustTryingToFuckup()
         function()
             update = basicEndOfWaveCheck(nowYouAreJustTryingToFuckupFinished)
             for n=-24, 24, 2 do
-                table.insert(all_enemies, createPickup(20, n))
+                table.insert(all_enemies, createPickup(Vector2(20, n)))
             end
         end
     )

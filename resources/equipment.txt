@@ -8,8 +8,8 @@
     name: Refurbished Engine
     type: engine
 
-    forward: 100.0
-    rotation: 5.0
+    forward: 150.0
+    rotation: 10.0
     energy: 0.005
 }
 [SHIELD-1] {

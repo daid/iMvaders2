@@ -51,11 +51,11 @@ void Enemy::onUpdate(float delta)
         if (glow_delta >= 1.0)
             glow_delta -= 1.0;
         if (glow_delta < 0.5)
-            render_data.color.r = render_data.color.g = render_data.color.b = sp::Tween<int>::linear(glow_delta, 0.0, 0.5, 255, 0);
+            render_data.color.r = render_data.color.g = render_data.color.b = sp::Tween<float>::linear(glow_delta, 0.0, 0.5, 1.0, 0);
         else
-            render_data.color.r = render_data.color.g = render_data.color.b = sp::Tween<int>::linear(glow_delta, 0.5, 1.0, 0, 255);
+            render_data.color.r = render_data.color.g = render_data.color.b = sp::Tween<float>::linear(glow_delta, 0.5, 1.0, 0, 1.0);
     }else{
-        render_data.color.r = render_data.color.g = render_data.color.b = 255;
+        render_data.color.r = render_data.color.g = render_data.color.b = 1.0;
     }
 }
 
@@ -77,9 +77,9 @@ void Enemy::onFixedUpdate()
     onWeaponUpdate.call(this);
     
     if (damage_indicator > 0)
-        render_data.color.a = (damage_indicator % 4) < 2 ? 255 : 0;
+        render_data.color.a = (damage_indicator % 4) < 2 ? 1.0 : 0.0;
     else
-        render_data.color.a = 255;
+        render_data.color.a = 1.0;
 }
 
 bool Enemy::takeDamage(sp::Vector2d position, double amount, DamageSource damage_source, DamageType type)

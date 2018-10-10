@@ -27,6 +27,7 @@
         alignment: bottom
         size: 600, 100
         position: 0, 50
+        text.size: 50
         theme_data: stage_button
     }
 }
@@ -47,5 +48,6 @@
     size: 100, 100
     margin: 0, 50
     caption: 1-1
+    text.size: 50
     theme_data: stage_button
 }
