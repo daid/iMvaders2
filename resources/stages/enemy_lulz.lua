@@ -47,7 +47,7 @@ function lulzTrippleShot(self)
         if random(0, 100) < 50 then self.spin_direction = -1 end
     end
     
-    self.setRotation(self.weapon_spin_counter * 2.0 + 180)
+    self.setRotation(self.weapon_spin_counter * 1.0 + 180)
     if not self.fire then return end
     
     self.weapon_spin_counter = self.weapon_spin_counter + self.spin_direction
@@ -210,7 +210,7 @@ function lulzBossWeapons(self)
                 ship.onControlUpdate(diveBomberController)
                 ship.onWeaponUpdate(basicPulseWeapon)
                 ship.speed = 0.2
-                ship.setPosition(pos + Vector2(-4, 0):rotate(self.getRotation() + 60))
+                ship.setPosition(pos + Vector2(4, 0):rotate(self.getRotation() + 60))
                 ship.setRotation(self.getRotation() + 60)
                 ship.setDrawOrder(1)
             end
