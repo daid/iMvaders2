@@ -168,6 +168,7 @@ end
 --TODO: Bonus game
 
 start()
+--postWave2()
 --startWave5()
 --startPrinterField()
 --startBoss()

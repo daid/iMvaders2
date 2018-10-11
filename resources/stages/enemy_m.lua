@@ -109,9 +109,9 @@ function breController(self)
         self.setInvincible(true)
         self.default_shot_delay = 120 * getDifficultyTimeScaleFactor()
     end
-    local x, y = self.getPosition()
+    local position = self.getPosition()
     if self.state == "flyin" then
-        if x < 4 then
+        if position.x < 4 then
             self.state = "moveLeftRight"
             self.setBoss()
             self.setInvincible(false)
@@ -122,12 +122,12 @@ function breController(self)
             end
             self.shot_delay = 72
         else
-            self.setPosition(x - 0.3, y)
+            self.setPosition(position + Vector2(-0.15, 0))
         end
     elseif self.state == "moveLeftRight" then
-        if y < -15 then self.move_dir = 1 end
-        if y > 15 then self.move_dir = -1 end
-        self.setPosition(4, y + self.move_dir * 0.11)
+        if position.y < -15 then self.move_dir = 1 end
+        if position.y > 15 then self.move_dir = -1 end
+        self.setPosition(Vector2(4, position.y + self.move_dir * 0.11))
         
         if self.shot_delay > 0 then
             self.shot_delay = self.shot_delay - 1
