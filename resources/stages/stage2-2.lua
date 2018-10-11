@@ -56,7 +56,7 @@ function giveBonus1()
 end
 
 function postBonus1()
-    update = delayUpdate(50, function() transmission(
+    update = delayUpdate(100, function() transmission(
         "[Face:peter]Large object inbound",
         "[Face:jaime]Watch out!|It is the|Replicator Z18",
         "[Face:peter]It does not|seem to do|anything",
@@ -98,7 +98,7 @@ function postWave2()
 end
 
 function postBonus2()
-    update = delayUpdate(50, function() transmission(
+    update = delayUpdate(100, function() transmission(
         "[Face:jaime]Watch out",
         "You are flying into|a field of abandoned|printers",
         startPrinterField
@@ -107,7 +107,7 @@ end
 
 --Start of printer field (+dive bombers?)
 function startPrinterField()
-    update = printerFieldUpdate(delayUpdate(120, startWave3))
+    update = printerFieldUpdate(delayUpdate(240, startWave3))
 end
 
 function printerFieldUpdate(next)
@@ -116,7 +116,7 @@ function printerFieldUpdate(next)
             abandoned_printer_count_down = abandoned_printer_count_down - 1
         else
             createSpecial("AbandondedPrinter")
-            abandoned_printer_count_down = 30
+            abandoned_printer_count_down = 60
         end
         next()
     end
@@ -124,20 +124,20 @@ end
 
 function startWave3()
     -- Wave, 2 digitizers
-    update = printerFieldUpdate(basicEndOfWaveCheck(function() update = printerFieldUpdate(delayUpdate(30, startWave4)) end))
+    update = printerFieldUpdate(basicEndOfWaveCheck(function() update = printerFieldUpdate(delayUpdate(60, startWave4)) end))
     createEnemyGroup(8, 0, 12, 2, function(group, position) createM_Digitizer(group).target = position end)
 end
 
 function startWave4()
     -- Wave, 3 digitizers, 8 enemies
-    update = printerFieldUpdate(basicEndOfWaveCheck(function() update = printerFieldUpdate(delayUpdate(30, startWave5)) end))
+    update = printerFieldUpdate(basicEndOfWaveCheck(function() update = printerFieldUpdate(delayUpdate(60, startWave5)) end))
     createEnemyGroup(3, 0, 2.5, 8, function(group, position) createM_M_Fighter(group).target = position end)
     createEnemyGroup(8, 0, 10, 3, function(group, position) createM_Digitizer(group).target = position end)
 end
 
 function startWave5()
     -- Wave, 4 digitizers, 8 enemies, 8 enemies
-    update = printerFieldUpdate(basicEndOfWaveCheck(function() update = delayUpdate(60, preBoss) end))
+    update = printerFieldUpdate(basicEndOfWaveCheck(function() update = delayUpdate(120, preBoss) end))
     createEnemyGroup(0, -2.5, 2.5, 6, function(group, position) createM_M_Fighter(group).target = position end)
     createEnemyGroup(3, 2.5, 2.5, 6, function(group, position) createM_M_Fighter(group).target = position end)
     createEnemyGroup(8, 0, 8, 4, function(group, position) createM_Digitizer(group).target = position end)

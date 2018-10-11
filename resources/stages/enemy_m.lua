@@ -43,7 +43,7 @@ function createM_Digitizer(group)
     ship.setCollisionBox(5, 4)
     ship.setHealth(6)
     ship.onControlUpdate(inAndOutController)
-    ship.center_time = 150
+    ship.center_time = 300
     ship.onWeaponUpdate(digitizerLaserWeapon)
     ship.onDestroy(spawnPickup(2))
     ship.speed = 0.2
@@ -64,7 +64,7 @@ function digitizerLaserWeapon(self)
             self.weapon_state = "charge"
             self.weapon_delay = 180
 
-            local p = Vector2(1.8,-1.6) + Vector2(25, 0):rotate(25 + 180)
+            local p = Vector2(-1.8,-1.6) + Vector2(-25, 0):rotate(25 + 180)
             self.createProjectile("PRELASER", p.x, p.y, 25);
             self.createProjectile("PRELASER", p.x,-p.y,-25);
         end
@@ -72,7 +72,7 @@ function digitizerLaserWeapon(self)
         if self.weapon_delay > 0 then
             self.weapon_delay = self.weapon_delay - 1
         else
-            local p = Vector2(1.8,-1.6) + Vector2(25, 0):rotate(25 + 180)
+            local p = Vector2(-1.8,-1.6) + Vector2(-25, 0):rotate(25 + 180)
             self.createProjectile("LASER", p.x, p.y, 25);
             self.createProjectile("LASER", p.x,-p.y,-25);
             self.weapon_state = "fire"

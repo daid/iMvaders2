@@ -83,7 +83,7 @@ function startWave3()
 end
 
 function postWave3()
-    update = delayUpdate(50, function() transmission(
+    update = delayUpdate(100, function() transmission(
         "[Face:lola]Lets see how you like these!",
         "[Face:harma]What? Space octopuses?|You have to be kidding me.",
         "[Face:harma]Touching them will drain your energy,|so be careful!",
@@ -93,7 +93,7 @@ end
 
 function startOctoField()
     octo_group = {}
-    update = octoFieldUpdate(delayUpdate(120, startWave4))
+    update = octoFieldUpdate(delayUpdate(240, startWave4))
 end
 
 function octoFieldUpdate(next)
@@ -118,7 +118,7 @@ function octoFieldUpdate(next)
 end
 
 function startWave4()
-    update = octoFieldUpdate(basicEndOfWaveCheck(function() update = octoFieldUpdate(delayUpdate(30, startWave5)) end))
+    update = octoFieldUpdate(basicEndOfWaveCheck(function() update = octoFieldUpdate(delayUpdate(60, startWave5)) end))
     createEnemyGroup(8, 0, 4, 5, function(group, position) createLulz_Lulz_Fighter(group).target = position end)
     createEnemyGroup(5, 0, 4, 3, function(group, position) createLulz_Lulz_Fighter({}, true).target = position end)
 end
@@ -142,7 +142,7 @@ function octoFieldEnd(next)
 end
 
 function postWave5()
-    update = delayUpdate(150, function() transmission(
+    update = delayUpdate(300, function() transmission(
         "[Face:harma]There it is, the lulz-base!",
         "[Face:harma]Go get it, take it out.|No matter the cost.",
         "[Face:lola]There is no stopping us!|We will be victorious!",
