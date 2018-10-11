@@ -26,10 +26,5 @@ int SaveData::unlockedStageLevel() const
     {
         level = std::max(level, it.first + 1);
     }
-#ifdef DEBUG
-    level += 2;
-#else
-    level = 1;
-#endif
     return level;
 }

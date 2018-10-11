@@ -104,14 +104,14 @@ function octoFieldUpdate(next)
             local ship = createEnemy("ship/lulz/octo.png", 5.0)
             ship.setCollisionCircle(2.2)
             ship.setHealth(2)
-            ship.setPosition(-22, 0)
+            ship.setPosition(Vector2(-22, 0))
             ship.setTouchDamage(0.4, "energyDrain")
-            ship.speed = 0.6
+            ship.speed = 0.3
             ship.onControlUpdate(aimedDiveBomberController)
             ship.setDrawOrder(-1)
             table.insert(octo_group, ship)
 
-            octo_count_down = 80
+            octo_count_down = 160
         end
         next()
     end

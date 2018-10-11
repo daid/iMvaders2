@@ -37,8 +37,10 @@
     [image] {
     }
     [progressbar] {
-        image: gui/theme/basic/progressbar_background.png
         image: gui/theme/basic/progressbar_fill.png
+        [progressbar.background] {
+            image: gui/theme/basic/progressbar_background.png
+        }
         
         [progressbar_energy] {
             color: #33a020
