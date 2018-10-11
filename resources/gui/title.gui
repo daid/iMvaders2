@@ -29,6 +29,7 @@
         [CONTINUE_GAME] {
             @ref: SELECT_OPTION
             caption: CONTINUE GAME
+            visible: false
         }
         
         {

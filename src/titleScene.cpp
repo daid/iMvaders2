@@ -153,12 +153,12 @@ void TitleController::onUpdate(float delta)
                 if (player_keys[n]->up.getDown())
                 {
                     state_time = fmodf(state_time, 2.0);
-                    option_index = (option_index - 1 + 3) % 3;
+                    option_index = (option_index - 1 + 2) % 2;
                 }
                 if (player_keys[n]->down.getDown())
                 {
                     state_time = fmodf(state_time, 2.0);
-                    option_index = (option_index + 1) % 3;
+                    option_index = (option_index + 1) % 2;
                 }
             }
             

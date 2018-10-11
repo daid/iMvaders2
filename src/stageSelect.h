@@ -23,6 +23,8 @@ private:
     int selection_level = 0;
     int selection_sublevel = 0;
     bool shop_selected = false;
+    
+    bool wait_for_it;
 };
 
 #endif//STAGE_SELECT_H

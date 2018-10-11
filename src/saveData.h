@@ -30,6 +30,7 @@ public:
     SaveData(int player_count);
     
     int unlockedStageLevel() const;
+    void checkForPlaytroughDone();
     
     static SaveData* instance;
 };

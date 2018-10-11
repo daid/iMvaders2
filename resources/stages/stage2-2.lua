@@ -160,7 +160,8 @@ end
 function postBoss()
     transmission(
         "[Face:peter]You did it|You saved the universe.",
-        "[Face:martijn]Thank you|            |But our princess|is in another castle!",
+        "[Face:martijn]Thank you|            |            ",
+        "[Face:martijn]But our princess|is in another castle!",
         stageDone
     )
 end

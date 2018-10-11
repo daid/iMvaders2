@@ -47,8 +47,11 @@ StageSelect::StageSelect()
 
 void StageSelect::show()
 {
+    wait_for_it = true;
     getScene()->enable();
     gui->show();
+    
+    SaveData::instance->checkForPlaytroughDone();
 
     sp::P<sp::gui::Widget> selector = gui->getWidgetWithID("SELECTOR");
     selector->setParent(gui);
@@ -59,6 +62,7 @@ void StageSelect::show()
     
     sp::P<sp::gui::Widget> row;
 
+    //TODO: Ugly hardcoded data
     row = sp::gui::Loader::load("gui/stage_select.gui", "STAGE_ROW", stages);
     addStageButton(row, 1, 0);
 
@@ -106,11 +110,11 @@ void StageSelect::addStageButton(sp::P<sp::gui::Widget> row, int level, int subl
     {
         button->setEventCallback([this, level, sublevel](sp::Variant v)
         {
-            SaveData::instance->finished_stages.emplace(level, sublevel);
             if (sublevel == 0)
                 SceneManager::instance->switchToStage("stage" + sp::string(level));
             else
                 SceneManager::instance->switchToStage("stage" + sp::string(level) + "-" + sp::string(sublevel));
+            SaveData::instance->finished_stages.emplace(level, sublevel);
         });
     }
     if (sublevel < 1)
@@ -127,6 +131,8 @@ void StageSelect::hide()
 
 void StageSelect::onUpdate(float delta)
 {
+    if (wait_for_it) { wait_for_it = false; return; }
+    
     for(int n=0; n<max_players; n++)
     {
         if (player_keys[n]->down.getDown())
