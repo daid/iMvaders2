@@ -39,9 +39,9 @@ void SpaceObject::onRegisterScriptBindings(sp::ScriptBindingClass& script_bindin
 {
     sp::Node::onRegisterScriptBindings(script_binding_class);
 
-    script_binding_class.bind("setPosition", &setPosition);
-    script_binding_class.bind("getPosition", &getPosition);
-    script_binding_class.bind("setRotation", &setRotation);
-    script_binding_class.bind("getRotation", &getRotation);
-    script_binding_class.bind("destroy", &destroy);
+    script_binding_class.bind("setPosition", &SpaceObject::setPosition);
+    script_binding_class.bind("getPosition", &SpaceObject::getPosition);
+    script_binding_class.bind("setRotation", &SpaceObject::setRotation);
+    script_binding_class.bind("getRotation", &SpaceObject::getRotation);
+    script_binding_class.bind("destroy", &SpaceObject::destroy);
 }
