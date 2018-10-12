@@ -22,10 +22,6 @@ int main(int argc, char** argv)
     //Create resource providers, so we can load things.
     new sp::io::DirectoryResourceProvider("resources");
     
-#ifndef DEBUG
-    sp::textureManager.setFallbackColors(sp::Color::Transparent, sp::Color::Transparent);
-#endif
-    
     //Load our ui theme.
     sp::gui::Theme::loadTheme("default", "gui/theme/basic.theme.txt");
     

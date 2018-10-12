@@ -192,18 +192,18 @@ void Enemy::onRegisterScriptBindings(sp::ScriptBindingClass& script_binding_clas
 {
     SpaceObject::onRegisterScriptBindings(script_binding_class);
 
-    script_binding_class.bind("setHealth", &setHealth);
-    script_binding_class.bind("setCollisionCircle", &setCollisionCircle);
-    script_binding_class.bind("setCollisionBox", &setCollisionBox);
-    script_binding_class.bind("setShield", &setShield);
-    script_binding_class.bind("setGlow", &setGlow);
-    script_binding_class.bind("disableGlow", &disableGlow);
-    script_binding_class.bind("setDrawOrder", &setDrawOrder);
-    script_binding_class.bind("setInvincible", &setInvincible);
-    script_binding_class.bind("setHitProtectionTime", &setHitProtectionTime);
-    script_binding_class.bind("setBoss", &setBoss);
-    script_binding_class.bind("createProjectile", &createProjectile);
-    script_binding_class.bind("setTouchDamage", &setTouchDamage);
+    script_binding_class.bind("setHealth", &Enemy::setHealth);
+    script_binding_class.bind("setCollisionCircle", &Enemy::setCollisionCircle);
+    script_binding_class.bind("setCollisionBox", &Enemy::setCollisionBox);
+    script_binding_class.bind("setShield", &Enemy::setShield);
+    script_binding_class.bind("setGlow", &Enemy::setGlow);
+    script_binding_class.bind("disableGlow", &Enemy::disableGlow);
+    script_binding_class.bind("setDrawOrder", &Enemy::setDrawOrder);
+    script_binding_class.bind("setInvincible", &Enemy::setInvincible);
+    script_binding_class.bind("setHitProtectionTime", &Enemy::setHitProtectionTime);
+    script_binding_class.bind("setBoss", &Enemy::setBoss);
+    script_binding_class.bind("createProjectile", &Enemy::createProjectile);
+    script_binding_class.bind("setTouchDamage", &Enemy::setTouchDamage);
 
     script_binding_class.bind("onDestroy", onDestroy);
     script_binding_class.bind("onDamage", onDamage);

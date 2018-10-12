@@ -79,8 +79,8 @@ void Message::onRegisterScriptBindings(sp::ScriptBindingClass& script_binding_cl
 {
     sp::Node::onRegisterScriptBindings(script_binding_class);
     
-    script_binding_class.bind("show", &show);
-    script_binding_class.bind("setText", &setText);
-    script_binding_class.bind("setFace", &setFace);
+    script_binding_class.bind("show", &Message::show);
+    script_binding_class.bind("setText", &Message::setText);
+    script_binding_class.bind("setFace", &Message::setFace);
     script_binding_class.bind("onFinished", onFinished);
 }
