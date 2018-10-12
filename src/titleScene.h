@@ -17,9 +17,9 @@ private:
     void startNewGame(int player_count);
     
     static constexpr float text_scroll_speed = 5.0;
-    static constexpr float text_scroll_start = -175.0;
-    static constexpr float text_scroll_passed = 175.0;
-    static constexpr float text_scroll_end = 340.0;
+    static constexpr float text_scroll_start = -20.0;
+    static constexpr float text_scroll_passed = 400.0;
+    static constexpr float text_scroll_end = 650.0;
 
     enum class State
     {

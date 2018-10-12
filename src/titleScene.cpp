@@ -8,6 +8,7 @@
 #include <sp2/graphics/shader.h>
 #include <sp2/graphics/meshdata.h>
 #include <sp2/graphics/textureManager.h>
+#include <sp2/graphics/fontManager.h>
 #include <sp2/logging.h>
 #include <sp2/assert.h>
 #include <sp2/random.h>
@@ -48,8 +49,9 @@ TitleController::TitleController()
     text_scroll = new sp::Node(text_scroll_root);
     text_scroll->render_data.type = sp::RenderData::Type::Normal;
     text_scroll->render_data.shader = sp::Shader::get("internal:basic.shader");
-    text_scroll->render_data.mesh = sp::MeshData::createQuad(sp::Vector2f(71.6, 308));
-    text_scroll->render_data.texture = sp::texture_manager.get("scrolltext.png");
+    text_scroll->render_data.mesh = sp::font_manager.get("gui/theme/basic/forque.ttf")->createString("It is 3 years after the\ndevastating defeat of\nthe M CORPERATION.\n\nWhile the U FORCE had\nwon against impossible\nodds, the result was\nnot the peace that\nwas hoped for.\n\nThe vast amount of\nresources for 3D printing\nhidden inside the\nASTEROID BELT where now\nripe for the taking.\n\nMultiple new entities\nreached for the stars,\nand the\nWAR FOR THE STARS\ncontinued...\n\nThe U FORCE now fights\nfor the control of the\nASTEROID BELT.\nAnd the rules of\nengagement have changed.\n\n\n\nWe still have cookies!", 64, 10, sp::Vector2d(0, 0), sp::Alignment::Top);
+    text_scroll->render_data.texture = sp::font_manager.get("gui/theme/basic/forque.ttf")->getTexture(64);
+
     text_scroll->setPosition(sp::Vector2d(0, 0));
     
     title_gui = sp::gui::Loader::load("gui/title.gui", "TITLE", nullptr);
