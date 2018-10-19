@@ -30,6 +30,7 @@ int main(int argc, char** argv)
     sp::P<sp::Window> window = new sp::Window(4.0/3.0);
 #ifndef DEBUG
     window->setFullScreen(true);
+    window->hideCursor();
 #endif
 
     sp::SceneGraphicsLayer* scene_layer = new sp::SceneGraphicsLayer(1);

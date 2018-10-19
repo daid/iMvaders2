@@ -27,7 +27,7 @@ void PlayerKeys::init()
     player_keys[0]->left.addKey("Keypad 4");
     player_keys[0]->right.setKey("Right");
     player_keys[0]->right.addKey("Keypad 6");
-    player_keys[0]->start.setKey("Num1");
+    player_keys[0]->start.setKey("1");
     player_keys[0]->primary_fire.setKey("Space");
     player_keys[0]->secondary_fire.setKey("Z");
     player_keys[0]->skip.setKey("X");
@@ -40,7 +40,7 @@ void PlayerKeys::init()
     player_keys[1]->down.setKey("S");
     player_keys[1]->left.setKey("A");
     player_keys[1]->right.setKey("D");
-    player_keys[1]->start.setKey("Num2");
+    player_keys[1]->start.setKey("2");
     player_keys[1]->primary_fire.setKey("Q");
     player_keys[1]->secondary_fire.setKey("E");
     player_keys[1]->skip.setKey("R");
