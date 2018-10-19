@@ -28,6 +28,9 @@ int main(int argc, char** argv)
     
     //Create a window to render on, and our engine.
     sp::P<sp::Window> window = new sp::Window(4.0/3.0);
+#ifndef DEBUG
+    window->setFullScreen(true);
+#endif
 
     sp::SceneGraphicsLayer* scene_layer = new sp::SceneGraphicsLayer(1);
     scene_layer->addRenderPass(new sp::BasicNodeRenderPass());
