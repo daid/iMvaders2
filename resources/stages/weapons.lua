@@ -85,7 +85,7 @@ function electroBoltWeapon(self)
         end
     elseif self.weapon_state == "fire" then
         if self.weapon_delay > 0 then
-            if self.weapon_delay % 2 == 0 then
+            if self.weapon_delay % 4 == 0 then
                 createElectricBeam(self, Vector2(1, 0), Vector2(21, random(-4, 4)), random(8, 12))
             end
             self.weapon_delay = self.weapon_delay - 1
@@ -101,7 +101,7 @@ function createElectricBeam(self, start_position, end_position, split_position)
     local distance = diff:length()
     local count = math.ceil(distance)
     local p0 = start_position
-    for n=1,count do
+    for n=1,count,2 do
         local p1 = start_position + (diff / distance) * n + Vector2(random(-0.3, 0.3), random(-0.3, 0.3))
         local pos = ((p0 + p1) / 2)
         self.createProjectile("ELECTRIC", pos.x, pos.y, (p1 - p0):angle());

@@ -19,6 +19,7 @@
 
 int main(int argc, char** argv)
 {
+    sp::P<sp::Engine> engine = new sp::Engine();
     //Create resource providers, so we can load things.
     new sp::io::DirectoryResourceProvider("resources");
     
@@ -27,7 +28,6 @@ int main(int argc, char** argv)
     
     //Create a window to render on, and our engine.
     sp::P<sp::Window> window = new sp::Window(4.0/3.0);
-    sp::P<sp::Engine> engine = new sp::Engine();
 
     sp::SceneGraphicsLayer* scene_layer = new sp::SceneGraphicsLayer(1);
     scene_layer->addRenderPass(new sp::BasicNodeRenderPass());

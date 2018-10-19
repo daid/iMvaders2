@@ -20,9 +20,13 @@ void PlayerKeys::init()
 {
     player_keys[0] = new PlayerKeys(0);
     player_keys[0]->up.setKey("Up");
+    player_keys[0]->up.addKey("Keypad 8");
     player_keys[0]->down.setKey("Down");
+    player_keys[0]->down.addKey("Keypad 2");
     player_keys[0]->left.setKey("Left");
+    player_keys[0]->left.addKey("Keypad 4");
     player_keys[0]->right.setKey("Right");
+    player_keys[0]->right.addKey("Keypad 6");
     player_keys[0]->start.setKey("Num1");
     player_keys[0]->primary_fire.setKey("Space");
     player_keys[0]->secondary_fire.setKey("Z");

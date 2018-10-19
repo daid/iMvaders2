@@ -62,8 +62,8 @@
     type: projectile
 
     sprite: weapon/electric.png
-    size: 1.4
-    collision: 1.0, 0.3
+    size: 2.8
+    collision: 1.5, 0.3
     speed: 0
     lifetime: 0.2
     damage: 2
