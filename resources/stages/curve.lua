@@ -4,7 +4,7 @@ Curve = newClass({delta = 0.0, p0=Vector2(0, 0), p1=Vector2(0, 0), cp0=Vector2(0
 function Curve:get(offset)
     local f = self.delta + (offset or 0.0)
     local g = 1.0 - f
-    return (self.p0*g*g*g) + (self.cp0*3.0*g*g*f) + (self.cp1*3.0*g*f*f) + (self.p1*f*f*f)
+    return (self.p0*(g*g*g)) + (self.cp0*(3.0*g*g*f)) + (self.cp1*(3.0*g*f*f)) + (self.p1*(f*f*f))
 end
 
 function Curve:advance(amount)
