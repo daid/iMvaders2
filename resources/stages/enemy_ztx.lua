@@ -141,7 +141,7 @@ function createZTX_Boss()
     center.right_z2.offset = Vector2(1.7, -2.2)
     center.right_z2.master = center
 
-    center.setPosition(22, 0)
+    center.setPosition(Vector2(22, 0))
     
     center.onDestroy(spawnPickup(12))
     return center
