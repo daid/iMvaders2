@@ -25,8 +25,8 @@ void Projectile::launch(sp::P<sp::Node> owner, sp::Vector2d position_offset, dou
     this->damage_source = damage_source;
     
     setRotation(owner->getGlobalRotation2D() + angle_offset);
-    sp::Vector2d forward = getGlobalTransform().applyDirection(sp::Vector2d(1, 0));
-    setPosition(owner->getGlobalPosition2D() + owner->getGlobalTransform().applyDirection(position_offset));
+    sp::Vector2d forward = sp::Vector2d(getGlobalTransform().applyDirection(sp::Vector2f(1, 0)));
+    setPosition(owner->getGlobalPosition2D() + sp::Vector2d(owner->getGlobalTransform().applyDirection(sp::Vector2f(position_offset))));
     setLinearVelocity(forward * travel_speed);
 }
 

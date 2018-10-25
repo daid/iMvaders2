@@ -86,11 +86,11 @@ function createLulz_Lulz_Boss()
 
     self.slow_speed = 0.05
     self.high_speed = 0.20
-    self.weapon1_delay = 120
-    self.weapon4_delay = 300
+    self.weapon1_delay = 240
+    self.weapon4_delay = 500
     self.shields = {}
     self.target_angle = 3
-    self.shield_regen_delay = 2000
+    self.shield_regen_delay = 2500
     
     self.shield_regen_counter = self.shield_regen_delay
     self.weapon1_counter = self.weapon1_delay
@@ -104,7 +104,7 @@ function createLulz_Lulz_Boss()
         local shield = createEnemy("ship/lulz/core-shield.png", 5.5)
         shield.setCollisionBox(2.7, 5)
         shield.setPosition(Vector2(25, 0))
-        shield.setHealth(10)
+        shield.setHealth(7)
         shield.setDrawOrder(1)
         self.shields[n] = shield
     end
@@ -170,7 +170,7 @@ function lulzBossController(self)
                 local shield = createEnemy("ship/lulz/core-shield.png", 5.5)
                 shield.setCollisionBox(2.7, 5)
                 shield.setPosition(Vector2(25, 0))
-                shield.setHealth(10)
+                shield.setHealth(7)
                 shield.setDrawOrder(1)
                 self.shields[i] = shield
 
