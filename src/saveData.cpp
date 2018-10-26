@@ -1,6 +1,6 @@
 #include "saveData.h"
 #include <sp2/logging.h>
-#include <sp2/io/resourceprovider.h>
+#include <sp2/io/resourceProvider.h>
 
 
 SaveData* SaveData::instance;
