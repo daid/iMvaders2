@@ -212,6 +212,7 @@ void Enemy::onRegisterScriptBindings(sp::ScriptBindingClass& script_binding_clas
     SpaceObject::onRegisterScriptBindings(script_binding_class);
 
     script_binding_class.bind("setHealth", &Enemy::setHealth);
+    script_binding_class.bind("getHealth", &Enemy::getHealth);
     script_binding_class.bind("setCollisionCircle", &Enemy::setCollisionCircle);
     script_binding_class.bind("setCollisionBox", &Enemy::setCollisionBox);
     script_binding_class.bind("setShield", &Enemy::setShield);

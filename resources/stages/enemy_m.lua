@@ -99,6 +99,7 @@ function createM_Bre()
     bre.mouth.setDrawOrder(-1)
     bre.onControlUpdate(breController)
     bre.onDestroy(breEnd)
+    bre.shield_deployed = false
 end
 
 function breController(self)
@@ -110,6 +111,38 @@ function breController(self)
         self.default_shot_delay = 120 * getDifficultyTimeScaleFactor()
     end
     local position = self.getPosition()
+    if not self.shield_deployed and self.getHealth() < 50 then
+        createMessage("Deploying corperate|money shield").setFace("strata").show()
+
+        local row_count = 1 + getPlaytroughCount()
+        for row=0,row_count do
+            local shield_count = 12 + row
+            for n=0,shield_count-1 do
+                local shield_part = createEnemy("ship/m/bre/money.png", 4.0);
+                shield_part.setHealth(3)
+                shield_part.setCollisionBox(4, 2);
+                shield_part.owner = self
+                shield_part.angle = n * 360 / shield_count
+                shield_part.rotation_speed = 0.7
+                if row % 2 == 1 then shield_part.rotation_speed = -shield_part.rotation_speed end
+                shield_part.distance = 0
+                shield_part.target_distance = 8.0 + row * 1.5
+                shield_part.onControlUpdate(function(shield)
+                    if not shield.owner.valid then
+                        shield.destroy()
+                        return
+                    end
+                    shield.angle = shield.angle + shield.rotation_speed
+                    if shield.distance < shield_part.target_distance then
+                        shield.distance = shield.distance + 0.2
+                    end
+                    shield.setRotation(shield.angle)
+                    shield.setPosition(shield.owner.getPosition() + Vector2(0, shield.distance):rotate(shield.angle))
+                end)
+                self.shield_deployed = true
+            end
+        end
+    end
     if self.state == "flyin" then
         if position.x < 4 then
             self.state = "moveLeftRight"
@@ -136,7 +169,7 @@ function breController(self)
                 if random(0, 100) < 50 then
                     self.state = "chargeLaser"
                     self.shot_delay = 60
-                    self.setGlow(3.0)
+                    self.setColor(1, 0.5, 0.5)
                 else
                     self.state = "openMouth"
                     self.shot_delay = self.default_shot_delay
@@ -152,7 +185,7 @@ function breController(self)
         if self.shot_delay > 0 then
             self.shot_delay = self.shot_delay - 1
         else
-            self.disableGlow()
+            self.setColor(1, 1, 1)
             self.state = "fireLaser"
             self.shot_delay = 60
             
@@ -224,7 +257,7 @@ function createBreSweepLaser(owner, offset, angle_start, angle_end)
     laser.setDrawOrder(1)
     laser.owner = owner
     laser.offset = offset
-    local pos = Vector2(owner.getPosition()) + offset
+    local pos = owner.getPosition() + offset
     laser.steps = 60
     laser.angle = angle_start
     laser.angle_step = (angle_end - angle_start) / laser.steps
@@ -236,7 +269,7 @@ function createBreSweepLaser(owner, offset, angle_start, angle_end)
             self.steps = self.steps - 1
             self.angle = self.angle + self.angle_step
 
-            local pos = Vector2(self.owner.getPosition()) + self.offset
+            local pos = self.owner.getPosition() + self.offset
             pos = pos + Vector2(-20, 0):rotate(self.angle)
             self.setPosition(pos)
             self.setRotation(self.angle)
