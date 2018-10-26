@@ -9,6 +9,7 @@ include("stage1_pickup.lua")
 --Also makes an appearance: M Corperation
 
 --Wave1: 2 X fighters with 2 Z wingman each
+--If first play, pickup tutorial.
 --Wave2: 4 X fighters with 2 Z wingman each, and 2 rows of single Z fighters.
 --Wave3: 2 T fighters
 --Wave4: 3 T fighters, 10 m fighters

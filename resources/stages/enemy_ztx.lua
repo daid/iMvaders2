@@ -149,15 +149,17 @@ end
 
 function ztxBossController(self)
     local speed = self.speed
+    local position = self.getPosition()
     if self.weapon_state == "charge" then speed = speed * 0.5 end
     if self.weapon_state == "fire" then speed = speed * 0.0 end
+    if position.x < 0 then speed = speed * (1.0 - position.x / 10) end
     
-    self.setPosition(self.getPosition() + Vector2(speed, 0):rotate(self.getRotation()))
-    if self.getPosition().x < -22 then
+    self.setPosition(position + Vector2(speed, 0):rotate(self.getRotation()))
+    if position.x < -22 then
         self.setPosition(Vector2(22, random(-10, 10)))
         self.setRotation(random(160, 200))
     end
-    self.fire = self.getPosition().x < 15
+    self.fire = position.x < 15
 
     self.setInvincible(self.left_x.valid or self.right_x.valid)
     if self.left_x.valid then
