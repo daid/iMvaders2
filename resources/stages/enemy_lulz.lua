@@ -65,7 +65,7 @@ function lulzTrippleShot(self)
             self.weapon_delay = random(140, 300) * self.weapon_delay_modifier
             self.weapon_state = "pre-fire"
         end
-        if self.weapon_delay % 3 == 0 then
+        if self.weapon_delay % 3 < 1 and self.weapon_delay % 50 < 30 then
             self.createProjectile("PULSE", 0, 0, 0);
             self.createProjectile("PULSE", 0, 0, 120);
             self.createProjectile("PULSE", 0, 0,-120);
