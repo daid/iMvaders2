@@ -87,7 +87,7 @@ function createLulz_Lulz_Boss()
     self.slow_speed = 0.05
     self.high_speed = 0.20
     self.weapon1_delay = 240
-    self.weapon4_delay = 500
+    self.weapon4_delay = 400
     self.shields = {}
     self.target_angle = 3
     self.shield_regen_delay = 2500
@@ -275,23 +275,30 @@ function lulzBossWeapons(self)
         if self.weapon4_counter > 0 then
             self.weapon4_counter = self.weapon4_counter - 1
         else
-            local ship = createEnemy("weapon/missile.png", 2.0)
-            ship.setCollisionBox(2, 0.8)
-            ship.setHealth(3)
-            ship.setPosition(pos + Vector2(-4, 0):rotate(self.getRotation() + 180))
-            ship.setRotation(self.getRotation() + 180)
-            ship.speed = 0.1
-            ship.onControlUpdate(function(s)
-                if s.player == nil or not s.player.valid then
-                    s.player = getRandomPlayer()
-                end
-                s.setPosition(s.getPosition() + Vector2(s.speed, 0):rotate(s.getRotation()))
-                if s.player then
-                    s.setRotation((s.player.getPosition() - s.getPosition()):angle())
-                end
-            end)
-            ship.setDrawOrder(1)
-            self.weapon4_counter = self.weapon4_delay
+            local n = 0
+            while true do
+                local player = getPlayer(n)
+                if not player then break end
+                n = n + 1
+                local ship = createEnemy("weapon/missile.png", 2.0)
+                ship.setCollisionBox(2, 0.8)
+                ship.setHealth(3)
+                ship.setPosition(pos + Vector2(-4, 0):rotate(self.getRotation() + 180))
+                ship.setRotation(self.getRotation() + 180)
+                ship.speed = 0.1
+                ship.player = player
+                ship.onControlUpdate(function(s)
+                    if s.player == nil or not s.player.valid then
+                        s.player = getRandomPlayer()
+                    end
+                    s.setPosition(s.getPosition() + Vector2(s.speed, 0):rotate(s.getRotation()))
+                    if s.player then
+                        s.setRotation((s.player.getPosition() - s.getPosition()):angle())
+                    end
+                end)
+                ship.setDrawOrder(1)
+                self.weapon4_counter = self.weapon4_delay
+            end
         end
     end
     if math.abs(angleDiff(a, 240)) > 90 then
