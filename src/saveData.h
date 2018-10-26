@@ -4,6 +4,8 @@
 #include <set>
 #include <vector>
 
+#include <sp2/string.h>
+
 class SaveData
 {
 public:
@@ -30,7 +32,10 @@ public:
     SaveData(int player_count);
     
     int unlockedStageLevel() const;
-    void checkForPlaytroughDone();
+    bool checkForPlaytroughDone();//returns true if the game was reset due to all stages done.
+
+    bool stageExists(int level, int sublevel);
+    sp::string getStageTitle(int level, int sublevel);
     
     static SaveData* instance;
 };

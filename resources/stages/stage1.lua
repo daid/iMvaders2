@@ -1,5 +1,4 @@
---Stage 1
---"Welcome back to the jungle"
+--STAGE 1: Welcome back to the jungle
 
 include("util.lua")
 include("stage1_pickup.lua")

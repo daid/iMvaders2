@@ -1,6 +1,5 @@
---Stage 2-1
+--STAGE 2-1: For the lulz
 --Lulzbot area.
---"For the lulz"
 
 -- Wave 1: 8 shielded enemies, 10 normal enemies, 2x4 burst shot enemies.
 -- Wave 2: 4 spinners

@@ -1,5 +1,7 @@
 #include "saveData.h"
 #include <sp2/logging.h>
+#include <sp2/io/resourceprovider.h>
+
 
 SaveData* SaveData::instance;
 
@@ -27,21 +29,50 @@ int SaveData::unlockedStageLevel() const
     {
         level = std::max(level, it.first + 1);
     }
-    //TODO: Ugly hardcoded data
-    if (level > 2) level = 2;
+#ifdef DEBUG
+    level += 10;
+#endif
     return level;
 }
 
-void SaveData::checkForPlaytroughDone()
+bool SaveData::checkForPlaytroughDone()
 {
-    //TODO: Ugly hardcoded data
-    if (finished_stages.find(std::pair<int, int>(1, 0)) == SaveData::instance->finished_stages.end())
-        return;
-    if (finished_stages.find(std::pair<int, int>(2, 1)) == SaveData::instance->finished_stages.end())
-        return;
-    if (finished_stages.find(std::pair<int, int>(2, 2)) == SaveData::instance->finished_stages.end())
-        return;
+    for(int level = 1; stageExists(level, 0) || stageExists(level, 1); level++)
+    {
+        if (stageExists(level, 0))
+        {
+            if (finished_stages.find(std::pair<int, int>(level, 0)) == SaveData::instance->finished_stages.end())
+                return false;
+        }
+        else
+        {
+            for(int sublevel=1; stageExists(level, sublevel); sublevel++)
+            {
+                if (finished_stages.find(std::pair<int, int>(level, sublevel)) == SaveData::instance->finished_stages.end())
+                    return false;
+            }
+        }
+    }
 
     finished_stages.clear();
     playtrough_count++;
+    return true;
+}
+
+bool SaveData::stageExists(int level, int sublevel)
+{
+    if (sublevel == 0)
+        return sp::io::ResourceProvider::get("stages/stage" + sp::string(level) + ".lua") != nullptr;
+    return sp::io::ResourceProvider::get("stages/stage" + sp::string(level) + "-" + sp::string(sublevel) + ".lua") != nullptr;
+}
+
+sp::string SaveData::getStageTitle(int level, int sublevel)
+{
+    sp::io::ResourceStreamPtr stream;
+    stream = sp::io::ResourceProvider::get("stages/stage" + sp::string(level) + "-" + sp::string(sublevel) + ".lua");
+    if (!stream)
+        stream = sp::io::ResourceProvider::get("stages/stage" + sp::string(level) + ".lua");
+    if (!stream)
+        return "?";
+    return stream->readLine().substr(2);
 }

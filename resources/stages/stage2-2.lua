@@ -1,4 +1,4 @@
---Stage 2-2
+--STAGE 2-2: Blast from the past
 --Re-hash of the origonal iMvaders
 --100% filled with M Corperation enemies
 --"Blast from the past"

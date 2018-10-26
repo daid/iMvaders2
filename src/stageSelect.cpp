@@ -62,23 +62,19 @@ void StageSelect::show()
     
     sp::P<sp::gui::Widget> row;
 
-    //TODO: Ugly hardcoded data
-    row = sp::gui::Loader::load("gui/stage_select.gui", "STAGE_ROW", stages);
-    addStageButton(row, 1, 0);
-
-    row = sp::gui::Loader::load("gui/stage_select.gui", "STAGE_ROW", stages);
-    addStageButton(row, 2, 1);
-    addStageButton(row, 2, 2);
-
-    row = sp::gui::Loader::load("gui/stage_select.gui", "STAGE_ROW", stages);
-    addStageButton(row, 3, 0);
-
-    row = sp::gui::Loader::load("gui/stage_select.gui", "STAGE_ROW", stages);
-    addStageButton(row, 4, 1);
-    addStageButton(row, 4, 2);
-
-    row = sp::gui::Loader::load("gui/stage_select.gui", "STAGE_ROW", stages);
-    addStageButton(row, 5, 0);
+    for(int level=1; SaveData::instance->stageExists(level, 0) || SaveData::instance->stageExists(level, 1); level++)
+    {
+        row = sp::gui::Loader::load("gui/stage_select.gui", "STAGE_ROW", stages);
+        if (SaveData::instance->stageExists(level, 0))
+        {
+            addStageButton(row, level, 0);
+        }
+        else
+        {
+            for(int sublevel=1; SaveData::instance->stageExists(level, sublevel); sublevel++)
+                addStageButton(row, level, sublevel);
+        }
+    }
 
     selection_level = SaveData::instance->unlockedStageLevel() - 1;
     selection_sublevel = 0;
@@ -214,21 +210,6 @@ void StageSelect::onUpdate(float delta)
     {
         name->setAttribute("caption", "UltiShop: spend you hard earned polymers");
     }else{
-        switch(selection_level)
-        {
-        case 0:
-            name->setAttribute("caption", "STAGE 1: Welcome back to the jungle");
-            break;
-        case 1:
-            switch(selection_sublevel)
-            {
-            case 0: name->setAttribute("caption", "STAGE 2-1: For the lulz"); break;
-            case 1: name->setAttribute("caption", "STAGE 2-2: Blast from the past"); break;
-            }
-            break;
-        default:
-            name->setAttribute("caption", "STAGE ?: ???");
-            break;
-        }
+        name->setAttribute("caption", SaveData::instance->getStageTitle(selection_level + 1, selection_sublevel + 1));
     }
 }
