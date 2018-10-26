@@ -39,6 +39,7 @@ private:
     bool glow_enabled;
     float glow_delta;
     float glow_speed;
+    sp::Color color;
 
     void setHealth(float health);
     void setCollisionCircle(float size);
@@ -51,6 +52,7 @@ private:
     void setBoss() { bosses.add(this); }
     void setDrawOrder(int order) { render_data.order = order; }
     void setTouchDamage(float amount, DamageType type) { touch_damage_amount = amount; touch_damage_type = type; }
+    void setColor(float r, float g, float b);
     
     sp::P<Projectile> createProjectile(sp::string name, float x, float y, float angle);
 

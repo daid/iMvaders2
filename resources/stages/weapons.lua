@@ -61,7 +61,7 @@ end
 
 function electroBoltWeapon(self)
     if not self.fire then
-        self.disableGlow()
+        self.setColor(1, 1, 1)
         self.weapon_state = nil
     end
     if self.weapon_state == nil then
@@ -76,10 +76,11 @@ function electroBoltWeapon(self)
         end
     elseif self.weapon_state == "charge" then
         if self.weapon_delay > 0 then
-            self.setGlow(2.0 + (140 - self.weapon_delay) / 140 * 5)
+            local f = self.weapon_delay / 140
+            self.setColor(f, f, 1)
             self.weapon_delay = self.weapon_delay - 1
         else
-            self.disableGlow()
+            self.setColor(1, 1, 1)
             self.weapon_state = "fire"
             self.weapon_delay = 20
         end

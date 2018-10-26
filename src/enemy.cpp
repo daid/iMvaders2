@@ -32,6 +32,8 @@ Enemy::Enemy()
 
     touch_damage_amount = 1.0;
     touch_damage_type = DamageType::Normal;
+    
+    color = sp::Color(1,1,1);
 }
 
 Enemy::~Enemy()
@@ -51,11 +53,21 @@ void Enemy::onUpdate(float delta)
         if (glow_delta >= 1.0)
             glow_delta -= 1.0;
         if (glow_delta < 0.5)
-            render_data.color.r = render_data.color.g = render_data.color.b = sp::Tween<float>::linear(glow_delta, 0.0, 0.5, 1.0, 0);
+        {
+            render_data.color.r = sp::Tween<float>::linear(glow_delta, 0.0, 0.5, color.r, 0);
+            render_data.color.g = sp::Tween<float>::linear(glow_delta, 0.0, 0.5, color.g, 0);
+            render_data.color.b = sp::Tween<float>::linear(glow_delta, 0.0, 0.5, color.b, 0);
+        }
         else
-            render_data.color.r = render_data.color.g = render_data.color.b = sp::Tween<float>::linear(glow_delta, 0.5, 1.0, 0, 1.0);
+        {
+            render_data.color.r = sp::Tween<float>::linear(glow_delta, 0.5, 1.0, 0, color.r);
+            render_data.color.g = sp::Tween<float>::linear(glow_delta, 0.5, 1.0, 0, color.g);
+            render_data.color.b = sp::Tween<float>::linear(glow_delta, 0.5, 1.0, 0, color.b);
+        }
     }else{
-        render_data.color.r = render_data.color.g = render_data.color.b = 1.0;
+        render_data.color.r = color.r;
+        render_data.color.g = color.g;
+        render_data.color.b = color.b;
     }
 }
 
@@ -176,6 +188,13 @@ void Enemy::setGlow(float speed)
     glow_speed = speed;
 }
 
+void Enemy::setColor(float r, float g, float b)
+{
+    color.r = r;
+    color.g = g;
+    color.b = b;
+}
+
 void Enemy::disableGlow()
 {
     glow_enabled = false;
@@ -197,6 +216,7 @@ void Enemy::onRegisterScriptBindings(sp::ScriptBindingClass& script_binding_clas
     script_binding_class.bind("setCollisionBox", &Enemy::setCollisionBox);
     script_binding_class.bind("setShield", &Enemy::setShield);
     script_binding_class.bind("setGlow", &Enemy::setGlow);
+    script_binding_class.bind("setColor", &Enemy::setColor);
     script_binding_class.bind("disableGlow", &Enemy::disableGlow);
     script_binding_class.bind("setDrawOrder", &Enemy::setDrawOrder);
     script_binding_class.bind("setInvincible", &Enemy::setInvincible);
