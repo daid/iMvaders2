@@ -246,7 +246,7 @@ end
 function breEnd(self)
     self.mouth.destroy()
     for _, enemy in ipairs(all_enemies) do
-        if enemy.valid then
+        if enemy.valid and enemy ~= self then
             enemy.destroy()
         end
     end
