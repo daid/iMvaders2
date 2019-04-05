@@ -3,7 +3,7 @@
     font: gui/theme/basic/forque.ttf
     size: 30
 
-    [button.label] {
+    [button.forground] {
         color.disabled: #808080
         color.hovered: #808080
         size: 80

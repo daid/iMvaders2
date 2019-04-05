@@ -141,7 +141,7 @@ static sp::P<Message> createMessage(sp::string message)
 static sp::P<Enemy> createEnemy(sp::string texture_name, float scale)
 {
     Enemy* e = new Enemy();
-    e->render_data.shader = sp::Shader::get("shader/basic.shader");
+    e->render_data.shader = sp::Shader::get("internal:basic.shader");
     e->render_data.type = sp::RenderData::Type::Normal;
     e->render_data.mesh = sp::MeshData::createQuad(sp::Vector2f(1.0, 1.0));
     e->render_data.texture = sp::texture_manager.get(texture_name);

@@ -1,5 +1,7 @@
 [VERTEX]
-#version 120
+attribute vec3 a_vertex;
+attribute vec3 a_normal;
+attribute vec2 a_uv;
 
 uniform mat4 projection_matrix;
 uniform mat4 camera_matrix;
@@ -51,12 +53,11 @@ mat4 inverse(mat4 m)
 
 void main()
 {
-    gl_Position = vec4(gl_Vertex.xyz, 1.0);
-    v_uv = (inverse(projection_matrix) * gl_Vertex).xy * 0.5;
+    gl_Position = vec4(a_vertex, 1.0);
+    v_uv = (inverse(projection_matrix) * vec4(a_vertex, 1)).xy * 0.5;
 }
 
 [FRAGMENT]
-#version 110
 uniform sampler2D texture_map;
 uniform vec4 color;
 

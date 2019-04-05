@@ -8,7 +8,7 @@
 
 AbandondedPrinter::AbandondedPrinter()
 {
-    render_data.shader = sp::Shader::get("shader/basic.shader");
+    render_data.shader = sp::Shader::get("internal:basic.shader");
     render_data.type = sp::RenderData::Type::Normal;
     render_data.mesh = sp::MeshData::createQuad(sp::Vector2f(1.0, 1.0));
     if (sp::random(0, 100) < 50)

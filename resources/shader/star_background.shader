@@ -1,5 +1,7 @@
 [VERTEX]
-#version 120
+attribute vec3 a_vertex;
+attribute vec3 a_normal;
+attribute vec2 a_uv;
 
 uniform mat4 projection_matrix;
 uniform mat4 camera_matrix;
@@ -66,19 +68,18 @@ mat4 rotationMatrix(vec3 axis, float angle)
 
 void main()
 {
-    gl_Position = gl_Vertex;
-    v_uv1 = (inverse(projection_matrix * camera_matrix * object_matrix) * gl_Vertex).xy / 50.0;
+    gl_Position = vec4(a_vertex, 1.0);
+    v_uv1 = (inverse(projection_matrix * camera_matrix * object_matrix) * gl_Position).xy / 50.0;
     mat4 camera_matrix2 = camera_matrix;
     camera_matrix2[3][0] *= 0.5;
     camera_matrix2[3][1] *= 0.5;
-    v_uv2 = (inverse(projection_matrix * camera_matrix2 * object_matrix * rotationMatrix(vec3(0, 0, 1), 1.0f)) * gl_Vertex).xy / 50.0;
+    v_uv2 = (inverse(projection_matrix * camera_matrix2 * object_matrix * rotationMatrix(vec3(0, 0, 1), 1.0f)) * gl_Position).xy / 50.0;
     camera_matrix2[3][0] *= 0.5;
     camera_matrix2[3][1] *= 0.5;
-    v_uv3 = (inverse(projection_matrix * camera_matrix2 * object_matrix * rotationMatrix(vec3(0, 0, 1), 2.0f)) * gl_Vertex).xy / 50.0;
+    v_uv3 = (inverse(projection_matrix * camera_matrix2 * object_matrix * rotationMatrix(vec3(0, 0, 1), 2.0f)) * gl_Position).xy / 50.0;
 }
 
 [FRAGMENT]
-#version 110
 uniform sampler2D texture_map;
 uniform vec4 color;
 

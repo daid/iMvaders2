@@ -11,7 +11,7 @@ public:
     Z18Part(Z18* owner, int index)
     : owner(owner), index(index)
     {
-        render_data.shader = sp::Shader::get("shader/basic.shader");
+        render_data.shader = sp::Shader::get("internal:basic.shader");
         render_data.type = sp::RenderData::Type::Normal;
         render_data.texture = sp::texture_manager.get("ship/m/z18.png");
         render_data.order = -1;
@@ -66,7 +66,7 @@ public:
         vertices.emplace_back(sp::Vector3f( 40, -0.5, 0.0f), sp::Vector2f(1, uv_y + 1.0/80.0));
         vertices.emplace_back(sp::Vector3f( 40,  0.5, 0.0f), sp::Vector2f(1, uv_y));
 
-        render_data.shader = sp::Shader::get("shader/basic.shader");
+        render_data.shader = sp::Shader::get("internal:basic.shader");
         render_data.type = sp::RenderData::Type::Normal;
         render_data.mesh = sp::MeshData::create(std::move(vertices), std::move(indices));
         render_data.texture = sp::texture_manager.get("ship/m/z18.png");
