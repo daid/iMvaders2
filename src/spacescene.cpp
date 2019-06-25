@@ -211,7 +211,7 @@ bool StageController::loadStage(sp::string name)
     for(auto child : space_scene->getRoot()->getChildren())
     {
         if (child != *camera && child != *background && child != this)
-            delete child;
+            child.destroy();
     }
     background->setPosition(sp::Vector2d(0, 0));
     background_speed = sp::Vector2d(-5, 0);
@@ -351,7 +351,7 @@ void StageController::onUpdate(float delta)
     if (Enemy::bosses.size() > 0)
     {
         float health = 0.0;
-        for(Enemy* e : Enemy::bosses)
+        for(sp::P<Enemy> e : Enemy::bosses)
             health += e->getHealth();
         boss->show();
         boss->setValue(health);

@@ -58,7 +58,7 @@ void StageSelect::show()
     
     sp::P<sp::gui::Widget> stages = gui->getWidgetWithID("STAGES");
     for(auto child : stages->getChildren())
-        delete child;
+        child.destroy();
     
     sp::P<sp::gui::Widget> row;
 
