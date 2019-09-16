@@ -19,7 +19,7 @@ SceneManager::SceneManager()
 {
     instance = this;
 
-    new sp::gui::Scene(sp::Vector2d(1280, 960), sp::gui::Scene::Direction::Horizontal);
+    new sp::gui::Scene(sp::Vector2d(1280, 960));
 
     title_controller = new TitleController();
     stage_select = new StageSelect();
