@@ -38,7 +38,7 @@ public:
         }
     }
     
-    virtual void onFixedUpdate()
+    virtual void onFixedUpdate() override
     {
         setPosition(getPosition2D() - sp::Vector2d(Z18::speed, 0));
     }

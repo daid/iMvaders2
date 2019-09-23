@@ -10,7 +10,7 @@ public:
     
     virtual bool takeDamage(sp::Vector2d position, double amount, DamageSource damage_source, DamageType type) override;
     virtual void onCollision(sp::CollisionInfo& info) override;
-    virtual void onFixedUpdate();
+    virtual void onFixedUpdate() override;
 
 private:
     float health;
