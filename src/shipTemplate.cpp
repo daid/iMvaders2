@@ -5,6 +5,7 @@
 #include <sp2/logging.h>
 #include <sp2/collision/2d/circle.h>
 #include <sp2/collision/2d/box.h>
+#include <sp2/stringutil/convert.h>
 
 std::map<sp::string, ShipTemplate> ShipTemplate::templates;
 
