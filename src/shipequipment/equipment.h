@@ -2,6 +2,7 @@
 #define EQUIPMENT_H
 
 #include <sp2/scene/node.h>
+#include <sp2/stringutil/convert.h>
 
 class Ship;
 class Equipment : public sp::Node
