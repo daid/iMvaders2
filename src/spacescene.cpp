@@ -250,7 +250,7 @@ bool StageController::loadStage(sp::string name)
     script->setGlobal("random", sp::random);
     script->setGlobal("irandom", sp::irandom);
     script->setGlobal("stageDone", ::stageDone);
-    if (!script->load(sp::io::ResourceProvider::get("stages/" + name + ".lua")))
+    if (script->load(sp::io::ResourceProvider::get("stages/" + name + ".lua")).isErr())
     {
         LOG(Error, "Error while loading stage.");
         return false;
