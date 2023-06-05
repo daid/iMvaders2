@@ -13,7 +13,7 @@ std::map<sp::string, EquipmentTemplate> EquipmentTemplate::templates;
 
 void EquipmentTemplate::init()
 {
-    sp::KeyValueTreePtr tree = sp::io::KeyValueTreeLoader::load("equipment.txt");
+    sp::KeyValueTreePtr tree = sp::io::KeyValueTreeLoader::loadResource("equipment.txt");
     for(auto it : tree->getFlattenNodesByIds())
     {
         const sp::string& id = it.first;

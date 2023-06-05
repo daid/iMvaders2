@@ -11,7 +11,7 @@ std::map<sp::string, ShipTemplate> ShipTemplate::templates;
 
 void ShipTemplate::init()
 {
-    sp::KeyValueTreePtr tree = sp::io::KeyValueTreeLoader::load("ships.txt");
+    sp::KeyValueTreePtr tree = sp::io::KeyValueTreeLoader::loadResource("ships.txt");
     for(auto it : tree->getFlattenNodesByIds())
     {
         const sp::string& id = it.first;
